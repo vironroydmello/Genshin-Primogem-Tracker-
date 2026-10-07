@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Primogem Tracker</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2a1f5e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Primogems">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f1fa;--card:#fff;--ink:#221d33;--mut:#675f7d;--line:#e2deef;--acc:#6d4df2;--on:#fff;--gold:#a8740a;--gold-f:#e8b84a;--ok:#1f7f55;--warn:#a8480f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14111e;--card:#1e1a2b;--ink:#efecf7;--mut:#a29cb3;--line:#342f46;--acc:#a18dff;--on:#17122b;--gold:#f0c862;--gold-f:#f0c862;--ok:#4cc88e;--warn:#f0956a}}
+:root[data-theme="dark"]{--bg:#14111e;--card:#1e1a2b;--ink:#efecf7;--mut:#a29cb3;--line:#342f46;--acc:#a18dff;--on:#17122b;--gold:#f0c862;--gold-f:#f0c862;--ok:#4cc88e;--warn:#f0956a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
+main{max-width:580px;margin:0 auto;padding:0 14px 28px}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.disp{font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+
+/* hero */
+.hero{margin:0 -14px 14px;position:relative;overflow:hidden;background:linear-gradient(180deg,#2a1f5e,#4a3a8f 60%,#7c5cc4);color:#fff;padding:22px 18px 16px}
+.hero svg.sky{position:absolute;inset:0;width:100%;height:100%}
+.tw{animation:tw 2.4s ease-in-out infinite}.tw:nth-child(2n){animation-delay:.8s}.tw:nth-child(3n){animation-delay:1.5s}
+@keyframes tw{0%,100%{opacity:.25}50%{opacity:1}}
+.fl{animation:fl 3.5s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-6px) rotate(6deg)}}
+.hero h1{position:relative;margin:0;font-size:22px;font-weight:700;letter-spacing:-.01em}
+.tot{position:relative;display:flex;gap:20px;margin-top:10px;font-size:13px;opacity:.96}
+.tot b{display:block;font-size:30px;line-height:1.1;font-weight:700}
+.tot .big b{font-size:38px}
+.nx{position:relative;margin-top:12px;font-size:13px;background:rgba(255,255,255,.14);border-radius:10px;padding:8px 10px}
+
+/* shared */
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+h2{font-size:17px;font-weight:650;margin:0 0 10px}
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:20px 2px 8px}
+.sec h2{margin:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}.row>*{flex:1;min-width:96px}
+label.f{display:block;font-size:12px;color:var(--mut)}
+label.f input,label.f select{margin-top:3px;color:var(--ink)}
+input,select{width:100%;min-height:44px;padding:9px 10px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+input[type=checkbox]{width:20px;height:20px;min-height:0;accent-color:var(--acc)}
+button{min-height:44px;padding:9px 14px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}
+button.p{background:var(--acc);border-color:var(--acc);color:var(--on);font-weight:600}
+button.sm{min-height:36px;padding:5px 11px;font-size:14px}
+button.danger{color:var(--warn);border-color:currentColor}
+button.wide{width:100%;margin-top:10px}
+.sub{color:var(--mut);font-size:13px}
+.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn)}.mut{color:var(--mut)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.chip{min-height:36px;border-radius:99px;padding:5px 13px;font-size:14px}
+.seg{display:flex;margin-left:auto;border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.seg button{border:0;border-radius:0;min-height:34px;padding:4px 12px;font-size:14px;background:transparent}
+.seg button[aria-checked=true]{background:var(--acc);color:var(--on);font-weight:600}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--ink);grid-column:1/3}
+
+/* goal timeline */
+.tl{position:relative;margin:4px 0 14px 18px;padding-left:26px;border-left:3px dashed var(--line)}
+.g{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:14px}
+.g.cur{border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 20%,transparent)}
+.g.lock{opacity:.88}
+.node{position:absolute;left:-44px;top:10px;width:32px;height:32px;border-radius:50%;background:var(--card);border:3px solid var(--line);display:grid;place-items:center;font-size:14px;font-weight:700}
+.g.cur .node{border-color:var(--acc)}.g.done .node{background:var(--ok);border-color:var(--ok);color:#fff}
+.gh{display:flex;gap:10px;align-items:center}
+.gt{flex:1;min-width:0}
+.ico{width:38px;height:38px;flex:none}
+.gn{font-weight:700;font-size:18px;line-height:1.2;overflow-wrap:anywhere}
+.badge{display:inline-block;font-size:11px;padding:1px 8px;border-radius:99px;background:var(--bg);border:1px solid var(--line);color:var(--mut);margin-right:6px}
+.bar{position:relative;height:18px;border-radius:10px;background:var(--bg);border:1px solid var(--line);margin:14px 0 8px}
+.fill{height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,var(--acc),var(--gold-f));transition:width .5s}
+.gem{position:absolute;top:-8px;width:30px;height:30px;transform:translateX(-50%);transition:left .5s}
+.prog{font-size:14px}.prog b{font-size:18px}.prog .pc{color:var(--mut);margin-left:4px}
+.eta{font-size:13px;color:var(--mut);margin-top:4px}
+.eta b{color:var(--ink)}
+.panel{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.panel[hidden]{display:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.b{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.empty{border:2px dashed var(--line);border-radius:14px;padding:18px;text-align:center;margin-bottom:10px}
+.addrow{display:flex;gap:8px}.addrow button{flex:1}
+
+/* chart */
+.chart{width:100%;height:auto;display:block}
+.chart text{font:10.5px system-ui,sans-serif;fill:var(--mut)}
+.chart .yl{text-anchor:end}
+.chart .gl{stroke:var(--line);stroke-width:1}
+.chart .thr{stroke:var(--acc);stroke-width:1;stroke-dasharray:4 3;opacity:.55}
+.chart .thr.ok{stroke:var(--ok);opacity:.8}
+.chart .rel{stroke:var(--gold);stroke-width:1;stroke-dasharray:2 3;opacity:.8}
+.chart .today{stroke:var(--mut);stroke-width:1;opacity:.4}
+.chart .hist{fill:none;stroke:var(--acc);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.chart .area{fill:var(--acc);opacity:.12}
+.chart .proj{stroke:var(--gold);stroke-width:2.5;stroke-dasharray:6 5;stroke-linecap:round}
+.chart .dot{fill:var(--acc);stroke:var(--card);stroke-width:2}
+.chart .bt{fill:var(--acc)}.chart .bt.ok{fill:var(--ok)}
+.chart .br{fill:var(--gold-f)}
+.chart .bn{text-anchor:middle;font-weight:700;fill:#fff}
+.chart .bn.dark{fill:#2b2000}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--mut);margin-top:8px}
+.legend i{display:inline-block;width:16px;height:0;border-top:3px solid var(--acc);vertical-align:middle;margin-right:5px}
+.legend i.d{border-top:3px dashed var(--gold)}
+.legend i.t{border-top:1px dashed var(--acc)}
+
+/* history */
+.log{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:14px}
+.log:first-child{border-top:0}
+.sec-s{font-size:13px;font-weight:600;margin:14px 0 4px}
+textarea{width:100%;min-height:90px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:12px/1.3 ui-monospace,monospace;padding:8px;margin-top:8px}
+#st{font-size:12px;color:var(--mut);text-align:center;margin:6px 0 20px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:9;display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);padding:6px 6px 6px 14px;border-radius:12px;max-width:calc(100% - 28px);font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.3)}
+#toast[hidden]{display:none}
+#toast button{min-height:34px;background:transparent;border:1px solid currentColor;color:inherit;padding:4px 12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<header class="hero">
+  <svg class="sky" viewBox="0 0 400 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="#fff"><circle class="tw" cx="30" cy="20" r="1.5"/><circle class="tw" cx="90" cy="60" r="1"/><circle class="tw" cx="150" cy="18" r="1.8"/><circle class="tw" cx="230" cy="45" r="1.2"/><circle class="tw" cx="300" cy="15" r="1.6"/><circle class="tw" cx="360" cy="70" r="1.2"/><circle class="tw" cx="200" cy="100" r="1"/><circle class="tw" cx="60" cy="110" r="1.4"/><circle class="tw" cx="330" cy="120" r="1"/></g>
+    <circle cx="350" cy="35" r="16" fill="#f7e9b0" opacity=".9"/><circle cx="357" cy="31" r="14" fill="#4a3a8f"/>
+    <g class="fl" style="transform-origin:300px 90px"><path d="M300 70l16 14-16 28-16-28z" fill="#9fe0ff" stroke="#fff" stroke-width="2"/><path d="M284 84h32M300 70l-6 14 6 28 6-28z" fill="none" stroke="#fff" stroke-width="1.2" opacity=".7"/></g>
+  </svg>
+  <h1 class="disp">✦ Primogem Tracker</h1>
+  <div class="tot disp"><div class="big"><b id="tt">0</b>total pulls</div><div><b id="tp">0</b>primogems</div><div><b id="tf">0</b>fates</div></div>
+  <div class="nx" id="nx"></div>
+</header>
+
+<section class="card" aria-labelledby="h-log">
+  <h2 id="h-log" class="disp">Log savings</h2>
+  <div class="chips">
+    <button class="chip" data-q="p60">+60 dailies</button>
+    <button class="chip" data-q="p90">+90 Welkin</button>
+    <button class="chip" data-q="f1">+1 fate</button>
+    <div class="seg" role="radiogroup" aria-label="Direction of the amounts below">
+      <button role="radio" aria-checked="true" data-sign="1">Gained</button><button role="radio" aria-checked="false" data-sign="-1">Spent</button>
+    </div>
+  </div>
+  <div class="row">
+    <label class="f">Primogems<input id="ap" type="number" inputmode="numeric" placeholder="e.g. 120"></label>
+    <label class="f">Fates<input id="af" type="number" inputmode="numeric" placeholder="e.g. 2"></label>
+  </div>
+  <div class="row" style="margin-top:8px">
+    <label class="f" style="flex:1.6;min-width:130px">Date<input id="ad" type="date"></label>
+    <button class="p" id="add">Add</button>
+    <button id="set">Set total</button>
+  </div>
+  <div class="sub" style="margin-top:8px">160 primogems = 1 pull. <b>Set total</b> replaces your balance; leave a field empty to keep it as is.</div>
+</section>
+
+<div class="sec"><h2 class="disp">Goals</h2><span class="sub">Savings fill goal 1 first, then spill into 2, 3…</span></div>
+<div class="tl" id="tl"></div>
+<div class="empty" id="emptyG" hidden><div class="disp" style="font-weight:600">No goals yet</div><div class="sub">Add a character or weapon banner to start planning.</div></div>
+<div class="addrow" style="margin-bottom:12px"><button class="p" id="addc">＋ Character</button><button class="p" id="addw">＋ Weapon</button><button id="addx">＋ Custom</button></div>
+
+<section class="card" aria-labelledby="h-fc">
+  <h2 id="h-fc" class="disp">Savings forecast</h2>
+  <svg class="chart" id="chart" viewBox="0 0 360 200" role="img" aria-label="Savings chart"></svg>
+  <div class="sub" id="cap" style="margin-top:6px"></div>
+  <div class="legend"><span><i></i>Saved</span><span><i class="d"></i>Projected</span><span><i class="t"></i>Goal target (number badge)</span><span>Gold badge: release day</span></div>
+</section>
+
+<section class="card" aria-labelledby="h-inc">
+  <h2 id="h-inc" class="disp">Income</h2>
+  <div class="row">
+    <label class="f">Per day (commissions etc.)<input id="i-d" type="number" inputmode="numeric" min="0"></label>
+    <label class="f">Other per month<input id="i-m" type="number" inputmode="numeric" min="0" placeholder="Abyss, Theater, events…"></label>
+  </div>
+  <label class="chk" style="margin-top:10px"><input type="checkbox" id="i-w"> Welkin Moon active (+90/day)</label>
+  <div class="sub" style="margin-top:8px" id="incOut"></div>
+</section>
+
+<section class="card" aria-labelledby="h-hi">
+  <h2 id="h-hi" class="disp">History</h2>
+  <div id="hist" class="sub">No entries yet.</div>
+  <div id="doneWrap" hidden><div class="sec-s">Completed goals</div><div id="doneList" class="sub"></div></div>
+</section>
+
+<section class="card" aria-labelledby="h-bk">
+  <h2 id="h-bk" class="disp">Backup</h2>
+  <div class="row"><button id="exp">Export backup</button><label class="f" style="flex:1"><span class="sr" style="position:absolute;left:-9999px">Import backup file</span><input id="imp" type="file" accept=".json,application/json" style="padding-top:9px"></label></div>
+  <textarea id="expTxt" readonly hidden aria-label="Backup data"></textarea>
+  <div id="impBox" hidden style="margin-top:10px"><div class="sub" id="impMsg"></div><div class="b"><button class="p sm" id="impOk">Replace my data</button><button class="sm" id="impNo">Cancel</button></div></div>
+</section>
+
+<div id="st" role="status" aria-live="polite"></div>
+</main>
+<div id="toast" role="status" aria-live="polite" hidden><span id="tmsg"></span><button id="tund">Undo</button></div>
+
+<script>
+'use strict';
+const LS='primo-tracker-v3',OLD=['primo-tracker-v2','primo-tracker-v1'];
+const PER={char:180,weapon:160},HALF={char:90,weapon:80},WELKIN=90;
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const num=v=>{const n=parseInt(v,10);return isNaN(n)?0:n};
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const t0=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
+const today=()=>iso(new Date());
+const addDays=n=>{const d=t0();d.setDate(d.getDate()+n);return iso(d)};
+const off=s=>Math.round((new Date(s+'T00:00:00')-t0())/864e5);
+const fmt=s=>{const d=new Date(s+'T00:00:00');return d.toLocaleDateString(undefined,d.getFullYear()===new Date().getFullYear()?{month:'short',day:'numeric'}:{month:'short',day:'numeric',year:'numeric'})};
+const uid=()=>Math.random().toString(36).slice(2,8);
+const plural=(n,w)=>n+' '+w+(n===1?'':'s');
+const isoRe=/^\d{4}-\d{2}-\d{2}$/;
+
+/* ---------- state ---------- */
+const newGoal=o=>Object.assign({id:uid(),name:'',patch:'',type:'char',copies:1,pity:0,custom:180,release:'',guar:false},o||{});
+function clampPity(g){if(g.type!=='custom')g.pity=Math.min(Math.max(0,g.pity),HALF[g.type]-1)}
+function cleanGoal(raw){
+  const g=newGoal(raw);
+  g.id=String(g.id||uid());g.name=String(g.name||'');g.patch=String(g.patch||'');
+  if(!['char','weapon','custom'].includes(g.type))g.type='char';
+  g.copies=Math.max(1,num(g.copies)||1);g.custom=Math.max(0,num(g.custom));g.pity=Math.max(0,num(g.pity));
+  g.guar=!!g.guar;g.release=isoRe.test(g.release||'')?g.release:'';
+  clampPity(g);return g;
+}
+const defState=()=>({v:3,primos:0,fates:0,income:{daily:60,welkin:false,monthly:0},log:[],goals:[],done:[],updated:0});
+function norm(raw){ // accepts v1, v2 and v3 data
+  const o=defState();
+  if(!raw||typeof raw!=='object')return o;
+  o.primos=num(raw.primos);o.fates=num(raw.fates);o.updated=Number(raw.updated)||0;
+  const inc=raw.income;
+  if(inc&&typeof inc==='object')o.income={daily:Math.max(0,num(inc.daily)),welkin:!!inc.welkin,monthly:Math.max(0,num(inc.monthly))};
+  else if(inc!==undefined)o.income.daily=Math.max(0,num(inc));
+  o.log=(Array.isArray(raw.log)?raw.log:[]).filter(e=>e&&typeof e==='object').map(e=>{
+    const x={date:isoRe.test(e.date||'')?e.date:today(),p:num(e.p),f:num(e.f),dp:num(e.dp),df:num(e.df),mode:e.mode||'add'};
+    if(e.goal&&typeof e.goal==='object'){x.goal=cleanGoal(e.goal);x.idx=num(e.idx)}
+    return x;
+  });
+  if(Array.isArray(raw.goals)&&(raw.goals.length||raw.v===3))o.goals=raw.goals.filter(g=>g&&typeof g==='object').map(cleanGoal);
+  else{const t=raw.goalType;o.goals=[cleanGoal({name:raw.goalName||'',type:t==='160'||t==='80'?'weapon':(t==='custom'?'custom':'char'),custom:raw.goalCustom||180,pity:raw.pity||0})]}
+  o.done=(Array.isArray(raw.done)?raw.done:[]).filter(d=>d&&typeof d==='object').map(d=>({id:String(d.id||uid()),name:String(d.name||''),patch:String(d.patch||''),pulls:num(d.pulls),date:isoRe.test(d.date||'')?d.date:today()}));
+  return o;
+}
+let S=defState(),dbDoc=null,tmr=null,DL=null,pending=null;
+function loadLocal(){
+  for(const k of [LS,...OLD]){try{const r=localStorage.getItem(k);if(r){S=norm(JSON.parse(r));return}}catch(e){}}
+  S=norm(null);
+}
+function status(t){$('st').textContent=t}
+function save(){
+  S.updated=Date.now();
+  try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}
+  if(dbDoc){clearTimeout(tmr);tmr=setTimeout(()=>{dbDoc.set(JSON.parse(JSON.stringify(S))).then(()=>status('Saved ✓'),()=>status('Saved on this device only'))},400)}
+}
+
+/* ---------- maths ---------- */
+const totP=()=>S.primos+S.fates*160;
+const have=()=>Math.floor(S.primos/160)+S.fates;
+const eff=()=>S.income.daily+(S.income.welkin?WELKIN:0)+S.income.monthly/30;
+const need=g=>{
+  if(g.type==='custom')return Math.max(0,g.custom);
+  const per=PER[g.type],first=g.guar?HALF[g.type]:per;
+  return Math.max(0,first+per*(Math.max(1,g.copies)-1)-g.pity);
+};
+function model(){
+  const e=eff(),tp=totP();let cum=0,curSet=false;
+  const rows=S.goals.map(g=>{
+    const n=need(g),start=cum;cum+=n;
+    const gotF=Math.max(0,Math.min(n,tp/160-start)),got=Math.floor(gotF);
+    const pct=n?gotF/n*100:100,done=tp>=cum*160,cur=!done&&!curSet;if(cur)curSet=true;
+    const remP=Math.max(0,cum*160-tp);
+    const ready=done?0:(e>0?Math.ceil(remP/e):null);
+    const rel=g.release?off(g.release):null;
+    return {g,n,start,cum,got,pct,done,cur,remP,ready,rel};
+  });
+  return {e,tp,rows,cumAll:cum};
+}
+
+/* ---------- ledger ---------- */
+function applyCore(q){ // q: {mode,p,f,date,goal,idx}
+  let dp=q.p,df=q.f;
+  if(q.mode==='set'){dp=q.p-S.primos;df=q.f-S.fates}
+  let nP=S.primos+dp,nF=S.fates+df;
+  if(nP+nF*160<0)return {err:'That would take you below zero.'};
+  if(nF<0){nP+=nF*160;nF=0}
+  if(nP<0){const k=Math.ceil(-nP/160);nF-=k;nP+=k*160}
+  const e={date:q.date&&isoRe.test(q.date)?q.date:today(),p:q.p,f:q.f,dp:nP-S.primos,df:nF-S.fates,mode:q.mode};
+  if(q.goal){e.goal=q.goal;e.idx=q.idx}
+  S.primos=nP;S.fates=nF;S.log.push(e);
+  return {e};
+}
+function refresh(){render();history()}
+function commit(q){const r=applyCore(q);if(r.err){toast(r.err);return r}save();refresh();return r}
+function undoEntry(e){
+  if(!S.log.includes(e))return;
+  if(totP()-e.dp-e.df*160<0){toast('Undo newer entries first — those pulls were spent since.');return}
+  S.primos-=e.dp;S.fates-=e.df;S.log=S.log.filter(x=>x!==e);
+  if(e.goal){S.done=S.done.filter(d=>d.id!==e.goal.id);S.goals.splice(Math.min(Math.max(0,e.idx||0),S.goals.length),0,e.goal)}
+  if(S.fates<0){S.primos+=S.fates*160;S.fates=0}
+  if(S.primos<0){const k=Math.ceil(-S.primos/160);S.fates-=k;S.primos+=k*160}
+  save();refresh();
+}
+let tt=null;
+function toast(msg,undo){
+  $('tmsg').textContent=msg;$('tund').hidden=!undo;$('toast').hidden=false;
+  $('tund').onclick=()=>{if(undo)undo();$('toast').hidden=true};
+  clearTimeout(tt);tt=setTimeout(()=>{$('toast').hidden=true},5500);
+}
+
+/* ---------- icons ---------- */
+const gemSvg='<svg class="gem" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2l11 10-11 16L4 12z" fill="#9fe0ff" stroke="#5a7bd8" stroke-width="2" stroke-linejoin="round"/><path d="M4 12h22M15 2l-4 10 4 16 4-16z" fill="none" stroke="#5a7bd8" stroke-width="1.2" opacity=".7"/></svg>';
+const ICO={
+ char:'<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#ffe9a8" stroke="#e8b84a" stroke-width="2"/><path d="M20 6l3.5 10.5L34 20l-10.5 3.5L20 34l-3.5-10.5L6 20l10.5-3.5z" fill="#e8b84a"/></svg>',
+ weapon:'<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#d7e4ff" stroke="#7c9be0" stroke-width="2"/><path d="M28 8l4 4-14 14-4-4z" fill="#7c9be0"/><path d="M12 24l4 4-6 3z" fill="#5a6fb0"/><rect x="9" y="27" width="6" height="3" transform="rotate(-45 12 28)" fill="#e8b84a"/></svg>',
+ custom:'<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#e6dcff" stroke="#9c85ff" stroke-width="2"/><path d="M20 9l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#9c85ff"/></svg>'
+};
+
+/* ---------- goal cards ---------- */
+const cards=new Map();
+function makeCard(g){
+  const el=document.createElement('div');el.dataset.id=g.id;
+  el.innerHTML='<div class="node"></div><div class="gh"><span class="icoW"></span><div class="gt"><div class="gn"></div><div class="sub"><span class="badge" hidden></span><span class="lab"></span></div></div><button class="sm" data-a="edit" aria-expanded="false">Edit</button></div>'+
+   '<div class="bar" role="progressbar" aria-label="Pulls saved toward this goal" aria-valuemin="0"><div class="fill"></div>'+gemSvg+'</div><div class="prog"></div><div class="eta"></div><div class="acts"></div>'+
+   '<div class="panel edit" hidden></div><div class="panel spend" hidden></div>';
+  return {el,edit:el.querySelector('.edit'),spend:el.querySelector('.spend'),icon:''};
+}
+function etaHtml(r,m){
+  const L=[],e=m.e;
+  if(r.done)L.push('<span class="ok">Ready ✦ enough pulls saved</span>');
+  else if(r.ready===null)L.push('Set your daily income to get a ready date');
+  else if(r.ready>365)L.push('Ready in <b>over a year</b> at ~'+Math.round(e)+'/day');
+  else L.push('Ready in <b>'+plural(r.ready,'day')+'</b> ('+fmt(addDays(r.ready))+') at ~'+Math.round(e)+'/day');
+  if(r.g.release){
+    const rel=r.rel,dt=fmt(r.g.release);
+    if(rel>0){
+      L.push('Releases in <b>'+plural(rel,'day')+'</b> ('+dt+')');
+      if(!r.done){
+        const short=r.cum*160-(m.tp+e*rel);
+        L.push(short<=0?'<span class="ok">On track ✓ enough by release</span>':'<span class="warn">Short by ~'+Math.ceil(short)+' primos (≈'+plural(Math.ceil(short/160),'pull')+'). Need ~'+Math.ceil(r.remP/rel)+'/day</span>');
+      }
+    }else if(rel===0)L.push('<b>Releases today!</b>');
+    else L.push('Released '+dt);
+  }else if(!r.done)L.push('Add a release date to check if you’re on track');
+  return L.join('<br>');
+}
+function fillCard(c,r,i,m){
+  const g=r.g,el=c.el;
+  el.className='g'+(r.done?' done':'')+(r.cur?' cur':'')+(!r.done&&!r.cur?' lock':'');
+  el.querySelector('.node').textContent=r.done?'✓':i+1;
+  if(c.icon!==g.type){el.querySelector('.icoW').innerHTML=ICO[g.type];c.icon=g.type}
+  el.querySelector('.gn').textContent=g.name||'Untitled goal';
+  const bd=el.querySelector('.badge');bd.hidden=!g.patch;bd.textContent=g.patch?'Patch '+g.patch:'';
+  let lab;
+  if(g.type==='custom')lab=r.n+' pulls (custom)';
+  else{const p=[(g.type==='char'?'Character':'Weapon')+' ×'+g.copies];if(g.guar)p.push('guaranteed');if(g.pity)p.push('pity '+g.pity);lab=p.join(', ')}
+  el.querySelector('.lab').textContent=lab;
+  const bar=el.querySelector('.bar');bar.setAttribute('aria-valuemax',r.n);bar.setAttribute('aria-valuenow',r.got);
+  el.querySelector('.fill').style.width=Math.min(100,r.pct)+'%';
+  el.querySelector('.gem').style.left=Math.max(4,Math.min(96,r.pct))+'%';
+  el.querySelector('.prog').innerHTML='<b>'+r.got+'</b> / '+r.n+' pulls<span class="pc">'+Math.floor(r.pct)+'%</span>';
+  el.querySelector('.eta').innerHTML=etaHtml(r,m);
+  const acts=el.querySelector('.acts'),want=r.done&&r.n>0?'1':'';
+  if(acts.dataset.on!==want){acts.dataset.on=want;acts.innerHTML=want?'<button class="p wide" data-a="spend">Pulled it — spend &amp; archive</button>':''}
+  const eb=el.querySelector('[data-a=edit]');eb.textContent=c.edit.hidden?'Edit':'Close';eb.setAttribute('aria-expanded',String(!c.edit.hidden));
+}
+function render(){
+  const m=model();
+  $('tp').textContent=S.primos;$('tf').textContent=S.fates;$('tt').textContent=have();
+  // hero summary
+  const nx=m.rows.find(r=>!r.done);
+  $('nx').textContent=!S.goals.length?'Add a goal below to start planning.':!nx?'Every goal on your list is covered ✦':
+    'Next: '+(nx.g.name||'Untitled goal')+' — '+(nx.ready===null?'set your daily income for a date':nx.ready>365?'over a year away at this rate':'ready in '+plural(nx.ready,'day')+' ('+fmt(addDays(nx.ready))+')');
+  // goal cards
+  const tl=$('tl'),keep=new Set();
+  m.rows.forEach((r,i)=>{
+    let c=cards.get(r.g.id);if(!c){c=makeCard(r.g);cards.set(r.g.id,c)}
+    keep.add(r.g.id);fillCard(c,r,i,m);
+    if(tl.children[i]!==c.el)tl.insertBefore(c.el,tl.children[i]||null);
+  });
+  for(const [id,c] of [...cards]){if(!keep.has(id)){c.el.remove();cards.delete(id)}}
+  tl.hidden=!S.goals.length;$('emptyG').hidden=!!S.goals.length;
+  // income readout
+  const d=m.e;$('incOut').textContent='≈ '+Math.round(d)+' primos/day, about '+(d*30/160).toFixed(1)+' pulls every 30 days.';
+  drawChart(m);
+}
+
+/* edit + spend panels */
+function ensureEdit(c,g){
+  if(c.edit.dataset.built)return;c.edit.dataset.built='1';
+  c.edit.innerHTML='<div class="grid2">'+
+   '<label class="f">Name<input data-k="name" autocomplete="off"></label><label class="f">Patch<input data-k="patch" placeholder="e.g. 6.2" autocomplete="off"></label>'+
+   '<label class="f">Type<select data-k="type"><option value="char">Character (180)</option><option value="weapon">Weapon (160)</option><option value="custom">Custom pulls</option></select></label>'+
+   '<label class="f">Release date<input type="date" data-k="release"></label>'+
+   '<label class="f" data-w="copies">Copies (C0 = 1, C1 = 2…)<input data-k="copies" type="number" inputmode="numeric" min="1"></label>'+
+   '<label class="f" data-w="pity">Current pity<input data-k="pity" type="number" inputmode="numeric" min="0"></label>'+
+   '<label class="f" data-w="custom">Pulls needed<input data-k="custom" type="number" inputmode="numeric" min="0"></label>'+
+   '<label class="chk" data-w="guar"><input type="checkbox" data-k="guar"> Next 5★ is guaranteed featured (lost 50/50)</label></div>'+
+   '<div class="b"><button class="sm" data-a="up">↑ Move up</button><button class="sm" data-a="dn">↓ Move down</button><button class="sm danger" data-a="rm">Delete</button></div>';
+  const q=k=>c.edit.querySelector('[data-k='+k+']');
+  ['name','patch','type','release','copies','pity','custom'].forEach(k=>{q(k).value=k==='copies'?g.copies:(g[k]===0&&!['pity','custom'].includes(k)?'':g[k])});
+  q('guar').checked=g.guar;
+  const sync=()=>{const cu=g.type==='custom';
+    c.edit.querySelector('[data-w=copies]').style.display=cu?'none':'';c.edit.querySelector('[data-w=pity]').style.display=cu?'none':'';
+    c.edit.querySelector('[data-w=guar]').style.display=cu?'none':'';c.edit.querySelector('[data-w=custom]').style.display=cu?'':'none'};
+  const onIn=ev=>{
+    const inp=ev.target.closest('[data-k]');if(!inp)return;const k=inp.dataset.k;
+    if(k==='guar')g.guar=inp.checked;
+    else if(['name','patch','type'].includes(k))g[k]=inp.value;
+    else if(k==='release')g.release=isoRe.test(inp.value)?inp.value:'';
+    else g[k]=Math.max(0,num(inp.value));
+    if(k==='copies'&&g.copies<1)g.copies=1;
+    if(k==='type'||k==='pity'){const before=g.pity;clampPity(g);if(k==='pity'&&before!==g.pity)inp.value=g.pity;if(k==='type')q('pity').value=g.pity}
+    sync();save();render();
+  };
+  c.edit.addEventListener('input',onIn);c.edit.addEventListener('change',onIn);
+  sync();
+}
+function openSpend(c,g,r){
+  const h=have(),def=Math.max(1,Math.min(r.n,h));
+  c.spend.innerHTML='<label class="f">Pulls actually used<input data-k="spent" type="number" inputmode="numeric" min="1" max="'+h+'" value="'+def+'"></label>'+
+   '<div class="sub" style="margin-top:6px">Taken from your fates first, then primogems. Planned worst case: '+r.n+' pulls — enter fewer if you got lucky.</div>'+
+   '<div class="b"><button class="p sm" data-a="spendok">Spend &amp; archive</button><button class="sm" data-a="spendno">Cancel</button></div>';
+  c.spend.hidden=false;c.spend.querySelector('input').focus();
+}
+$('tl').addEventListener('click',ev=>{
+  const b=ev.target.closest('button[data-a]');if(!b)return;
+  const el=b.closest('.g'),i=S.goals.findIndex(x=>x.id===el.dataset.id);if(i<0)return;
+  const g=S.goals[i],c=cards.get(g.id),a=b.dataset.a;
+  if(a==='edit'){ensureEdit(c,g);c.edit.hidden=!c.edit.hidden;render()}
+  else if(a==='up'&&i>0){[S.goals[i-1],S.goals[i]]=[S.goals[i],S.goals[i-1]];save();render()}
+  else if(a==='dn'&&i<S.goals.length-1){[S.goals[i+1],S.goals[i]]=[S.goals[i],S.goals[i+1]];save();render()}
+  else if(a==='rm'){
+    if(b.dataset.armed){S.goals.splice(i,1);save();render()}
+    else{b.dataset.armed='1';b.textContent='Tap again to delete';setTimeout(()=>{delete b.dataset.armed;b.textContent='Delete'},3000)}
+  }
+  else if(a==='spend'){openSpend(c,g,model().rows[i])}
+  else if(a==='spendno'){c.spend.hidden=true}
+  else if(a==='spendok'){
+    const n=Math.min(have(),Math.max(1,num(c.spend.querySelector('input').value)));
+    if(have()<1){toast('You have no pulls saved to spend.');return}
+    const useF=Math.min(S.fates,n),rest=n-useF;
+    const r=applyCore({mode:'spend',p:-rest*160,f:-useF,goal:JSON.parse(JSON.stringify(g)),idx:i});
+    if(r.err){toast(r.err);return}
+    S.goals.splice(i,1);S.done.push({id:g.id,name:g.name,patch:g.patch,pulls:n,date:r.e.date});
+    save();refresh();toast('Spent '+plural(n,'pull')+' — goal archived',()=>undoEntry(r.e));
+  }
+});
+function addGoal(type){
+  const g=newGoal({type});S.goals.push(g);save();render();
+  const c=cards.get(g.id);ensureEdit(c,g);c.edit.hidden=false;render();
+  c.el.scrollIntoView({block:'center',behavior:'smooth'});c.edit.querySelector('[data-k=name]').focus({preventScroll:true});
+}
+$('addc').onclick=()=>addGoal('char');$('addw').onclick=()=>addGoal('weapon');$('addx').onclick=()=>addGoal('custom');
+
+/* ---------- forecast chart ---------- */
+function drawChart(m){
+  const W=360,HT=200,L=34,R=14,T=22,B=28,iw=W-L-R,ih=HT-T-B,r1=x=>Math.round(x*10)/10;
+  const cur=m.tp/160,perDay=m.e/160;
+  const ents=S.log.map((e,i)=>({e,i,o:off(e.date)})).sort((a,b)=>a.o-b.o||a.i-b.i);
+  let pts=[];
+  if(ents.length){
+    let v=cur-ents.reduce((s,x)=>s+x.e.dp/160+x.e.df,0);
+    pts.push({o:ents[0].o,v});
+    ents.forEach(x=>{v+=x.e.dp/160+x.e.df;pts.push({o:x.o,v})});
+  }
+  pts=pts.map(p=>({o:Math.max(-180,Math.min(0,p.o)),v:Math.max(0,p.v)}));
+  const P=pts.length?-pts[0].o:0;
+  const fin=m.e>0&&m.cumAll*160>m.tp?Math.ceil((m.cumAll*160-m.tp)/m.e):0;
+  const cand=[...m.rows.filter(r=>r.rel>0).map(r=>r.rel),fin].filter(x=>x>0).map(x=>Math.min(150,x));
+  const H=cand.length?Math.max(14,...cand):30;
+  const endV=cur+perDay*H,top=Math.max(m.cumAll,cur,endV,1)*1.06;
+  const step=[1,2,5,10,20,25,50,100,200,250,500,1000,2000].find(s=>s>=top/4)||2000;
+  const yTop=Math.max(step,Math.ceil(top/step)*step);
+  const X=o=>L+(o+P)/(P+H)*iw,Y=v=>T+ih-v/yTop*ih;
+  let s='';
+  for(let v=0;v<=yTop+1e-9;v+=step)s+='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+r1(Y(v))+'" y2="'+r1(Y(v))+'"/><text class="yl" x="'+(L-6)+'" y="'+r1(Y(v)+3.5)+'">'+v+'</text>';
+  s+='<line class="today" x1="'+r1(X(0))+'" x2="'+r1(X(0))+'" y1="'+T+'" y2="'+(T+ih)+'"/>';
+  // saved history
+  const full=pts.map(p=>[X(p.o),Y(p.v)]);
+  if(!pts.length||pts[pts.length-1].o<0)full.push([X(0),Y(cur)]);
+  if(pts.length){
+    s+='<path class="area" d="M'+r1(full[0][0])+','+(T+ih)+' '+full.map(p=>'L'+r1(p[0])+','+r1(p[1])).join(' ')+' L'+r1(full[full.length-1][0])+','+(T+ih)+'Z"/>';
+    s+='<path class="hist" d="'+full.map((p,i)=>(i?'L':'M')+r1(p[0])+','+r1(p[1])).join(' ')+'"/>';
+  }
+  if(perDay>0)s+='<line class="proj" x1="'+r1(X(0))+'" y1="'+r1(Y(cur))+'" x2="'+r1(X(H))+'" y2="'+r1(Y(endV))+'"/>';
+  // targets + release days
+  m.rows.forEach((r,i)=>{if(r.n>0)s+='<line class="thr'+(r.done?' ok':'')+'" x1="'+L+'" x2="'+(W-R)+'" y1="'+r1(Y(r.cum))+'" y2="'+r1(Y(r.cum))+'"/>'});
+  m.rows.forEach((r,i)=>{if(r.n>0)s+='<circle class="bt'+(r.done?' ok':'')+'" cx="'+(L+10)+'" cy="'+r1(Y(r.cum))+'" r="8"/><text class="bn" x="'+(L+10)+'" y="'+r1(Y(r.cum)+3.5)+'">'+(i+1)+'</text>'});
+  m.rows.forEach((r,i)=>{if(r.rel>0&&r.rel<=H){const x=r1(X(r.rel));
+    s+='<line class="rel" x1="'+x+'" x2="'+x+'" y1="'+(T-2)+'" y2="'+(T+ih)+'"/><circle class="br" cx="'+x+'" cy="9" r="8"/><text class="bn dark" x="'+x+'" y="12.5">'+(i+1)+'</text>'}});
+  s+='<circle class="dot" cx="'+r1(X(0))+'" cy="'+r1(Y(cur))+'" r="5"/>';
+  // x labels
+  const ly=HT-8,x0=X(0);
+  const ta=x0<L+22?'start':(x0>W-R-22?'end':'middle');
+  s+='<text x="'+r1(x0)+'" y="'+ly+'" text-anchor="'+ta+'">Today</text>';
+  if(x0-L>80)s+='<text x="'+L+'" y="'+ly+'" text-anchor="start">'+fmt(addDays(-P))+'</text>';
+  if(W-R-x0>80)s+='<text x="'+(W-R)+'" y="'+ly+'" text-anchor="end">'+fmt(addDays(H))+'</text>';
+  $('chart').innerHTML=s;
+  let cap;
+  if(!S.goals.length)cap='Add a goal to see targets on the chart.';
+  else if(m.cumAll*160<=m.tp)cap='You already have enough for every goal on the list.';
+  else if(m.e<=0)cap='Set your daily income to see a projection.';
+  else if(fin>365)cap='At ~'+Math.round(m.e)+' primos/day, all '+m.cumAll+' pulls are more than a year away.';
+  else cap='At ~'+Math.round(m.e)+' primos/day you’ll have all '+m.cumAll+' pulls in about '+plural(fin,'day')+' ('+fmt(addDays(fin))+').';
+  if(!S.log.length)cap+=' Log savings to start your history line.';
+  $('cap').textContent=cap;$('chart').setAttribute('aria-label','Pulls saved over time with projection. '+cap);
+}
+
+/* ---------- history ---------- */
+function history(){
+  const h=$('hist');
+  if(!S.log.length)h.textContent='No entries yet.';
+  else{
+    h.innerHTML='';
+    S.log.map((e,i)=>({e,i})).sort((a,b)=>a.e.date<b.e.date?1:a.e.date>b.e.date?-1:b.i-a.i).slice(0,30).forEach(({e})=>{
+      const d=document.createElement('div');d.className='log';
+      const sg=v=>(v>0?'+':'')+v,t=document.createElement('span');
+      if(e.goal)t.textContent=fmt(e.date)+' — spent '+plural(-e.df+(-e.dp/160),'pull')+' on '+(e.goal.name||'goal');
+      else t.textContent=fmt(e.date)+' — '+(e.mode==='set'?'set to '+e.p+' primos, '+e.f+' fates':sg(e.p)+' primos, '+sg(e.f)+' fates');
+      const b=document.createElement('button');b.className='sm';b.textContent='Undo';b.onclick=()=>undoEntry(e);
+      d.append(t,b);h.append(d);
+    });
+  }
+  const dl=$('doneList');dl.innerHTML='';$('doneWrap').hidden=!S.done.length;
+  S.done.slice(-10).reverse().forEach(x=>{const d=document.createElement('div');d.className='log';d.textContent=fmt(x.date)+' — '+(x.name||'Goal')+(x.patch?' (patch '+x.patch+')':'')+', '+plural(x.pulls,'pull');dl.append(d)});
+}
+
+/* ---------- log form ---------- */
+let sign=1;
+document.querySelectorAll('[data-sign]').forEach(b=>b.onclick=()=>{sign=Number(b.dataset.sign);document.querySelectorAll('[data-sign]').forEach(x=>x.setAttribute('aria-checked',String(x===b)))});
+function entry(mode){
+  const pv=$('ap').value,fv=$('af').value;
+  if(pv===''&&fv==='')return;
+  let p,f;
+  if(mode==='set'){p=pv===''?S.primos:num(pv);f=fv===''?S.fates:num(fv);if(p<0||f<0){toast('Totals can’t be negative.');return}}
+  else{p=num(pv);f=num(fv);if(sign<0){p=-Math.abs(p);f=-Math.abs(f)}}
+  const date=$('ad').value&&$('ad').value<=today()?$('ad').value:today();
+  const r=commit({mode,p,f,date});
+  if(!r.err){$('ap').value='';$('af').value='';$('ad').value=today();toast(mode==='set'?'Balance updated':'Entry logged',()=>undoEntry(r.e))}
+}
+$('add').onclick=()=>entry('add');$('set').onclick=()=>entry('set');
+[$('ap'),$('af')].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')entry('add')}));
+document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
+  const q=b.dataset.q,p=q==='p60'?60:q==='p90'?90:0,f=q==='f1'?1:0;
+  const r=commit({mode:'add',p,f,date:today()});
+  if(!r.err)toast('Logged '+(p?'+'+p+' primos':'+1 fate'),()=>undoEntry(r.e));
+});
+
+/* ---------- income ---------- */
+function incIn(){S.income={daily:Math.max(0,num($('i-d').value)),welkin:$('i-w').checked,monthly:Math.max(0,num($('i-m').value))};save();render()}
+['i-d','i-m'].forEach(id=>$(id).addEventListener('input',incIn));$('i-w').addEventListener('change',incIn);
+function fillIncome(){$('i-d').value=S.income.daily;$('i-m').value=S.income.monthly||'';$('i-w').checked=S.income.welkin}
+
+/* ---------- backup ---------- */
+function payload(){return JSON.stringify(Object.assign({app:'primogem-tracker'},S),null,1)}
+$('exp').onclick=()=>{
+  const json=payload();
+  if(DL){DL.save({filename:'primogem-tracker-'+today()+'.json',data:json}).then(()=>toast('Backup saved'),()=>status('Backup was not saved'))}
+  else{const t=$('expTxt');t.value=json;t.hidden=false;t.focus();t.select();status('Copy the text above and keep it somewhere safe')}
+};
+$('imp').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    try{
+      const o=JSON.parse(rd.result);if(!o||typeof o!=='object'||!('primos' in o))throw 0;
+      pending=norm(o);
+      $('impMsg').textContent='This backup has '+(Math.floor(pending.primos/160)+pending.fates)+' pulls saved and '+plural(pending.goals.length,'goal')+'. Replace your current data with it?';
+      $('impBox').hidden=false;
+    }catch(err){pending=null;$('impBox').hidden=true;toast('That file isn’t a Primogem Tracker backup.')}
+  };
+  rd.readAsText(f);
+};
+$('impNo').onclick=()=>{pending=null;$('impBox').hidden=true;$('imp').value=''};
+$('impOk').onclick=()=>{if(!pending)return;S=pending;pending=null;$('impBox').hidden=true;$('imp').value='';rebuild();save();toast('Backup restored')};
+function rebuild(){cards.clear();$('tl').innerHTML='';fillIncome();refresh()}
+
+/* ---------- boot ---------- */
+loadLocal();$('ad').value=today();$('ad').max=today();fillIncome();render();history();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){$('ad').max=today();if(document.activeElement!==$('ad'))$('ad').value=today();render()}});
+
+(async()=>{
+  try{
+    if(!window.claude)return;
+    try{DL=await claude.use('downloads')}catch(e){DL=null}
+    const [db,user]=await Promise.all([claude.use('db'),claude.use('user')]);
+    if(!db||!user)return;
+    const id=await user.id();if(!id)return;
+    const ref=db.collection('data/users/'+id).doc('tracker');
+    const snap=await ref.get();
+    dbDoc=ref;
+    if(snap.exists){
+      const remote=norm(snap.data());
+      if(remote.updated>=S.updated){S=remote;try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}rebuild()}
+      else save();
+    }else save();
+    status('Synced ✓');
+  }catch(e){status('Saved on this device only')}
+})();
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+</script>
+</body>
+</html>
