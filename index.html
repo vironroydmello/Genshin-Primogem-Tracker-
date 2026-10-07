@@ -118,6 +118,14 @@ textarea{width:100%;min-height:90px;border-radius:9px;border:1px solid var(--lin
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:9;display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);padding:6px 6px 6px 14px;border-radius:12px;max-width:calc(100% - 28px);font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.3)}
 #toast[hidden]{display:none}
 #toast button{min-height:34px;background:transparent;border:1px solid currentColor;color:inherit;padding:4px 12px}
+select.sm{min-height:36px;padding:4px 8px;font-size:14px;width:auto}
+.tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:10px}
+button:disabled{opacity:.4;cursor:default}
+.wide2{width:100%;margin-top:8px}
+.seg.inl{margin:0 0 10px;width:100%}.seg.inl button{flex:1}
+.g.paused{opacity:.75;border-style:dashed}
+.pr{display:flex;justify-content:space-between;gap:4px 10px;flex-wrap:wrap;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+.pr:first-child{border-top:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -161,7 +169,9 @@ textarea{width:100%;min-height:90px;border-radius:9px;border:1px solid var(--lin
     <div class="sub" id="latOut" style="margin-top:6px"></div></div>
 </section>
 
-<div class="sec"><h2 class="disp">Goals</h2><span class="sub">Savings fill goal 1 first, then spill into 2, 3…</span></div>
+<div class="sec"><h2 class="disp">Goals</h2></div>
+<p class="sub" style="margin:-4px 2px 10px">Pulls fund goals from the top: Must have first, then Want, then If spare. Change a tier or pause a goal when plans change and everything re-plans.</p>
+<section class="card" id="prio" hidden><div id="prioRows"></div></section>
 <div class="tl" id="tl"></div>
 <div class="empty" id="emptyG" hidden><div class="disp" style="font-weight:600">No goals yet</div><div class="sub">Add a character or weapon banner to start planning.</div></div>
 <div class="addrow" style="margin-bottom:12px"><button class="p" id="addc">＋ Character</button><button class="p" id="addw">＋ Weapon</button><button id="addx">＋ Custom</button></div>
@@ -189,7 +199,7 @@ textarea{width:100%;min-height:90px;border-radius:9px;border:1px solid var(--lin
 <section class="card" aria-labelledby="h-hi">
   <h2 id="h-hi" class="disp">History</h2>
   <div id="hist" class="sub">No entries yet.</div>
-  <div id="doneWrap" hidden><div class="sec-s">Completed goals</div><div id="doneList" class="sub"></div></div>
+  <div id="doneWrap" hidden><div class="sec-s">Pull results</div><div class="sub" id="rec" style="margin-bottom:4px"></div><div id="doneList" class="sub"></div></div>
 </section>
 
 <section class="card" aria-labelledby="h-bk">
@@ -201,6 +211,7 @@ textarea{width:100%;min-height:90px;border-radius:9px;border:1px solid var(--lin
 
 <button class="p wide" id="inst" hidden>Install app</button>
 <div id="st" role="status" aria-live="polite"></div>
+<div class="sub" style="text-align:center;margin-bottom:18px">Primogem Tracker v3</div>
 </main>
 <div id="toast" role="status" aria-live="polite" hidden><span id="tmsg"></span><button id="tund">Undo</button></div>
 
@@ -224,14 +235,14 @@ const plural=(n,w)=>n+' '+w+(n===1?'':'s');
 const isoRe=/^\d{4}-\d{2}-\d{2}$/;
 
 /* ---------- state ---------- */
-const newGoal=o=>Object.assign({id:uid(),name:'',patch:'',type:'char',copies:1,pity:0,custom:180,release:'',guar:false},o||{});
+const newGoal=o=>Object.assign({id:uid(),name:'',patch:'',type:'char',copies:1,pity:0,custom:180,release:'',guar:false,prio:2,paused:false},o||{});
 function clampPity(g){if(g.type!=='custom')g.pity=Math.min(Math.max(0,g.pity),TAB.worst.HALF[g.type]-1)}
 function cleanGoal(raw){
   const g=newGoal(raw);
   g.id=String(g.id||uid());g.name=String(g.name||'');g.patch=String(g.patch||'');
   if(!['char','weapon','custom'].includes(g.type))g.type='char';
   g.copies=Math.max(1,num(g.copies)||1);g.custom=Math.max(0,num(g.custom));g.pity=Math.max(0,num(g.pity));
-  g.guar=!!g.guar;g.release=isoRe.test(g.release||'')?g.release:'';
+  g.guar=!!g.guar;g.paused=!!g.paused;g.prio=[1,2,3].includes(num(g.prio))?num(g.prio):2;g.release=isoRe.test(g.release||'')?g.release:'';
   clampPity(g);return g;
 }
 const defState=()=>({v:3,primos:0,fates:0,income:{daily:60,welkin:false,monthly:0,bargains:false},mode:'worst',glitter:0,genesis:0,log:[],goals:[],done:[],updated:0});
@@ -243,13 +254,15 @@ function norm(raw){ // accepts v1, v2 and v3 data
   if(inc&&typeof inc==='object')o.income={daily:Math.max(0,num(inc.daily)),welkin:!!inc.welkin,monthly:Math.max(0,num(inc.monthly)),bargains:!!inc.bargains};
   else if(inc!==undefined)o.income.daily=Math.max(0,num(inc));
   o.log=(Array.isArray(raw.log)?raw.log:[]).filter(e=>e&&typeof e==='object').map(e=>{
-    const x={date:isoRe.test(e.date||'')?e.date:today(),p:num(e.p),f:num(e.f),dp:num(e.dp),df:num(e.df),mode:e.mode||'add'};if(e.note)x.note=String(e.note).slice(0,60);if(e.lg)x.lg=num(e.lg);if(e.ls)x.ls=num(e.ls);
+    const x={date:isoRe.test(e.date||'')?e.date:today(),p:num(e.p),f:num(e.f),dp:num(e.dp),df:num(e.df),mode:e.mode||'add'};
+    if(e.res==='won'||e.res==='lost'){x.res=e.res;x.pulls=num(e.pulls)}
+    if(e.eid)x.eid=String(e.eid);if(e.note)x.note=String(e.note).slice(0,60);if(e.lg)x.lg=num(e.lg);if(e.ls)x.ls=num(e.ls);
     if(e.goal&&typeof e.goal==='object'){x.goal=cleanGoal(e.goal);x.idx=num(e.idx)}
     return x;
   });
   if(Array.isArray(raw.goals)&&(raw.goals.length||raw.v===3))o.goals=raw.goals.filter(g=>g&&typeof g==='object').map(cleanGoal);
   else{const t=raw.goalType;o.goals=[cleanGoal({name:raw.goalName||'',type:t==='160'||t==='80'?'weapon':(t==='custom'?'custom':'char'),custom:raw.goalCustom||180,pity:raw.pity||0})]}
-  o.done=(Array.isArray(raw.done)?raw.done:[]).filter(d=>d&&typeof d==='object').map(d=>({id:String(d.id||uid()),name:String(d.name||''),patch:String(d.patch||''),pulls:num(d.pulls),date:isoRe.test(d.date||'')?d.date:today()}));
+  o.done=(Array.isArray(raw.done)?raw.done:[]).filter(d=>d&&typeof d==='object').map(d=>({id:String(d.id||uid()),name:String(d.name||''),patch:String(d.patch||''),pulls:num(d.pulls),date:isoRe.test(d.date||'')?d.date:today(),res:d.res==='lost'?'lost':'won',fifty:!!d.fifty,eid:String(d.eid||'')}));
   return o;
 }
 let S=defState(),dbDoc=null,tmr=null,DL=null,pending=null;
@@ -276,7 +289,8 @@ const need=g=>{
 };
 function model(){
   const e=eff(),tp=totP();let cum=0,curSet=false;
-  const rows=S.goals.map(g=>{
+  const act=S.goals.map((g,i)=>({g,i})).filter(x=>!x.g.paused).sort((a,b)=>a.g.prio-b.g.prio||a.i-b.i).map(x=>x.g);
+  const rows=act.map(g=>{
     const n=need(g),start=cum;cum+=n;
     const gotF=Math.max(0,Math.min(n,tp/160-start)),got=Math.floor(gotF);
     const pct=n?gotF/n*100:100,done=tp>=cum*160,cur=!done&&!curSet;if(cur)curSet=true;
@@ -285,7 +299,8 @@ function model(){
     const rel=g.release?off(g.release):null;
     return {g,n,start,cum,got,pct,done,cur,remP,ready,rel};
   });
-  return {e,tp,rows,cumAll:cum};
+  const paused=S.goals.filter(g=>g.paused).map(g=>({g,n:need(g),paused:true,got:0,pct:0,done:false,cur:false,cum:0,start:0,remP:0,ready:null,rel:g.release?off(g.release):null}));
+  return {e,tp,rows,paused,all:[...rows,...paused],cumAll:cum};
 }
 
 /* ---------- ledger ---------- */
@@ -309,7 +324,12 @@ function undoEntry(e){
   if(!S.log.includes(e))return;
   if(ledP()-e.dp-e.df*160<0){toast('Undo newer entries first — those pulls were spent since.');return}
   S.primos-=e.dp;S.fates-=e.df;S.genesis+=e.lg||0;S.glitter+=e.ls||0;S.log=S.log.filter(x=>x!==e);
-  if(e.goal){S.done=S.done.filter(d=>d.id!==e.goal.id);S.goals.splice(Math.min(Math.max(0,e.idx||0),S.goals.length),0,e.goal)}
+  if(e.goal){
+    S.done=S.done.filter(d=>e.eid?d.eid!==e.eid:d.id!==e.goal.id);
+    const cur=S.goals.find(x=>x.id===e.goal.id);
+    if(cur)Object.assign(cur,e.goal); // goal stayed on the list (lost 50/50 or extra copies): restore it in place
+    else S.goals.splice(Math.min(Math.max(0,e.idx||0),S.goals.length),0,e.goal);
+  }
   if(S.fates<0){S.primos+=S.fates*160;S.fates=0}
   if(S.primos<0){const k=Math.ceil(-S.primos/160);S.fates-=k;S.primos+=k*160}
   save();refresh();
@@ -334,9 +354,12 @@ const cards=new Map();
 function makeCard(g){
   const el=document.createElement('div');el.dataset.id=g.id;
   el.innerHTML='<div class="node"></div><div class="gh"><span class="icoW"></span><div class="gt"><div class="gn"></div><div class="sub"><span class="badge" hidden></span><span class="lab"></span></div></div><button class="sm" data-a="edit" aria-expanded="false">Edit</button></div>'+
-   '<div class="bar" role="progressbar" aria-label="Pulls saved toward this goal" aria-valuemin="0"><div class="fill"></div>'+gemSvg+'</div><div class="prog"></div><div class="eta"></div><div class="acts"></div>'+
-   '<div class="panel edit" hidden></div><div class="panel spend" hidden></div>';
-  return {el,edit:el.querySelector('.edit'),spend:el.querySelector('.spend'),icon:''};
+   '<div class="bar" role="progressbar" aria-label="Pulls saved toward this goal" aria-valuemin="0"><div class="fill"></div>'+gemSvg+'</div><div class="prog"></div><div class="eta"></div>'+
+   '<div class="tools"><select class="sm" data-prio aria-label="Priority"><option value="1">★ Must have</option><option value="2">Want</option><option value="3">If spare</option></select><button class="sm" data-a="up" aria-label="Move up within this tier">↑</button><button class="sm" data-a="dn" aria-label="Move down within this tier">↓</button><button class="sm" data-a="pause">Pause</button></div>'+
+   '<div class="acts"></div><div class="panel edit" hidden></div><div class="panel spend" hidden></div>';
+  const c={el,edit:el.querySelector('.edit'),spend:el.querySelector('.spend'),icon:''};
+  c.spend.addEventListener('input',ev=>{if(ev.target.dataset.k==='spent')c.spend.dataset.touched='1'});
+  return c;
 }
 function etaHtml(r,m){
   const L=[],e=m.e;
@@ -350,17 +373,17 @@ function etaHtml(r,m){
       L.push('Releases in <b>'+plural(rel,'day')+'</b> ('+dt+')');
       if(!r.done){
         const short=r.cum*160-(m.tp+e*rel);
-        L.push(short<=0?'<span class="ok">On track ✓ enough by release</span>':'<span class="warn">Short by ~'+Math.ceil(short)+' primos (≈'+plural(Math.ceil(short/160),'pull')+'). Need ~'+Math.ceil(r.remP/rel)+'/day</span>');
+        L.push(short<=0?'<span class="ok">On track ✓ covers this and the goals above it</span>':'<span class="warn">Short by ~'+Math.ceil(short)+' primos (≈'+plural(Math.ceil(short/160),'pull')+') for this and the goals above it. Need ~'+Math.ceil(r.remP/rel)+'/day</span>');
       }
     }else if(rel===0)L.push('<b>Releases today!</b>');
     else L.push('Released '+dt);
   }else if(!r.done)L.push('Add a release date to check if you’re on track');
   return L.join('<br>');
 }
-function fillCard(c,r,i,m){
-  const g=r.g,el=c.el;
-  el.className='g'+(r.done?' done':'')+(r.cur?' cur':'')+(!r.done&&!r.cur?' lock':'');
-  el.querySelector('.node').textContent=r.done?'✓':i+1;
+function fillCard(c,r,m){
+  const g=r.g,el=c.el,ri=m.rows.indexOf(r);
+  el.className='g'+(r.paused?' paused':'')+(r.done?' done':'')+(r.cur?' cur':'')+(!r.paused&&!r.done&&!r.cur?' lock':'');
+  el.querySelector('.node').textContent=r.paused?'⏸':r.done?'✓':ri+1;
   if(c.icon!==g.type){el.querySelector('.icoW').innerHTML=ICO[g.type];c.icon=g.type}
   el.querySelector('.gn').textContent=g.name||'Untitled goal';
   const bd=el.querySelector('.badge');bd.hidden=!g.patch;bd.textContent=g.patch?'Patch '+g.patch:'';
@@ -371,35 +394,56 @@ function fillCard(c,r,i,m){
   const bar=el.querySelector('.bar');bar.setAttribute('aria-valuemax',r.n);bar.setAttribute('aria-valuenow',r.got);
   el.querySelector('.fill').style.width=Math.min(100,r.pct)+'%';
   el.querySelector('.gem').style.left=Math.max(4,Math.min(96,r.pct))+'%';
-  el.querySelector('.prog').innerHTML='<b>'+r.got+'</b> / '+r.n+' pulls<span class="pc">'+Math.floor(r.pct)+'%</span>';
-  el.querySelector('.eta').innerHTML=etaHtml(r,m);
-  const acts=el.querySelector('.acts'),want=r.done&&r.n>0?'1':'';
-  if(acts.dataset.on!==want){acts.dataset.on=want;acts.innerHTML=want?'<button class="p wide" data-a="spend">Pulled it — spend &amp; archive</button>':''}
+  el.querySelector('.prog').innerHTML=r.paused?'<b>'+r.n+'</b> pulls planned':'<b>'+r.got+'</b> / '+r.n+' pulls<span class="pc">'+Math.floor(r.pct)+'%</span>';
+  el.querySelector('.eta').innerHTML=r.paused?'Paused — not counted in your plan. Resume it to fund it again.':etaHtml(r,m);
+  el.querySelector('[data-prio]').value=String(g.prio);
+  el.querySelector('[data-a=up]').disabled=r.paused||!(ri>0&&m.rows[ri-1].g.prio===g.prio);
+  el.querySelector('[data-a=dn]').disabled=r.paused||!(m.rows[ri+1]&&m.rows[ri+1].g.prio===g.prio);
+  el.querySelector('[data-a=pause]').textContent=g.paused?'Resume':'Pause';
+  const acts=el.querySelector('.acts'),key=r.paused?'':(r.done?'d':'n');
+  if(acts.dataset.on!==key){acts.dataset.on=key;acts.innerHTML=key==='d'?'<button class="p wide" data-a="spend">Pulled it — log the result</button>':key==='n'?'<button class="sm wide2" data-a="spend">Log a pull result (won early or lost?)</button>':''}
   const eb=el.querySelector('[data-a=edit]');eb.textContent=c.edit.hidden?'Edit':'Close';eb.setAttribute('aria-expanded',String(!c.edit.hidden));
+  if(c.edit.dataset.built)populateEdit(c,g);
 }
+const TIER={1:'Must have',2:'Want',3:'If spare'};
 function render(){
   const m=model();
   $('tp').textContent=S.primos;$('tf').textContent=S.fates;$('tt').textContent=have();
-  // hero summary
   const nx=m.rows.find(r=>!r.done);
-  $('nx').textContent=!S.goals.length?'Add a goal below to start planning.':!nx?'Every goal on your list is covered ✦':
+  $('nx').textContent=!m.rows.length?(S.goals.length?'All goals are paused.':'Add a goal below to start planning.'):!nx?'Every active goal is covered ✦':
     'Next: '+(nx.g.name||'Untitled goal')+' — '+(nx.ready===null?'set your daily income for a date':nx.ready>365?'over a year away at this rate':'ready in '+plural(nx.ready,'day')+' ('+fmt(addDays(nx.ready))+')');
-  // goal cards
   const tl=$('tl'),keep=new Set();
-  m.rows.forEach((r,i)=>{
+  m.all.forEach((r,i)=>{
     let c=cards.get(r.g.id);if(!c){c=makeCard(r.g);cards.set(r.g.id,c)}
-    keep.add(r.g.id);fillCard(c,r,i,m);
+    keep.add(r.g.id);fillCard(c,r,m);
     if(tl.children[i]!==c.el)tl.insertBefore(c.el,tl.children[i]||null);
   });
   for(const [id,c] of [...cards]){if(!keep.has(id)){c.el.remove();cards.delete(id)}}
   tl.hidden=!S.goals.length;$('emptyG').hidden=!!S.goals.length;
-  // income readout
+  // priority summary
+  let ph='';
+  [1,2,3].forEach(t=>{
+    const rs=m.rows.filter(r=>r.g.prio===t);if(!rs.length)return;
+    const last=rs[rs.length-1],pulls=rs.reduce((s,r)=>s+r.n,0);
+    const st=last.done?'<span class="ok">covered ✓</span>':last.ready===null?'set income for a date':last.ready>365?'over a year away':'ready by <b>'+fmt(addDays(last.ready))+'</b>';
+    ph+='<div class="pr"><b>'+TIER[t]+'</b><span class="sub">'+plural(rs.length,'goal')+', '+pulls+' pulls</span><span>'+st+'</span></div>';
+  });
+  if(m.paused.length)ph+='<div class="pr"><span class="sub">'+plural(m.paused.length,'goal')+' paused (not counted)</span></div>';
+  $('prioRows').innerHTML=ph;$('prio').hidden=!ph;
   const d=m.e;$('incOut').textContent='≈ '+Math.round(d)+' primos/day, about '+(d*30/160).toFixed(1)+' pulls every 30 days.';
   $('latOut').textContent=(S.genesis||S.glitter)?'Counts as '+(lat()/160).toFixed(1)+' pulls. Convert to spend them.':'Genesis counts 1:1 as primogems; 5 Starglitter = 1 fate.';
   drawChart(m);
 }
 
-/* edit + spend panels */
+/* edit + result panels */
+function populateEdit(c,g){
+  const q=k=>c.edit.querySelector('[data-k='+k+']');
+  const set=(k,v)=>{const el=q(k);if(el&&document.activeElement!==el)el.value=v};
+  set('name',g.name);set('patch',g.patch);set('type',g.type);set('release',g.release);set('copies',g.copies);set('pity',g.pity);set('custom',g.custom);
+  q('guar').checked=g.guar;
+  const cu=g.type==='custom',w=n=>c.edit.querySelector('[data-w='+n+']');
+  w('copies').style.display=cu?'none':'';w('pity').style.display=cu?'none':'';w('guar').style.display=cu?'none':'';w('custom').style.display=cu?'':'none';
+}
 function ensureEdit(c,g){
   if(c.edit.dataset.built)return;c.edit.dataset.built='1';
   c.edit.innerHTML='<div class="grid2">'+
@@ -410,13 +454,8 @@ function ensureEdit(c,g){
    '<label class="f" data-w="pity">Current pity<input data-k="pity" type="number" inputmode="numeric" min="0"></label>'+
    '<label class="f" data-w="custom">Pulls needed<input data-k="custom" type="number" inputmode="numeric" min="0"></label>'+
    '<label class="chk" data-w="guar"><input type="checkbox" data-k="guar"> Next 5★ is guaranteed featured (lost 50/50)</label></div>'+
-   '<div class="b"><button class="sm" data-a="up">↑ Move up</button><button class="sm" data-a="dn">↓ Move down</button><button class="sm danger" data-a="rm">Delete</button></div>';
+   '<div class="b"><button class="sm danger" data-a="rm">Delete goal</button></div>';
   const q=k=>c.edit.querySelector('[data-k='+k+']');
-  ['name','patch','type','release','copies','pity','custom'].forEach(k=>{q(k).value=k==='copies'?g.copies:(g[k]===0&&!['pity','custom'].includes(k)?'':g[k])});
-  q('guar').checked=g.guar;
-  const sync=()=>{const cu=g.type==='custom';
-    c.edit.querySelector('[data-w=copies]').style.display=cu?'none':'';c.edit.querySelector('[data-w=pity]').style.display=cu?'none':'';
-    c.edit.querySelector('[data-w=guar]').style.display=cu?'none':'';c.edit.querySelector('[data-w=custom]').style.display=cu?'':'none'};
   const onIn=ev=>{
     const inp=ev.target.closest('[data-k]');if(!inp)return;const k=inp.dataset.k;
     if(k==='guar')g.guar=inp.checked;
@@ -424,40 +463,74 @@ function ensureEdit(c,g){
     else if(k==='release')g.release=isoRe.test(inp.value)?inp.value:'';
     else g[k]=Math.max(0,num(inp.value));
     if(k==='copies'&&g.copies<1)g.copies=1;
-    if(k==='type'||k==='pity'){const before=g.pity;clampPity(g);if(k==='pity'&&before!==g.pity)inp.value=g.pity;if(k==='type')q('pity').value=g.pity}
-    sync();save();render();
+    if(k==='type'||k==='pity'){const before=g.pity;clampPity(g);if(k==='pity'&&before!==g.pity)inp.value=g.pity}
+    save();render();
   };
   c.edit.addEventListener('input',onIn);c.edit.addEventListener('change',onIn);
-  sync();
+  populateEdit(c,g);
 }
-function openSpend(c,g,r){
-  const h=ledHave(),def=Math.max(1,Math.min(r.n,h));
-  c.spend.innerHTML='<label class="f">Pulls actually used<input data-k="spent" type="number" inputmode="numeric" min="1" max="'+h+'" value="'+def+'"></label>'+
-   '<div class="sub" style="margin-top:6px">Taken from your fates first, then primogems. Planned: '+r.n+' pulls — enter fewer if you got lucky.</div>'+
-   '<div class="b"><button class="p sm" data-a="spendok">Spend &amp; archive</button><button class="sm" data-a="spendno">Cancel</button></div>';
-  c.spend.hidden=false;c.spend.querySelector('input').focus();
+const RES_HINT={won:'Pulls it took to get the featured 5★. Anything left over stays in your savings.',lost:'Pulls it took to get the other 5★. The goal stays on your list and is marked guaranteed.',forced:'Your 50/50 was already lost, so this pull is guaranteed — it counts as a win.',custom:'Pulls you spent on this goal.'};
+function setResHint(c,g){c.spend.querySelector('[data-hint]').textContent=g.type==='custom'?RES_HINT.custom:g.guar?RES_HINT.forced:RES_HINT[c.spend.dataset.res]}
+function openResult(c,g,r){
+  const h=ledHave(),forced=g.guar||g.type==='custom';
+  c.spend.dataset.res='won';delete c.spend.dataset.touched;
+  c.spend.innerHTML=(forced?'':'<div class="seg inl" role="radiogroup" aria-label="Result"><button role="radio" aria-checked="true" data-a="res-won">Won ✓</button><button role="radio" aria-checked="false" data-a="res-lost">Lost 50/50</button></div>')+
+   '<label class="f">Pulls it took<input data-k="spent" type="number" inputmode="numeric" min="1" value="'+Math.max(1,Math.min(r.n||1,h))+'"></label>'+
+   '<label class="chk" style="margin-top:8px"><input type="checkbox" data-k="already"> I already updated my balance (don’t deduct)</label>'+
+   '<div class="sub" data-hint style="margin-top:6px"></div>'+
+   '<div class="b"><button class="p sm" data-a="resok">Save result</button><button class="sm" data-a="resno">Cancel</button></div>';
+  setResHint(c,g);c.spend.hidden=false;c.spend.querySelector('input').focus();
 }
+function moveGoal(g,dir){
+  const act=model().rows.map(r=>r.g),k=act.indexOf(g),o=act[k+dir];
+  if(!o||o.prio!==g.prio){toast('Change the priority tier to move it further.');return}
+  const a=S.goals.indexOf(g),b=S.goals.indexOf(o);S.goals[a]=o;S.goals[b]=g;save();render();
+}
+$('tl').addEventListener('change',ev=>{
+  const sel=ev.target.closest('select[data-prio]');if(!sel)return;
+  const g=S.goals.find(x=>x.id===sel.closest('.g').dataset.id);if(!g)return;
+  g.prio=num(sel.value)||2;save();render();
+});
 $('tl').addEventListener('click',ev=>{
   const b=ev.target.closest('button[data-a]');if(!b)return;
-  const el=b.closest('.g'),i=S.goals.findIndex(x=>x.id===el.dataset.id);if(i<0)return;
-  const g=S.goals[i],c=cards.get(g.id),a=b.dataset.a;
+  const el=b.closest('.g'),g=S.goals.find(x=>x.id===el.dataset.id);if(!g)return;
+  const c=cards.get(g.id),a=b.dataset.a;
   if(a==='edit'){ensureEdit(c,g);c.edit.hidden=!c.edit.hidden;render()}
-  else if(a==='up'&&i>0){[S.goals[i-1],S.goals[i]]=[S.goals[i],S.goals[i-1]];save();render()}
-  else if(a==='dn'&&i<S.goals.length-1){[S.goals[i+1],S.goals[i]]=[S.goals[i],S.goals[i+1]];save();render()}
+  else if(a==='up')moveGoal(g,-1);
+  else if(a==='dn')moveGoal(g,1);
+  else if(a==='pause'){g.paused=!g.paused;save();render()}
   else if(a==='rm'){
-    if(b.dataset.armed){S.goals.splice(i,1);save();render()}
-    else{b.dataset.armed='1';b.textContent='Tap again to delete';setTimeout(()=>{delete b.dataset.armed;b.textContent='Delete'},3000)}
+    if(b.dataset.armed){S.goals.splice(S.goals.indexOf(g),1);save();render()}
+    else{b.dataset.armed='1';b.textContent='Tap again to delete';setTimeout(()=>{delete b.dataset.armed;b.textContent='Delete goal'},3000)}
   }
-  else if(a==='spend'){openSpend(c,g,model().rows[i])}
-  else if(a==='spendno'){c.spend.hidden=true}
-  else if(a==='spendok'){
-    const n=Math.min(ledHave(),Math.max(1,num(c.spend.querySelector('input').value)));
-    if(ledHave()<1){toast('No pulls in your balance yet — convert Genesis/Starglitter first.');return}
-    const useF=Math.min(S.fates,n),rest=n-useF;
-    const r=applyCore({mode:'spend',p:-rest*160,f:-useF,goal:JSON.parse(JSON.stringify(g)),idx:i});
+  else if(a==='spend'){const r=model().all.find(x=>x.g===g);openResult(c,g,r)}
+  else if(a==='resno'){c.spend.hidden=true}
+  else if(a==='res-won'||a==='res-lost'){
+    const res=a==='res-lost'?'lost':'won';c.spend.dataset.res=res;
+    c.spend.querySelectorAll('[role=radio]').forEach(x=>x.setAttribute('aria-checked',String(x===b)));
+    if(!c.spend.dataset.touched)c.spend.querySelector('[data-k=spent]').value=Math.max(1,Math.min(res==='lost'?(TAB[S.mode].HALF[g.type]||90):(need(g)||1),ledHave()));
+    setResHint(c,g);
+  }
+  else if(a==='resok'){
+    const forced=g.guar||g.type==='custom',res=forced?'won':(c.spend.dataset.res||'won');
+    const already=c.spend.querySelector('[data-k=already]').checked;
+    let n=Math.max(1,num(c.spend.querySelector('[data-k=spent]').value));
+    if(!already){
+      if(ledHave()<1){toast('No pulls in your balance yet. Convert Genesis/Starglitter first, or tick “already updated my balance”.');return}
+      n=Math.min(n,ledHave());
+    }
+    const useF=already?0:Math.min(S.fates,n),rest=already?0:n-useF;
+    const fifty=!forced,eid=uid();
+    const r=applyCore({mode:'spend',p:-rest*160,f:-useF,goal:JSON.parse(JSON.stringify(g)),idx:S.goals.indexOf(g)});
     if(r.err){toast(r.err);return}
-    S.goals.splice(i,1);S.done.push({id:g.id,name:g.name,patch:g.patch,pulls:n,date:r.e.date});
-    save();refresh();toast('Spent '+plural(n,'pull')+' — goal archived',()=>undoEntry(r.e));
+    r.e.res=res;r.e.pulls=n;r.e.eid=eid;
+    S.done.push({id:g.id,eid,name:g.name,patch:g.patch,pulls:n,date:r.e.date,res,fifty});
+    const nm=g.name||'goal';
+    if(res==='lost'){g.guar=true;g.pity=0}
+    else if(g.type!=='custom'&&g.copies>1){g.copies-=1;g.pity=0;g.guar=false}
+    else S.goals.splice(S.goals.indexOf(g),1);
+    c.spend.hidden=true;save();refresh();
+    toast(res==='lost'?'Lost the 50/50 after '+plural(n,'pull')+'. Next 5★ is guaranteed.':'Won '+nm+' in '+plural(n,'pull')+' ✓',()=>undoEntry(r.e));
   }
 });
 function addGoal(type){
@@ -470,11 +543,11 @@ $('addc').onclick=()=>addGoal('char');$('addw').onclick=()=>addGoal('weapon');$(
 /* ---------- forecast chart ---------- */
 function drawChart(m){
   const W=360,HT=200,L=34,R=14,T=22,B=28,iw=W-L-R,ih=HT-T-B,r1=x=>Math.round(x*10)/10;
-  const cur=m.tp/160,perDay=m.e/160;
+  const cur=m.tp/160,led=ledP()/160,perDay=m.e/160;
   const ents=S.log.map((e,i)=>({e,i,o:off(e.date)})).sort((a,b)=>a.o-b.o||a.i-b.i);
   let pts=[];
   if(ents.length){
-    let v=cur-ents.reduce((s,x)=>s+x.e.dp/160+x.e.df,0);
+    let v=led-ents.reduce((s,x)=>s+x.e.dp/160+x.e.df,0);
     pts.push({o:ents[0].o,v});
     ents.forEach(x=>{v+=x.e.dp/160+x.e.df;pts.push({o:x.o,v})});
   }
@@ -492,7 +565,7 @@ function drawChart(m){
   s+='<line class="today" x1="'+r1(X(0))+'" x2="'+r1(X(0))+'" y1="'+T+'" y2="'+(T+ih)+'"/>';
   // saved history
   const full=pts.map(p=>[X(p.o),Y(p.v)]);
-  if(!pts.length||pts[pts.length-1].o<0)full.push([X(0),Y(cur)]);
+  if(!pts.length||pts[pts.length-1].o<0||Math.abs(pts[pts.length-1].v-cur)>1e-6)full.push([X(0),Y(cur)]);
   if(pts.length){
     s+='<path class="area" d="M'+r1(full[0][0])+','+(T+ih)+' '+full.map(p=>'L'+r1(p[0])+','+r1(p[1])).join(' ')+' L'+r1(full[full.length-1][0])+','+(T+ih)+'Z"/>';
     s+='<path class="hist" d="'+full.map((p,i)=>(i?'L':'M')+r1(p[0])+','+r1(p[1])).join(' ')+'"/>';
@@ -530,15 +603,20 @@ function history(){
     S.log.map((e,i)=>({e,i})).sort((a,b)=>a.e.date<b.e.date?1:a.e.date>b.e.date?-1:b.i-a.i).slice(0,30).forEach(({e})=>{
       const d=document.createElement('div');d.className='log';
       const sg=v=>(v>0?'+':'')+v,t=document.createElement('span');
-      if(e.goal)t.textContent=fmt(e.date)+' — spent '+plural(-e.df+(-e.dp/160),'pull')+' on '+(e.goal.name||'goal');
-      else t.textContent=fmt(e.date)+' — '+(e.mode==='set'?'set to '+e.p+' primos, '+e.f+' fates':sg(e.p)+' primos, '+sg(e.f)+' fates');
-      if(e.note)t.textContent+=' · '+e.note;
+      if(e.goal){
+        const n=e.pulls||(-e.df+(-e.dp/160)),nm=e.goal.name||'goal';
+        t.textContent=fmt(e.date)+' — '+(e.res==='won'?'won '+nm+' in '+plural(n,'pull'):e.res==='lost'?'lost the 50/50 on '+nm+' after '+plural(n,'pull'):'spent '+plural(n,'pull')+' on '+nm);
+      }else{t.textContent=fmt(e.date)+' — '+(e.mode==='set'?'set to '+e.p+' primos, '+e.f+' fates':sg(e.p)+' primos, '+sg(e.f)+' fates');if(e.note)t.textContent+=' · '+e.note}
       const b=document.createElement('button');b.className='sm';b.textContent='Undo';b.onclick=()=>undoEntry(e);
       d.append(t,b);h.append(d);
     });
   }
   const dl=$('doneList');dl.innerHTML='';$('doneWrap').hidden=!S.done.length;
-  S.done.slice(-10).reverse().forEach(x=>{const d=document.createElement('div');d.className='log';d.textContent=fmt(x.date)+' — '+(x.name||'Goal')+(x.patch?' (patch '+x.patch+')':'')+', '+plural(x.pulls,'pull');dl.append(d)});
+  S.done.slice(-10).reverse().forEach(x=>{const d=document.createElement('div');d.className='log';d.textContent=fmt(x.date)+' — '+(x.res==='lost'?'Lost 50/50':'Won')+': '+(x.name||'Goal')+(x.patch?' (patch '+x.patch+')':'')+', '+plural(x.pulls,'pull');dl.append(d)});
+  const wins=S.done.filter(x=>x.res!=='lost'),w=S.done.filter(x=>x.res!=='lost'&&x.fifty).length,l=S.done.filter(x=>x.res==='lost').length;
+  const rec=[];if(w+l)rec.push('50/50 record: '+w+' won, '+l+' lost.');
+  if(wins.length)rec.push('Average '+Math.round(wins.reduce((s,x)=>s+x.pulls,0)/wins.length)+' pulls per win.');
+  $('rec').textContent=rec.join(' ');
 }
 
 /* ---------- log form ---------- */
