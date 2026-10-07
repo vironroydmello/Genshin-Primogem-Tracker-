@@ -148,12 +148,17 @@ textarea{width:100%;min-height:90px;border-radius:9px;border:1px solid var(--lin
     <label class="f">Primogems<input id="ap" type="number" inputmode="numeric" placeholder="e.g. 120"></label>
     <label class="f">Fates<input id="af" type="number" inputmode="numeric" placeholder="e.g. 2"></label>
   </div>
+  <label class="f" style="display:block;margin-top:8px">Note (optional)<input id="an" maxlength="60" list="cats" autocomplete="off" placeholder="Events, Abyss 36★, Codes, Top-up…"></label>
+  <datalist id="cats"><option value="Events"><option value="Abyss"><option value="Imaginarium Theater"><option value="Livestream codes"><option value="Genesis top-up"><option value="Maintenance"><option value="Quest / Exploration"></datalist>
   <div class="row" style="margin-top:8px">
     <label class="f" style="flex:1.6;min-width:130px">Date<input id="ad" type="date"></label>
     <button class="p" id="add">Add</button>
     <button id="set">Set total</button>
   </div>
   <div class="sub" style="margin-top:8px">160 primogems = 1 pull. <b>Set total</b> replaces your balance; leave a field empty to keep it as is.</div>
+  <div class="panel"><div class="sec-s" style="margin-top:0">Inventory not in your balance yet</div>
+    <div class="row"><label class="f">Genesis Crystals<input id="i-g" type="number" inputmode="numeric" min="0"></label><label class="f">Masterless Starglitter<input id="i-s" type="number" inputmode="numeric" min="0"></label><button id="conv">Convert</button></div>
+    <div class="sub" id="latOut" style="margin-top:6px"></div></div>
 </section>
 
 <div class="sec"><h2 class="disp">Goals</h2><span class="sub">Savings fill goal 1 first, then spill into 2, 3…</span></div>
@@ -174,7 +179,10 @@ textarea{width:100%;min-height:90px;border-radius:9px;border:1px solid var(--lin
     <label class="f">Per day (commissions etc.)<input id="i-d" type="number" inputmode="numeric" min="0"></label>
     <label class="f">Other per month<input id="i-m" type="number" inputmode="numeric" min="0" placeholder="Abyss, Theater, events…"></label>
   </div>
+  <div class="chips" style="margin:10px 0 0"><span class="sub">Planning</span><div class="seg" role="radiogroup" aria-label="Planning mode"><button role="radio" aria-checked="true" data-mode="worst">Worst case</button><button role="radio" aria-checked="false" data-mode="real">Realistic</button></div></div>
+  <div class="sub" id="modeNote" style="margin-bottom:6px"></div>
   <label class="chk" style="margin-top:10px"><input type="checkbox" id="i-w"> Welkin Moon active (+90/day)</label>
+  <label class="chk" style="margin-top:8px"><input type="checkbox" id="i-b"> Paimon’s Bargains (+5 fates on the 1st of each month)</label>
   <div class="sub" style="margin-top:8px" id="incOut"></div>
 </section>
 
@@ -191,6 +199,7 @@ textarea{width:100%;min-height:90px;border-radius:9px;border:1px solid var(--lin
   <div id="impBox" hidden style="margin-top:10px"><div class="sub" id="impMsg"></div><div class="b"><button class="p sm" id="impOk">Replace my data</button><button class="sm" id="impNo">Cancel</button></div></div>
 </section>
 
+<button class="p wide" id="inst" hidden>Install app</button>
 <div id="st" role="status" aria-live="polite"></div>
 </main>
 <div id="toast" role="status" aria-live="polite" hidden><span id="tmsg"></span><button id="tund">Undo</button></div>
@@ -198,7 +207,7 @@ textarea{width:100%;min-height:90px;border-radius:9px;border:1px solid var(--lin
 <script>
 'use strict';
 const LS='primo-tracker-v3',OLD=['primo-tracker-v2','primo-tracker-v1'];
-const PER={char:180,weapon:160},HALF={char:90,weapon:80},WELKIN=90;
+const TAB={worst:{PER:{char:180,weapon:160},HALF:{char:90,weapon:80}},real:{PER:{char:154,weapon:130},HALF:{char:77,weapon:65}}},WELKIN=90;
 
 /* ---------- helpers ---------- */
 const $=id=>document.getElementById(id);
@@ -216,7 +225,7 @@ const isoRe=/^\d{4}-\d{2}-\d{2}$/;
 
 /* ---------- state ---------- */
 const newGoal=o=>Object.assign({id:uid(),name:'',patch:'',type:'char',copies:1,pity:0,custom:180,release:'',guar:false},o||{});
-function clampPity(g){if(g.type!=='custom')g.pity=Math.min(Math.max(0,g.pity),HALF[g.type]-1)}
+function clampPity(g){if(g.type!=='custom')g.pity=Math.min(Math.max(0,g.pity),TAB.worst.HALF[g.type]-1)}
 function cleanGoal(raw){
   const g=newGoal(raw);
   g.id=String(g.id||uid());g.name=String(g.name||'');g.patch=String(g.patch||'');
@@ -225,16 +234,16 @@ function cleanGoal(raw){
   g.guar=!!g.guar;g.release=isoRe.test(g.release||'')?g.release:'';
   clampPity(g);return g;
 }
-const defState=()=>({v:3,primos:0,fates:0,income:{daily:60,welkin:false,monthly:0},log:[],goals:[],done:[],updated:0});
+const defState=()=>({v:3,primos:0,fates:0,income:{daily:60,welkin:false,monthly:0,bargains:false},mode:'worst',glitter:0,genesis:0,log:[],goals:[],done:[],updated:0});
 function norm(raw){ // accepts v1, v2 and v3 data
   const o=defState();
   if(!raw||typeof raw!=='object')return o;
-  o.primos=num(raw.primos);o.fates=num(raw.fates);o.updated=Number(raw.updated)||0;
+  o.primos=num(raw.primos);o.fates=num(raw.fates);o.updated=Number(raw.updated)||0;o.mode=raw.mode==='real'?'real':'worst';o.glitter=Math.max(0,num(raw.glitter));o.genesis=Math.max(0,num(raw.genesis));
   const inc=raw.income;
-  if(inc&&typeof inc==='object')o.income={daily:Math.max(0,num(inc.daily)),welkin:!!inc.welkin,monthly:Math.max(0,num(inc.monthly))};
+  if(inc&&typeof inc==='object')o.income={daily:Math.max(0,num(inc.daily)),welkin:!!inc.welkin,monthly:Math.max(0,num(inc.monthly)),bargains:!!inc.bargains};
   else if(inc!==undefined)o.income.daily=Math.max(0,num(inc));
   o.log=(Array.isArray(raw.log)?raw.log:[]).filter(e=>e&&typeof e==='object').map(e=>{
-    const x={date:isoRe.test(e.date||'')?e.date:today(),p:num(e.p),f:num(e.f),dp:num(e.dp),df:num(e.df),mode:e.mode||'add'};
+    const x={date:isoRe.test(e.date||'')?e.date:today(),p:num(e.p),f:num(e.f),dp:num(e.dp),df:num(e.df),mode:e.mode||'add'};if(e.note)x.note=String(e.note).slice(0,60);if(e.lg)x.lg=num(e.lg);if(e.ls)x.ls=num(e.ls);
     if(e.goal&&typeof e.goal==='object'){x.goal=cleanGoal(e.goal);x.idx=num(e.idx)}
     return x;
   });
@@ -256,12 +265,13 @@ function save(){
 }
 
 /* ---------- maths ---------- */
-const totP=()=>S.primos+S.fates*160;
-const have=()=>Math.floor(S.primos/160)+S.fates;
-const eff=()=>S.income.daily+(S.income.welkin?WELKIN:0)+S.income.monthly/30;
+const ledP=()=>S.primos+S.fates*160,lat=()=>S.genesis+Math.floor(S.glitter/5)*160;
+const totP=()=>ledP()+lat();
+const have=()=>Math.floor(totP()/160),ledHave=()=>Math.floor(ledP()/160);
+const eff=()=>S.income.daily+(S.income.welkin?WELKIN:0)+S.income.monthly/30+(S.income.bargains?800/30:0);
 const need=g=>{
   if(g.type==='custom')return Math.max(0,g.custom);
-  const per=PER[g.type],first=g.guar?HALF[g.type]:per;
+  const T=TAB[S.mode],per=T.PER[g.type],first=g.guar?T.HALF[g.type]:per;
   return Math.max(0,first+per*(Math.max(1,g.copies)-1)-g.pity);
 };
 function model(){
@@ -288,6 +298,8 @@ function applyCore(q){ // q: {mode,p,f,date,goal,idx}
   if(nP<0){const k=Math.ceil(-nP/160);nF-=k;nP+=k*160}
   const e={date:q.date&&isoRe.test(q.date)?q.date:today(),p:q.p,f:q.f,dp:nP-S.primos,df:nF-S.fates,mode:q.mode};
   if(q.goal){e.goal=q.goal;e.idx=q.idx}
+  if(q.note)e.note=String(q.note).slice(0,60);
+  if(q.lg||q.ls){e.lg=q.lg||0;e.ls=q.ls||0;S.genesis=Math.max(0,S.genesis-e.lg);S.glitter=Math.max(0,S.glitter-e.ls)}
   S.primos=nP;S.fates=nF;S.log.push(e);
   return {e};
 }
@@ -295,18 +307,18 @@ function refresh(){render();history()}
 function commit(q){const r=applyCore(q);if(r.err){toast(r.err);return r}save();refresh();return r}
 function undoEntry(e){
   if(!S.log.includes(e))return;
-  if(totP()-e.dp-e.df*160<0){toast('Undo newer entries first — those pulls were spent since.');return}
-  S.primos-=e.dp;S.fates-=e.df;S.log=S.log.filter(x=>x!==e);
+  if(ledP()-e.dp-e.df*160<0){toast('Undo newer entries first — those pulls were spent since.');return}
+  S.primos-=e.dp;S.fates-=e.df;S.genesis+=e.lg||0;S.glitter+=e.ls||0;S.log=S.log.filter(x=>x!==e);
   if(e.goal){S.done=S.done.filter(d=>d.id!==e.goal.id);S.goals.splice(Math.min(Math.max(0,e.idx||0),S.goals.length),0,e.goal)}
   if(S.fates<0){S.primos+=S.fates*160;S.fates=0}
   if(S.primos<0){const k=Math.ceil(-S.primos/160);S.fates-=k;S.primos+=k*160}
   save();refresh();
 }
 let tt=null;
-function toast(msg,undo){
-  $('tmsg').textContent=msg;$('tund').hidden=!undo;$('toast').hidden=false;
+function toast(msg,undo,label,keep){
+  $('tmsg').textContent=msg;$('tund').hidden=!undo;$('tund').textContent=label||'Undo';$('toast').hidden=false;
   $('tund').onclick=()=>{if(undo)undo();$('toast').hidden=true};
-  clearTimeout(tt);tt=setTimeout(()=>{$('toast').hidden=true},5500);
+  clearTimeout(tt);if(!keep)tt=setTimeout(()=>{$('toast').hidden=true},5500);
 }
 
 /* ---------- icons ---------- */
@@ -383,6 +395,7 @@ function render(){
   tl.hidden=!S.goals.length;$('emptyG').hidden=!!S.goals.length;
   // income readout
   const d=m.e;$('incOut').textContent='≈ '+Math.round(d)+' primos/day, about '+(d*30/160).toFixed(1)+' pulls every 30 days.';
+  $('latOut').textContent=(S.genesis||S.glitter)?'Counts as '+(lat()/160).toFixed(1)+' pulls. Convert to spend them.':'Genesis counts 1:1 as primogems; 5 Starglitter = 1 fate.';
   drawChart(m);
 }
 
@@ -391,7 +404,7 @@ function ensureEdit(c,g){
   if(c.edit.dataset.built)return;c.edit.dataset.built='1';
   c.edit.innerHTML='<div class="grid2">'+
    '<label class="f">Name<input data-k="name" autocomplete="off"></label><label class="f">Patch<input data-k="patch" placeholder="e.g. 6.2" autocomplete="off"></label>'+
-   '<label class="f">Type<select data-k="type"><option value="char">Character (180)</option><option value="weapon">Weapon (160)</option><option value="custom">Custom pulls</option></select></label>'+
+   '<label class="f">Type<select data-k="type"><option value="char">Character</option><option value="weapon">Weapon</option><option value="custom">Custom pulls</option></select></label>'+
    '<label class="f">Release date<input type="date" data-k="release"></label>'+
    '<label class="f" data-w="copies">Copies (C0 = 1, C1 = 2…)<input data-k="copies" type="number" inputmode="numeric" min="1"></label>'+
    '<label class="f" data-w="pity">Current pity<input data-k="pity" type="number" inputmode="numeric" min="0"></label>'+
@@ -418,9 +431,9 @@ function ensureEdit(c,g){
   sync();
 }
 function openSpend(c,g,r){
-  const h=have(),def=Math.max(1,Math.min(r.n,h));
+  const h=ledHave(),def=Math.max(1,Math.min(r.n,h));
   c.spend.innerHTML='<label class="f">Pulls actually used<input data-k="spent" type="number" inputmode="numeric" min="1" max="'+h+'" value="'+def+'"></label>'+
-   '<div class="sub" style="margin-top:6px">Taken from your fates first, then primogems. Planned worst case: '+r.n+' pulls — enter fewer if you got lucky.</div>'+
+   '<div class="sub" style="margin-top:6px">Taken from your fates first, then primogems. Planned: '+r.n+' pulls — enter fewer if you got lucky.</div>'+
    '<div class="b"><button class="p sm" data-a="spendok">Spend &amp; archive</button><button class="sm" data-a="spendno">Cancel</button></div>';
   c.spend.hidden=false;c.spend.querySelector('input').focus();
 }
@@ -438,8 +451,8 @@ $('tl').addEventListener('click',ev=>{
   else if(a==='spend'){openSpend(c,g,model().rows[i])}
   else if(a==='spendno'){c.spend.hidden=true}
   else if(a==='spendok'){
-    const n=Math.min(have(),Math.max(1,num(c.spend.querySelector('input').value)));
-    if(have()<1){toast('You have no pulls saved to spend.');return}
+    const n=Math.min(ledHave(),Math.max(1,num(c.spend.querySelector('input').value)));
+    if(ledHave()<1){toast('No pulls in your balance yet — convert Genesis/Starglitter first.');return}
     const useF=Math.min(S.fates,n),rest=n-useF;
     const r=applyCore({mode:'spend',p:-rest*160,f:-useF,goal:JSON.parse(JSON.stringify(g)),idx:i});
     if(r.err){toast(r.err);return}
@@ -519,6 +532,7 @@ function history(){
       const sg=v=>(v>0?'+':'')+v,t=document.createElement('span');
       if(e.goal)t.textContent=fmt(e.date)+' — spent '+plural(-e.df+(-e.dp/160),'pull')+' on '+(e.goal.name||'goal');
       else t.textContent=fmt(e.date)+' — '+(e.mode==='set'?'set to '+e.p+' primos, '+e.f+' fates':sg(e.p)+' primos, '+sg(e.f)+' fates');
+      if(e.note)t.textContent+=' · '+e.note;
       const b=document.createElement('button');b.className='sm';b.textContent='Undo';b.onclick=()=>undoEntry(e);
       d.append(t,b);h.append(d);
     });
@@ -537,28 +551,48 @@ function entry(mode){
   if(mode==='set'){p=pv===''?S.primos:num(pv);f=fv===''?S.fates:num(fv);if(p<0||f<0){toast('Totals can’t be negative.');return}}
   else{p=num(pv);f=num(fv);if(sign<0){p=-Math.abs(p);f=-Math.abs(f)}}
   const date=$('ad').value&&$('ad').value<=today()?$('ad').value:today();
-  const r=commit({mode,p,f,date});
-  if(!r.err){$('ap').value='';$('af').value='';$('ad').value=today();toast(mode==='set'?'Balance updated':'Entry logged',()=>undoEntry(r.e))}
+  const r=commit({mode,p,f,date,note:$('an').value.trim()});
+  if(!r.err){$('an').value='';$('ap').value='';$('af').value='';$('ad').value=today();toast(mode==='set'?'Balance updated':'Entry logged',()=>undoEntry(r.e))}
 }
 $('add').onclick=()=>entry('add');$('set').onclick=()=>entry('set');
 [$('ap'),$('af')].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')entry('add')}));
 document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
   const q=b.dataset.q,p=q==='p60'?60:q==='p90'?90:0,f=q==='f1'?1:0;
-  const r=commit({mode:'add',p,f,date:today()});
+  const r=commit({mode:'add',p,f,date:today(),note:q==='p60'?'Dailies':q==='p90'?'Welkin':''});
   if(!r.err)toast('Logged '+(p?'+'+p+' primos':'+1 fate'),()=>undoEntry(r.e));
 });
 
 /* ---------- income ---------- */
-function incIn(){S.income={daily:Math.max(0,num($('i-d').value)),welkin:$('i-w').checked,monthly:Math.max(0,num($('i-m').value))};save();render()}
-['i-d','i-m'].forEach(id=>$(id).addEventListener('input',incIn));$('i-w').addEventListener('change',incIn);
-function fillIncome(){$('i-d').value=S.income.daily;$('i-m').value=S.income.monthly||'';$('i-w').checked=S.income.welkin}
+function incIn(){S.income={daily:Math.max(0,num($('i-d').value)),welkin:$('i-w').checked,monthly:Math.max(0,num($('i-m').value)),bargains:$('i-b').checked};save();render()}
+['i-d','i-m'].forEach(id=>$(id).addEventListener('input',incIn));$('i-w').addEventListener('change',incIn);$('i-b').addEventListener('change',incIn);
+function fillIncome(){$('i-d').value=S.income.daily;$('i-m').value=S.income.monthly||'';$('i-w').checked=S.income.welkin;$('i-b').checked=S.income.bargains;$('i-g').value=S.genesis||'';$('i-s').value=S.glitter||'';setMode()}
+
+/* ---------- planning mode + latent inventory ---------- */
+function setMode(){document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.mode===S.mode)));
+  $('modeNote').textContent=S.mode==='real'?'Average luck with soft pity: ~77 pulls per character 5★ (154 after a lost 50/50), ~65 per weapon 5★ (130).':'Hard pity and a lost 50/50: 180 pulls per character, 160 per weapon.'}
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{S.mode=b.dataset.mode;save();setMode();render()});
+$('i-g').addEventListener('input',()=>{S.genesis=Math.max(0,num($('i-g').value));save();render()});
+$('i-s').addEventListener('input',()=>{S.glitter=Math.max(0,num($('i-s').value));save();render()});
+$('conv').onclick=()=>{
+  const gf=Math.floor(S.glitter/5);if(!S.genesis&&!gf){toast('Nothing to convert yet.');return}
+  const r=commit({mode:'add',p:S.genesis,f:gf,date:today(),note:'Converted Genesis/Starglitter',lg:S.genesis,ls:gf*5});
+  if(!r.err){$('i-g').value=S.genesis||'';$('i-s').value=S.glitter||'';toast('Converted into your balance',()=>{undoEntry(r.e);$('i-g').value=S.genesis||'';$('i-s').value=S.glitter||''})}
+};
 
 /* ---------- backup ---------- */
 function payload(){return JSON.stringify(Object.assign({app:'primogem-tracker'},S),null,1)}
-$('exp').onclick=()=>{
-  const json=payload();
-  if(DL){DL.save({filename:'primogem-tracker-'+today()+'.json',data:json}).then(()=>toast('Backup saved'),()=>status('Backup was not saved'))}
-  else{const t=$('expTxt');t.value=json;t.hidden=false;t.focus();t.select();status('Copy the text above and keep it somewhere safe')}
+const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function showText(json){const t=$('expTxt');t.value=json;t.hidden=false;t.focus();t.select();status('Download isn’t available here — copy this text and save it as a .json file')}
+$('exp').onclick=async()=>{
+  const json=payload(),name='primogem-tracker-'+today()+'.json';
+  try{
+    if(DL){await DL.save({filename:name,data:json});toast('Backup saved');return}
+    const blob=new Blob([json],{type:'application/json'});
+    if(isIOS&&navigator.canShare){const f=new File([blob],name,{type:'application/json'});
+      if(navigator.canShare({files:[f]})){await navigator.share({files:[f],title:name});toast('Backup ready — choose Save to Files');return}}
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),10000);toast('Backup downloaded');
+  }catch(e){if(e&&e.name==='AbortError')return;showText(json)}
 };
 $('imp').onchange=e=>{
   const f=e.target.files[0];if(!f)return;
@@ -599,7 +633,15 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden){$('ad').m
     status('Synced ✓');
   }catch(e){status('Saved on this device only')}
 })();
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+if('serviceWorker' in navigator){
+  const had=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had)toast('A new version is ready',()=>location.reload(),'Reload',true)});
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+let ip=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;$('inst').hidden=false});
+$('inst').onclick=async()=>{if(!ip)return;ip.prompt();try{await ip.userChoice}catch(e){}ip=null;$('inst').hidden=true};
+window.addEventListener('appinstalled',()=>{$('inst').hidden=true});
 </script>
 </body>
 </html>
