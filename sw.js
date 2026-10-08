@@ -1,4 +1,4 @@
-const CACHE='primogem-tracker-v4'; // bump this number whenever you change the files
+const CACHE='primogem-tracker-v5'; // bump this number whenever you change the files
 const ASSETS=['./','./index.html','./manifest.json','./icon-180.png','./icon-192.png','./icon-512.png'];
 const FONT_HOSTS=['fonts.googleapis.com','fonts.gstatic.com'];
 // Cache each file on its own, so one missing file (or a renamed index.html) can't break the whole install.
@@ -20,3 +20,4 @@ self.addEventListener('fetch',e=>{
     return hit||net;
   }));
 });
+
