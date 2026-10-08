@@ -129,6 +129,11 @@ button:disabled{opacity:.4;cursor:default}
 .chart .band{fill:var(--gold-f);opacity:.2}
 .chart .projmax{stroke:var(--gold);stroke-width:1.5;stroke-dasharray:2 4;opacity:.7}
 .theme{position:absolute;right:14px;top:16px;z-index:2;min-height:32px;padding:3px 12px;font-size:13px;background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:99px}
+.addrow{flex-wrap:wrap}.addrow button{min-width:118px}
+.pq{position:relative;margin-top:8px;min-height:32px;width:auto;max-width:60%;font-size:13px;padding:2px 12px;background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:99px}
+.pq option{color:#000}
+.bn{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:14px}
+.bn:first-child{border-top:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -142,6 +147,7 @@ button:disabled{opacity:.4;cursor:default}
   </svg>
   <h1 class="disp">✦ Primogem Tracker</h1>
   <button class="theme" id="themeBtn">Auto</button>
+  <select class="pq" id="profQuick" aria-label="Profile" hidden></select>
   <div class="tot disp"><div class="big"><b id="tt">0</b>total pulls</div><div><b id="tp">0</b>primogems</div><div><b id="tf">0</b>fates</div></div>
   <div class="nx" id="nx"></div>
 </header>
@@ -170,9 +176,12 @@ button:disabled{opacity:.4;cursor:default}
     <button id="set">Set total</button>
   </div>
   <div class="sub" style="margin-top:8px">160 primogems = 1 pull. <b>Set total</b> replaces your balance; leave a field empty to keep it as is.</div>
-  <div class="panel"><div class="sec-s" style="margin-top:0">Inventory not in your balance yet</div>
-    <div class="row"><label class="f">Genesis Crystals<input id="i-g" type="number" inputmode="numeric" min="0"></label><label class="f">Masterless Starglitter<input id="i-s" type="number" inputmode="numeric" min="0"></label><button id="conv">Convert</button></div>
-    <div class="sub" id="latOut" style="margin-top:6px"></div></div>
+  <div class="panel"><div class="sec-s" style="margin-top:0">Not converted yet</div>
+    <div class="sub" id="latOut"></div>
+    <div class="row" style="margin-top:8px"><label class="f">Genesis Crystals<input id="inv-g" type="number" inputmode="numeric" min="0" placeholder="amount"></label><label class="f">Masterless Starglitter<input id="inv-s" type="number" inputmode="numeric" min="0" placeholder="amount"></label></div>
+    <div class="b"><button class="sm" id="invAdd">Add to inventory</button><button class="sm" id="invRem">Remove from inventory</button></div>
+    <div class="row" style="margin-top:12px"><label class="f">Convert Genesis<input id="cv-g" type="number" inputmode="numeric" min="0" placeholder="all"></label><label class="f">Convert Starglitter<input id="cv-s" type="number" inputmode="numeric" min="0" placeholder="all"></label><button id="conv">Convert</button></div>
+    <div class="sub" style="margin-top:6px">Leave the convert boxes empty to convert everything. Genesis becomes primogems 1:1 and 5 Starglitter become 1 fate. Every change here is logged in History and can be undone.</div></div>
 </section>
 
 <div class="sec"><h2 class="disp">Goals</h2></div>
@@ -180,7 +189,7 @@ button:disabled{opacity:.4;cursor:default}
 <section class="card" id="prio" hidden><div id="prioRows"></div></section>
 <div class="tl" id="tl"></div>
 <div class="empty" id="emptyG" hidden><div class="disp" style="font-weight:600">No goals yet</div><div class="sub">Add a character or weapon banner to start planning.</div></div>
-<div class="addrow" style="margin-bottom:12px"><button class="p" id="addc">＋ Character</button><button class="p" id="addw">＋ Weapon</button><button id="addx">＋ Custom</button></div>
+<div class="addrow" style="margin-bottom:12px"><button class="p" id="addc">＋ Character</button><button class="p" id="addw">＋ Weapon</button><button class="p" id="addn">＋ Chronicled</button><button id="addx">＋ Custom</button></div>
 
 <section class="card" aria-labelledby="h-fc">
   <h2 id="h-fc" class="disp">Savings forecast</h2>
@@ -194,11 +203,11 @@ button:disabled{opacity:.4;cursor:default}
   <h2 id="h-inc" class="disp">Income</h2>
   <div class="row">
     <label class="f">Dailies per day<input id="i-d" type="number" inputmode="numeric" min="0"></label>
-    <label class="f">Abyss, Theater &amp; other per month<input id="i-m" type="number" inputmode="numeric" min="0" placeholder="e.g. 1700"></label>
+    <label class="f">Other per month (codes, check-ins…)<input id="i-m" type="number" inputmode="numeric" min="0" placeholder="e.g. 100"></label>
   </div>
   <label class="f" style="display:block;margin-top:8px">Events, quests, mail &amp; codes per patch<input id="i-p" type="number" inputmode="numeric" min="0" placeholder="e.g. 4500"></label>
-  <div class="chips" style="margin:8px 0 0"><span class="sub">Rough guide</span><button class="chip" data-pp="3000">Light 3,000</button><button class="chip" data-pp="4500">Typical 4,500</button><button class="chip" data-pp="6000">Rich 6,000</button></div>
-  <div class="sub" style="margin-top:4px">Guide figures are rough ranges from community per-patch estimates, on top of dailies and Abyss/Theater. Real patches vary, so edit freely.</div>
+  <div class="chips" style="margin:8px 0 0"><span class="sub">Rough guide</span><button class="chip" data-pp="2000">Light 2,000</button><button class="chip" data-pp="3000">Typical 3,000</button><button class="chip" data-pp="5000">Big 5,000</button></div>
+  <div class="sub" style="margin-top:4px">Typical is about what recent community estimates show for events, maintenance and codes in an ordinary patch (6.5 and 7.1). Light and Big are my judgement, and X.0 region launches run higher. Abyss, Theater and Stygian go in the Endgame card, so leave them out here. If you used the monthly box above for Abyss or Theater, move that amount to Endgame.</div>
   <label class="chk" style="margin-top:12px"><input type="checkbox" id="i-w"> Welkin Moon active (+90/day)</label>
   <label class="chk" style="margin-top:8px"><input type="checkbox" id="i-bp"> Gnostic Hymn Battle Pass (+4 fates and 680 primogems per patch)</label>
   <label class="chk" style="margin-top:8px"><input type="checkbox" id="i-b"> Paimon’s Bargains (+5 fates on the 1st of each month)</label>
@@ -211,8 +220,31 @@ button:disabled{opacity:.4;cursor:default}
     <select id="i-r"><option value="100">Everything</option><option value="90">Most days (about 90%)</option><option value="75">Casual (about 75%)</option></select></label>
   <div class="chips" style="margin:12px 0 0"><span class="sub">Planning</span><div class="seg" role="radiogroup" aria-label="Planning mode"><button role="radio" aria-checked="true" data-mode="worst">Worst case</button><button role="radio" aria-checked="false" data-mode="real">Average luck</button></div></div>
   <div class="sub" id="modeNote" style="margin-bottom:6px"></div>
+  <div class="sub">Odds on each goal use the standard pity curves (soft pity from pull 74 for characters and Chronicled, 63 for weapons) with a 55% win rate for characters, 37.5% for a chosen weapon and 50% for Chronicled. The weapon curve is a model estimate.</div>
   <div class="sub" style="margin-top:8px" id="incOut"></div>
 </section></section>
+
+<section class="card" aria-labelledby="h-eg">
+  <h2 id="h-eg" class="disp">Endgame income</h2>
+  <div class="sec-s" style="margin-top:0">Spiral Abyss (floors 9–12): stars you usually get per floor</div>
+  <div class="grid2" id="egFloors"></div>
+  <label class="f" style="display:block;margin-top:8px">Resets per month<select id="eg-an"><option value="1">Once a month (the 16th)</option><option value="2">Twice a month</option></select></label>
+  <div class="sec-s">Imaginarium Theater</div>
+  <div class="row"><label class="f">Maximum per month<input id="eg-tm" type="number" inputmode="numeric" min="0"></label><label class="f">How much you usually clear<select id="eg-tp"><option value="100">All of it</option><option value="75">About 75%</option><option value="50">About half</option><option value="25">About 25%</option><option value="0">None</option></select></label></div>
+  <div class="sec-s">Stygian Onslaught (once per patch)</div>
+  <label class="f">Difficulties you clear<select id="eg-sg"><option value="0">None</option><option value="1">1 (150)</option><option value="2">2 (300)</option><option value="3">3 (450)</option></select></label>
+  <div class="sub" id="egOut" style="margin-top:10px"></div>
+  <div class="sub" style="margin-top:4px">Abyss pays 50, 50 and 100 primogems at 3, 6 and 9 stars on each floor (200 per floor, 800 for all 36 stars). Reward sizes and reset dates change between versions and sources disagree, so check the in-game reward preview and edit the Theater maximum and reset count if yours differ.</div>
+</section>
+
+<section class="card" aria-labelledby="h-bn">
+  <h2 id="h-bn" class="disp">Planned bonuses</h2>
+  <div class="sub">One-offs you already know about, like an anniversary gift or maintenance compensation. They’re added to your projection on their date.</div>
+  <div id="bnList" style="margin:8px 0"></div>
+  <label class="f">What<input id="bn-l" maxlength="40" autocomplete="off" placeholder="e.g. Anniversary gift"></label>
+  <div class="row" style="margin-top:8px"><label class="f">Date<input id="bn-d" type="date"></label><label class="f">Primogems<input id="bn-p" type="number" inputmode="numeric" min="0"></label><label class="f">Fates<input id="bn-f" type="number" inputmode="numeric" min="0"></label></div>
+  <button class="sm" id="bnAdd" style="margin-top:8px">Add bonus</button>
+</section>
 
 <section class="card" aria-labelledby="h-hi">
   <h2 id="h-hi" class="disp">History</h2>
@@ -228,15 +260,23 @@ button:disabled{opacity:.4;cursor:default}
 </section>
 
 <button class="p wide" id="inst" hidden>Install app</button>
+<section class="card" aria-labelledby="h-pr">
+  <h2 id="h-pr" class="disp">Profiles</h2>
+  <label class="f">Active profile<select id="profSel"></select></label>
+  <label class="f" style="display:block;margin-top:8px">Name<input id="profName" maxlength="24" autocomplete="off" placeholder="e.g. Alt account"></label>
+  <div class="b"><button class="sm" id="profAdd">Add profile</button><button class="sm" id="profRen">Rename current</button><button class="sm danger" id="profDel">Delete current</button></div>
+  <div class="sub" style="margin-top:8px">Each profile has its own balance, goals, income and history. Backups and CSV export cover the profile you’re in. The Main profile can be renamed but not deleted.</div>
+</section>
+
 <div id="st" role="status" aria-live="polite"></div>
-<div class="sub" style="text-align:center;margin-bottom:18px">Primogem Tracker v4</div>
+<div class="sub" style="text-align:center;margin-bottom:18px">Primogem Tracker v5</div>
 </main>
 <div id="toast" role="status" aria-live="polite" hidden><span id="tmsg"></span><button id="tund">Undo</button></div>
 
 <script>
 'use strict';
-const LS='primo-tracker-v3',OLD=['primo-tracker-v2','primo-tracker-v1'];
-const TAB={worst:{PER:{char:180,weapon:160},HALF:{char:90,weapon:80}},real:{PER:{char:90,weapon:87},HALF:{char:62,weapon:53}}},WELKIN=90,BP=1320;
+let LS='primo-tracker-v3';const OLD=['primo-tracker-v2','primo-tracker-v1'];
+const TAB={worst:{PER:{char:180,weapon:160,chron:180},HALF:{char:90,weapon:80,chron:90}},real:{PER:{char:90,weapon:87,chron:94},HALF:{char:62,weapon:53,chron:62}}},WELKIN=90,BP=1320;
 
 /* ---------- helpers ---------- */
 const $=id=>document.getElementById(id);
@@ -258,16 +298,19 @@ function clampPity(g){if(g.type!=='custom')g.pity=Math.min(Math.max(0,g.pity),TA
 function cleanGoal(raw){
   const g=newGoal(raw);
   g.id=String(g.id||uid());g.name=String(g.name||'');g.patch=String(g.patch||'');
-  if(!['char','weapon','custom'].includes(g.type))g.type='char';
+  if(!['char','weapon','chron','custom'].includes(g.type))g.type='char';
   g.copies=Math.max(1,num(g.copies)||1);g.custom=Math.max(0,num(g.custom));g.pity=Math.max(0,num(g.pity));
   g.guar=!!g.guar;g.paused=!!g.paused;g.prio=[1,2,3].includes(num(g.prio))?num(g.prio):2;g.release=isoRe.test(g.release||'')?g.release:'';
   clampPity(g);return g;
 }
-const defState=()=>({v:3,primos:0,fates:0,income:{daily:60,welkin:false,monthly:0,bargains:false,bp:false,patch:0,rate:100},patchLen:42,patchStart:'',bargain:'',mode:'worst',glitter:0,genesis:0,log:[],goals:[],done:[],updated:0});
+const defState=()=>({v:3,primos:0,fates:0,income:{daily:60,welkin:false,monthly:0,bargains:false,bp:false,patch:0,rate:100},patchLen:42,patchStart:'',bargain:'',endgame:{ab:[0,0,0,0],abN:1,thMax:1000,thPct:0,sg:0},bonus:[],mode:'worst',glitter:0,genesis:0,log:[],goals:[],done:[],updated:0});
 function norm(raw){ // accepts v1, v2 and v3 data
   const o=defState();
   if(!raw||typeof raw!=='object')return o;
   o.primos=num(raw.primos);o.fates=num(raw.fates);o.updated=Number(raw.updated)||0;o.mode=raw.mode==='real'?'real':'worst';o.glitter=Math.max(0,num(raw.glitter));o.genesis=Math.max(0,num(raw.genesis));o.patchLen=Math.min(60,Math.max(28,num(raw.patchLen)||42));o.patchStart=isoRe.test(raw.patchStart||'')?raw.patchStart:'';o.bargain=String(raw.bargain||'').slice(0,7);
+  const eg=raw.endgame&&typeof raw.endgame==='object'?raw.endgame:{};
+  o.endgame={ab:[0,1,2,3].map(i=>[0,3,6,9].includes(num((eg.ab||[])[i]))?num(eg.ab[i]):0),abN:num(eg.abN)===2?2:1,thMax:eg.thMax===undefined?1000:Math.min(5000,Math.max(0,num(eg.thMax))),thPct:[0,25,50,75,100].includes(num(eg.thPct))?num(eg.thPct):0,sg:Math.min(3,Math.max(0,num(eg.sg)))};
+  o.bonus=(Array.isArray(raw.bonus)?raw.bonus:[]).filter(b=>b&&isoRe.test(b.date||'')).map(b=>({id:String(b.id||uid()),date:b.date,p:Math.max(0,num(b.p)),f:Math.max(0,num(b.f)),label:String(b.label||'').slice(0,40)}));
   const inc=raw.income;
   if(inc&&typeof inc==='object')o.income={daily:Math.max(0,num(inc.daily)),welkin:!!inc.welkin,monthly:Math.max(0,num(inc.monthly)),bargains:!!inc.bargains,bp:!!inc.bp,patch:Math.max(0,num(inc.patch)),rate:Math.min(100,Math.max(50,num(inc.rate)||100))};
   else if(inc!==undefined)o.income.daily=Math.max(0,num(inc));
@@ -280,12 +323,12 @@ function norm(raw){ // accepts v1, v2 and v3 data
   });
   if(Array.isArray(raw.goals)&&(raw.goals.length||raw.v===3))o.goals=raw.goals.filter(g=>g&&typeof g==='object').map(cleanGoal);
   else{const t=raw.goalType;o.goals=[cleanGoal({name:raw.goalName||'',type:t==='160'||t==='80'?'weapon':(t==='custom'?'custom':'char'),custom:raw.goalCustom||180,pity:raw.pity||0})]}
-  o.done=(Array.isArray(raw.done)?raw.done:[]).filter(d=>d&&typeof d==='object').map(d=>({id:String(d.id||uid()),name:String(d.name||''),patch:String(d.patch||''),pulls:num(d.pulls),date:isoRe.test(d.date||'')?d.date:today(),res:d.res==='lost'?'lost':'won',fifty:!!d.fifty,type:['weapon','custom'].includes(d.type)?d.type:'char',eid:String(d.eid||'')}));
+  o.done=(Array.isArray(raw.done)?raw.done:[]).filter(d=>d&&typeof d==='object').map(d=>({id:String(d.id||uid()),name:String(d.name||''),patch:String(d.patch||''),pulls:num(d.pulls),date:isoRe.test(d.date||'')?d.date:today(),res:d.res==='lost'?'lost':'won',fifty:!!d.fifty,type:['weapon','chron','custom'].includes(d.type)?d.type:'char',eid:String(d.eid||'')}));
   return o;
 }
-let S=defState(),dbDoc=null,tmr=null,DL=null,pending=null;
+let S=defState(),dbDoc=null,dbCol=null,tmr=null,DL=null,pending=null;
 function loadLocal(){
-  for(const k of [LS,...OLD]){try{const r=localStorage.getItem(k);if(r){S=norm(JSON.parse(r));return}}catch(e){}}
+  for(const k of [LS,...(PR.active==='main'?OLD:[])]){try{const r=localStorage.getItem(k);if(r){S=norm(JSON.parse(r));return}}catch(e){}}
   S=norm(null);
 }
 function status(t){$('st').textContent=t}
@@ -300,27 +343,67 @@ const ledP=()=>S.primos+S.fates*160,lat=()=>S.genesis+Math.floor(S.glitter/5)*16
 const totP=()=>ledP()+lat();
 const have=()=>Math.floor(totP()/160),ledHave=()=>Math.floor(ledP()/160);
 const patchLen=()=>S.patchLen||42;
-const effMax=()=>S.income.daily+(S.income.welkin?WELKIN:0)+S.income.monthly/30+(S.income.bargains?800/30:0)+(S.income.bp?BP/patchLen():0)+S.income.patch/patchLen();
+const abyssFloor=st=>st>=9?200:st>=6?100:st>=3?50:0;
+function endgameParts(){
+  const g=S.endgame,abyss=g.ab.reduce((t,x)=>t+abyssFloor(x),0)*g.abN,theater=g.thMax*g.thPct/100,stygian=g.sg*150*30/patchLen();
+  return {abyss,theater,stygian,total:abyss+theater+stygian};
+}
+const effMax=()=>S.income.daily+(S.income.welkin?WELKIN:0)+S.income.monthly/30+(S.income.bargains?800/30:0)+(S.income.bp?BP/patchLen():0)+S.income.patch/patchLen()+endgameParts().total/30;
 const eff=()=>effMax()*S.income.rate/100;
 const need=g=>{
   if(g.type==='custom')return Math.max(0,g.custom);
   const T=TAB[S.mode],per=T.PER[g.type],first=g.guar?T.HALF[g.type]:per;
   return Math.max(0,first+per*(Math.max(1,g.copies)-1)-g.pity);
 };
+/* ---------- pity curves ---------- */
+const PH={char:{base:.006,soft:74,step:.06,hard:90,win:.55},weapon:{base:.007,soft:63,step:.07,hard:80,win:.375},chron:{base:.006,soft:74,step:.06,hard:90,win:.5}};
+function firstFive(t,k0){ // chance the next 5★ lands j pulls from now, given k0 pulls since the last one
+  const out=[0];let surv=1;
+  for(let j=1;k0+j<=t.hard;j++){const k=k0+j,p=k>=t.hard?1:Math.min(1,t.base+(k>=t.soft?t.step*(k-t.soft+1):0));out[j]=surv*p;surv*=1-p}
+  return out;
+}
+function conv(a,b){
+  const r=new Array(Math.min(a.length+b.length-1,4000)).fill(0);
+  for(let i=0;i<a.length;i++){const ai=a[i];if(!ai)continue;for(let j=0;j<b.length&&i+j<r.length;j++)r[i+j]+=ai*b[j]}
+  return r;
+}
+function mix(wa,A,wb,B){const n=Math.max(A.length,B.length),r=new Array(n).fill(0);for(let i=0;i<n;i++)r[i]=wa*(A[i]||0)+wb*(B[i]||0);return r}
+const cdf=(a,n)=>{let t=0;for(let i=0;i<a.length&&i<=n;i++)t+=a[i];return Math.min(1,t)};
+const PMF=new Map();
+function goalPmf(g){
+  if(g.type==='custom'){const n=Math.max(0,g.custom),a=new Array(n+1).fill(0);a[n]=1;return a}
+  const key=[g.type,g.copies,g.pity,g.guar].join();if(PMF.has(key))return PMF.get(key);
+  const t=PH[g.type],F=firstFive(t,g.pity),F0=firstFive(t,0);
+  const first=g.guar?F:mix(t.win,F,1-t.win,conv(F,F0));
+  const fresh=mix(t.win,F0,1-t.win,conv(F0,F0));
+  let out=first;for(let c=1;c<Math.max(1,g.copies);c++)out=conv(out,fresh);
+  PMF.set(key,out);return out;
+}
+function bonusCum(maxD){
+  const a=new Array(maxD+1).fill(0);
+  S.bonus.forEach(b=>{const o=off(b.date);if(o>0&&o<=maxD)a[o]+=b.p+b.f*160});
+  for(let d=1;d<=maxD;d++)a[d]+=a[d-1];
+  return a;
+}
 function model(){
-  const e=eff(),eMax=effMax(),tp=totP();let cum=0,curSet=false;
+  const e=eff(),eMax=effMax(),tp=totP(),MAXD=730;let cum=0,curSet=false;
+  const cumB=bonusCum(MAXD),bAt=d=>cumB[Math.min(MAXD,Math.max(0,d))];
+  const dt=(target,rate)=>{if(tp>=target)return 0;for(let d=1;d<=MAXD;d++)if(tp+rate*d+cumB[d]>=target)return d;return null};
+  const rdy=(target,rate)=>{const d=dt(target,rate);return d===null?(rate>0?MAXD+1:null):d};
   const act=S.goals.map((g,i)=>({g,i})).filter(x=>!x.g.paused).sort((a,b)=>a.g.prio-b.g.prio||a.i-b.i).map(x=>x.g);
   const rows=act.map(g=>{
     const n=need(g),start=cum;cum+=n;
     const gotF=Math.max(0,Math.min(n,tp/160-start)),got=Math.floor(gotF);
     const pct=n?gotF/n*100:100,done=tp>=cum*160,cur=!done&&!curSet;if(cur)curSet=true;
     const remP=Math.max(0,cum*160-tp);
-    const ready=done?0:(e>0?Math.ceil(remP/e):null),readyMax=done?0:(eMax>0?Math.ceil(remP/eMax):null);
+    const ready=done?0:rdy(cum*160,e),readyMax=done?0:rdy(cum*160,eMax);
     const rel=g.release?off(g.release):null;
     return {g,n,start,cum,got,pct,done,cur,remP,ready,readyMax,rel};
   });
+  const now=Math.floor(tp/160);let acc=[1];
+  rows.forEach(r=>{acc=conv(acc,goalPmf(r.g));r.odds=cdf(acc,now);r.oddsRel=r.rel>0?cdf(acc,Math.floor((tp+e*r.rel+bAt(r.rel))/160)):null});
   const paused=S.goals.filter(g=>g.paused).map(g=>({g,n:need(g),paused:true,got:0,pct:0,done:false,cur:false,cum:0,start:0,remP:0,ready:null,rel:g.release?off(g.release):null}));
-  return {e,eMax,tp,rows,paused,all:[...rows,...paused],cumAll:cum};
+  return {e,eMax,tp,rows,paused,all:[...rows,...paused],cumAll:cum,dt,bAt};
 }
 
 /* ---------- ledger ---------- */
@@ -364,6 +447,7 @@ function toast(msg,undo,label,keep){
 /* ---------- icons ---------- */
 const gemSvg='<svg class="gem" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2l11 10-11 16L4 12z" fill="#9fe0ff" stroke="#5a7bd8" stroke-width="2" stroke-linejoin="round"/><path d="M4 12h22M15 2l-4 10 4 16 4-16z" fill="none" stroke="#5a7bd8" stroke-width="1.2" opacity=".7"/></svg>';
 const ICO={
+ chron:'<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#d9f2e6" stroke="#4fae86" stroke-width="2"/><path d="M12 11h16v18H12z" fill="none" stroke="#4fae86" stroke-width="2"/><path d="M16 16h8M16 20h8M16 24h5" stroke="#4fae86" stroke-width="2" stroke-linecap="round"/></svg>',
  char:'<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#ffe9a8" stroke="#e8b84a" stroke-width="2"/><path d="M20 6l3.5 10.5L34 20l-10.5 3.5L20 34l-3.5-10.5L6 20l10.5-3.5z" fill="#e8b84a"/></svg>',
  weapon:'<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#d7e4ff" stroke="#7c9be0" stroke-width="2"/><path d="M28 8l4 4-14 14-4-4z" fill="#7c9be0"/><path d="M12 24l4 4-6 3z" fill="#5a6fb0"/><rect x="9" y="27" width="6" height="3" transform="rotate(-45 12 28)" fill="#e8b84a"/></svg>',
  custom:'<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#e6dcff" stroke="#9c85ff" stroke-width="2"/><path d="M20 9l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#9c85ff"/></svg>'
@@ -382,18 +466,20 @@ function makeCard(g){
   return c;
 }
 function etaHtml(r,m){
-  const L=[],e=m.e;
+  const L=[],e=m.e,pc=p=>p<0.005?'<1%':p>0.995?'>99%':Math.round(p*100)+'%';
   if(r.done)L.push('<span class="ok">Ready ✦ enough pulls saved</span>');
   else if(r.ready===null)L.push('Set your daily income to get a ready date');
   else if(r.ready>365)L.push('Ready in <b>over a year</b> at ~'+Math.round(e)+'/day');
   else L.push('Ready in <b>'+plural(r.ready,'day')+'</b> ('+fmt(addDays(r.ready))+') at ~'+Math.round(e)+'/day'+(m.eMax>e&&r.readyMax!==null&&r.readyMax<r.ready?'. Best case: '+fmt(addDays(r.readyMax)):''));
+  if(r.n>0&&r.odds<0.995)L.push('Odds with the pulls you have now: <b>'+pc(r.odds)+'</b>');
   if(r.g.release){
     const rel=r.rel,dt=fmt(r.g.release);
     if(rel>0){
       L.push('Releases in <b>'+plural(rel,'day')+'</b> ('+dt+')');
+      if(r.n>0&&r.oddsRel!==null&&!(r.done&&r.oddsRel>0.995))L.push('Odds by release: <b>'+pc(r.oddsRel)+'</b>');
       if(!r.done){
-        const short=r.cum*160-(m.tp+e*rel);
-        L.push(short<=0?'<span class="ok">On track ✓ covers this and the goals above it</span>':'<span class="warn">Short by ~'+Math.ceil(short)+' primos (≈'+plural(Math.ceil(short/160),'pull')+') for this and the goals above it. Need ~'+Math.ceil(r.remP/rel)+'/day</span>');
+        const short=r.cum*160-(m.tp+e*rel+m.bAt(rel));
+        L.push(short<=0?'<span class="ok">On track ✓ covers this and the goals above it</span>':'<span class="warn">Short by ~'+Math.ceil(short)+' primos (≈'+plural(Math.ceil(short/160),'pull')+') for this and the goals above it. Need ~'+Math.ceil(Math.max(0,r.remP-m.bAt(rel))/rel)+'/day</span>');
       }
     }else if(rel===0)L.push('<b>Releases today!</b>');
     else L.push('Released '+dt);
@@ -409,7 +495,7 @@ function fillCard(c,r,m){
   const bd=el.querySelector('.badge');bd.hidden=!g.patch;bd.textContent=g.patch?'Patch '+g.patch:'';
   let lab;
   if(g.type==='custom')lab=r.n+' pulls (custom)';
-  else{const p=[(g.type==='char'?'Character':'Weapon')+' ×'+g.copies];if(g.guar)p.push(g.type==='weapon'?'Fate Point 1/1':'guaranteed');if(g.pity)p.push('pity '+g.pity);lab=p.join(', ')}
+  else{const p=[({char:'Character',weapon:'Weapon',chron:'Chronicled'}[g.type])+' ×'+g.copies];if(g.guar)p.push(g.type==='char'?'guaranteed':'Fate Point 1/1');if(g.pity)p.push('pity '+g.pity);lab=p.join(', ')}
   el.querySelector('.lab').textContent=lab;
   const bar=el.querySelector('.bar');bar.setAttribute('aria-valuemax',r.n);bar.setAttribute('aria-valuenow',r.got);
   el.querySelector('.fill').style.width=Math.min(100,r.pct)+'%';
@@ -451,8 +537,9 @@ function render(){
   if(m.paused.length)ph+='<div class="pr"><span class="sub">'+plural(m.paused.length,'goal')+' paused (not counted)</span></div>';
   $('prioRows').innerHTML=ph;$('prio').hidden=!ph;
   const d=m.e;$('incOut').textContent='≈ '+Math.round(d)+' primos/day, about '+(d*30/160).toFixed(1)+' pulls every 30 days'+(m.eMax>d?' (up to '+Math.round(m.eMax)+'/day if you collect everything).':'. Events arrive in lumps, so the chart smooths them out.');
-  $('latOut').textContent=(S.genesis||S.glitter)?'Counts as '+(lat()/160).toFixed(1)+' pulls. Convert to spend them.':'Genesis counts 1:1 as primogems; 5 Starglitter = 1 fate.';
-  drawChart(m);drawMilestones(m);drawBargain();
+  $('latOut').textContent=(S.genesis||S.glitter)?'In inventory: '+S.genesis+' Genesis, '+S.glitter+' Starglitter (about '+(lat()/160).toFixed(1)+' pulls once converted). Your balance above only counts what you’ve converted.':'Nothing waiting to be converted.';
+  const eg=endgameParts();$('egOut').textContent='Endgame ≈ '+Math.round(eg.total)+' primos a month (Abyss '+Math.round(eg.abyss)+', Theater '+Math.round(eg.theater)+', Stygian '+Math.round(eg.stygian)+').';
+  drawChart(m);drawMilestones(m);drawBargain();drawBonus();
 }
 
 /* edit + result panels */
@@ -482,8 +569,8 @@ function populateEdit(c,g){
   const set=(k,v)=>{const el=q(k);if(el&&document.activeElement!==el)el.value=v};
   set('name',g.name);set('patch',g.patch);set('type',g.type);set('release',g.release);set('copies',g.copies);set('pity',g.pity);set('custom',g.custom);
   q('guar').checked=g.guar;
-  c.edit.querySelector('[data-gl]').textContent=g.type==='weapon'?' Fate Point earned (1/1): next 5★ is your chosen weapon':' Next 5★ is guaranteed featured (lost 50/50)';
-  c.edit.querySelector('[data-w=guarnote]').textContent=(g.type==='weapon'&&g.guar)?'Fate Points reset when this weapon banner ends, so only tick this for the banner where you earned it.':'';
+  c.edit.querySelector('[data-gl]').textContent=g.type==='weapon'?' Fate Point earned (1/1): next 5★ is your chosen weapon':g.type==='chron'?' Fate Point earned (1/1): next 5★ is your chosen item':' Next 5★ is guaranteed featured (lost 50/50)';
+  c.edit.querySelector('[data-w=guarnote]').textContent=(g.type!=='char'&&g.type!=='custom'&&g.guar)?'Fate Points reset when this banner ends, so only tick this for the banner where you earned it. Your 5★ pity carries over, though.':'';
   renderPhases(c,g);
   const cu=g.type==='custom',w=n=>c.edit.querySelector('[data-w='+n+']');
   w('copies').style.display=cu?'none':'';w('pity').style.display=cu?'none':'';w('guar').style.display=cu?'none':'';w('custom').style.display=cu?'':'none';
@@ -492,7 +579,7 @@ function ensureEdit(c,g){
   if(c.edit.dataset.built)return;c.edit.dataset.built='1';
   c.edit.innerHTML='<div class="grid2">'+
    '<label class="f">Name<input data-k="name" autocomplete="off"></label><label class="f">Patch<input data-k="patch" placeholder="e.g. 6.2" autocomplete="off"></label>'+
-   '<label class="f">Type<select data-k="type"><option value="char">Character</option><option value="weapon">Weapon</option><option value="custom">Custom pulls</option></select></label>'+
+   '<label class="f">Type<select data-k="type"><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled Wish</option><option value="custom">Custom pulls</option></select></label>'+
    '<label class="f">Release date<input type="date" data-k="release"></label>'+
    '<label class="f" data-w="copies">Copies (C0 = 1, C1 = 2…)<input data-k="copies" type="number" inputmode="numeric" min="1"></label>'+
    '<label class="f" data-w="pity">Current pity<input data-k="pity" type="number" inputmode="numeric" min="0"></label>'+
@@ -516,7 +603,7 @@ function ensureEdit(c,g){
 }
 const RES_HINT={won:'Pulls it took to get the featured 5★. Anything left over stays in your savings.',lost:'Pulls it took to get the other 5★. The goal stays on your list and is marked guaranteed.',forced:'Your 50/50 was already lost, so this pull is guaranteed — it counts as a win.',custom:'Pulls you spent on this goal.'};
 function setResHint(c,g){
-  const w=g.type==='weapon',k=g.type==='custom'?'custom':g.guar?'forced':c.spend.dataset.res;let t=RES_HINT[k];
+  const w=g.type==='weapon'||g.type==='chron',k=g.type==='custom'?'custom':g.guar?'forced':c.spend.dataset.res;let t=RES_HINT[k];
   if(w&&k==='forced')t='Your Fate Point guarantees this pull, so it counts as a win.';
   if(w&&k==='lost')t='Pulls it took to get a different 5★. The goal stays on your list with a Fate Point (1/1).';
   c.spend.querySelector('[data-hint]').textContent=t;
@@ -571,7 +658,7 @@ $('tl').addEventListener('click',ev=>{
       n=Math.min(n,ledHave());
     }
     const useF=already?0:Math.min(S.fates,n),rest=already?0:n-useF;
-    const fifty=!forced&&g.type==='char',eid=uid();
+    const fifty=!forced&&(g.type==='char'||g.type==='chron'),eid=uid();
     const r=applyCore({mode:'spend',p:-rest*160,f:-useF,goal:JSON.parse(JSON.stringify(g)),idx:S.goals.indexOf(g)});
     if(r.err){toast(r.err);return}
     r.e.res=res;r.e.pulls=n;r.e.eid=eid;
@@ -589,7 +676,7 @@ function addGoal(type){
   const c=cards.get(g.id);ensureEdit(c,g);c.edit.hidden=false;render();
   c.el.scrollIntoView({block:'center',behavior:'smooth'});c.edit.querySelector('[data-k=name]').focus({preventScroll:true});
 }
-$('addc').onclick=()=>addGoal('char');$('addw').onclick=()=>addGoal('weapon');$('addx').onclick=()=>addGoal('custom');
+$('addc').onclick=()=>addGoal('char');$('addw').onclick=()=>addGoal('weapon');$('addn').onclick=()=>addGoal('chron');$('addx').onclick=()=>addGoal('custom');
 
 /* ---------- forecast chart ---------- */
 function drawChart(m){
@@ -604,10 +691,10 @@ function drawChart(m){
   }
   pts=pts.map(p=>({o:Math.max(-180,Math.min(0,p.o)),v:Math.max(0,p.v)}));
   const P=pts.length?-pts[0].o:0;
-  const fin=m.e>0&&m.cumAll*160>m.tp?Math.ceil((m.cumAll*160-m.tp)/m.e):0,finMax=m.eMax>0&&m.cumAll*160>m.tp?Math.ceil((m.cumAll*160-m.tp)/m.eMax):0;
+  const finOf=r=>{if(m.cumAll*160<=m.tp)return 0;const d=m.dt(m.cumAll*160,r);return d===null?(r>0?731:0):d},fin=finOf(m.e),finMax=finOf(m.eMax);
   const cand=[...m.rows.filter(r=>r.rel>0).map(r=>r.rel),fin].filter(x=>x>0).map(x=>Math.min(150,x));
   const H=cand.length?Math.max(14,...cand):30;
-  const endV=cur+perDay*H,endMax=cur+perMax*H,top=Math.max(m.cumAll,cur,endMax,1)*1.06;
+  const proj=(rate,d)=>(m.tp+rate*d+m.bAt(d))/160,endV=proj(m.e,H),endMax=proj(m.eMax,H),top=Math.max(m.cumAll,cur,endMax,1)*1.06;
   const step=[1,2,5,10,20,25,50,100,200,250,500,1000,2000].find(s=>s>=top/4)||2000;
   const yTop=Math.max(step,Math.ceil(top/step)*step);
   const X=o=>L+(o+P)/(P+H)*iw,Y=v=>T+ih-v/yTop*ih;
@@ -622,9 +709,12 @@ function drawChart(m){
     s+='<path class="hist" d="'+full.map((p,i)=>(i?'L':'M')+r1(p[0])+','+r1(p[1])).join(' ')+'"/>';
   }
   const range=perMax>perDay+1e-9;
-  if(range)s+='<path class="band" d="M'+r1(X(0))+','+r1(Y(cur))+' L'+r1(X(H))+','+r1(Y(endMax))+' L'+r1(X(H))+','+r1(Y(endV))+'Z"/><line class="projmax" x1="'+r1(X(0))+'" y1="'+r1(Y(cur))+'" x2="'+r1(X(H))+'" y2="'+r1(Y(endMax))+'"/>';
-  $('lgRange').hidden=!range;
-  if(perDay>0)s+='<line class="proj" x1="'+r1(X(0))+'" y1="'+r1(Y(cur))+'" x2="'+r1(X(H))+'" y2="'+r1(Y(endV))+'"/>';
+  const line=rate=>{const a=[];for(let d=0;d<=H;d++)a.push([X(d),Y(proj(rate,d))]);return a};
+  const pth=a=>a.map((p,i)=>(i?'L':'M')+r1(p[0])+','+r1(p[1])).join(' ');
+  const lo=line(m.e),hiL=line(m.eMax),moving=(m.e>0||m.bAt(H)>0);
+  if(range&&moving)s+='<path class="band" d="'+pth(hiL)+' '+lo.slice().reverse().map(p=>'L'+r1(p[0])+','+r1(p[1])).join(' ')+'Z"/><path class="projmax" fill="none" d="'+pth(hiL)+'"/>';
+  $('lgRange').hidden=!(range&&moving);
+  if(moving)s+='<path class="proj" fill="none" d="'+pth(lo)+'"/>';
   // targets + release days
   m.rows.forEach((r,i)=>{if(r.n>0)s+='<line class="thr'+(r.done?' ok':'')+'" x1="'+L+'" x2="'+(W-R)+'" y1="'+r1(Y(r.cum))+'" y2="'+r1(Y(r.cum))+'"/>'});
   m.rows.forEach((r,i)=>{if(r.n>0)s+='<circle class="bt'+(r.done?' ok':'')+'" cx="'+(L+10)+'" cy="'+r1(Y(r.cum))+'" r="8"/><text class="bn" x="'+(L+10)+'" y="'+r1(Y(r.cum)+3.5)+'">'+(i+1)+'</text>'});
@@ -641,7 +731,7 @@ function drawChart(m){
   let cap;
   if(!S.goals.length)cap='Add a goal to see targets on the chart.';
   else if(m.cumAll*160<=m.tp)cap='You already have enough for every goal on the list.';
-  else if(m.e<=0)cap='Set your daily income to see a projection.';
+  else if(m.e<=0&&!fin)cap='Set your daily income to see a projection.';
   else if(fin>365)cap='At ~'+Math.round(m.e)+' primos/day, all '+m.cumAll+' pulls are more than a year away.';
   else cap='At ~'+Math.round(m.e)+' primos/day you’ll have all '+m.cumAll+' pulls in about '+plural(fin,'day')+' ('+fmt(addDays(fin))+').'+(range&&finMax<fin?' Best case: '+fmt(addDays(finMax))+'.':'');
   if(!S.log.length)cap+=' Log savings to start your history line.';
@@ -655,7 +745,7 @@ function drawMilestones(m){
   if(!rows.length)return;
   const h=document.createElement('div');h.className='sec-s';h.textContent='At each release (likely to best case)';el.append(h);
   rows.forEach(({r,i})=>{
-    const lo=(m.tp+m.e*r.rel)/160,hi=(m.tp+m.eMax*r.rel)/160,need=r.cum;
+    const lo=(m.tp+m.e*r.rel+m.bAt(r.rel))/160,hi=(m.tp+m.eMax*r.rel+m.bAt(r.rel))/160,need=r.cum;
     const st=r.done?'<span class="ok">Covered ✓</span>':lo>=need?'<span class="ok">On track ✓</span>':hi>=need?'<span class="warn">Only if you collect everything</span>':'<span class="warn">Short by ~'+Math.ceil(need-lo)+' pulls</span>';
     const span=hi-lo>=1?Math.floor(lo)+'–'+Math.floor(hi):String(Math.floor(lo));
     const d=document.createElement('div');d.className='pr';
@@ -687,6 +777,7 @@ $('bgYes').onclick=()=>{
 $('bgSkip').onclick=()=>{const st=bargainState();if(!st)return;S.bargain=st.key;save();render()};
 
 /* ---------- history ---------- */
+const invText=e=>[e.lg?'Genesis '+(e.lg<0?'+':'−')+Math.abs(e.lg):'',e.ls?'Starglitter '+(e.ls<0?'+':'−')+Math.abs(e.ls):''].filter(Boolean).join(', ');
 function history(){
   const h=$('hist');
   if(!S.log.length)h.textContent='No entries yet.';
@@ -698,7 +789,7 @@ function history(){
       if(e.goal){
         const n=e.pulls||(-e.df+(-e.dp/160)),nm=e.goal.name||'goal';
         t.textContent=fmt(e.date)+' — '+(e.res==='won'?'won '+nm+' in '+plural(n,'pull'):e.res==='lost'?(e.goal.type==='weapon'?'missed '+nm:'lost the 50/50 on '+nm)+' after '+plural(n,'pull'):'spent '+plural(n,'pull')+' on '+nm);
-      }else{t.textContent=fmt(e.date)+' — '+(e.mode==='set'?'set to '+e.p+' primos, '+e.f+' fates':sg(e.p)+' primos, '+sg(e.f)+' fates');if(e.note)t.textContent+=' · '+e.note}
+      }else{t.textContent=fmt(e.date)+' — '+(e.mode==='inv'?invText(e):e.mode==='set'?'set to '+e.p+' primos, '+e.f+' fates':sg(e.p)+' primos, '+sg(e.f)+' fates');if(e.note)t.textContent+=' · '+e.note}
       const b=document.createElement('button');b.className='sm';b.textContent='Undo';b.onclick=()=>undoEntry(e);
       d.append(t,b);h.append(d);
     });
@@ -752,24 +843,81 @@ document.querySelectorAll('[data-pp]').forEach(b=>b.onclick=()=>{$('i-p').value=
 function fillIncome(){
   $('i-d').value=S.income.daily;$('i-m').value=S.income.monthly||'';$('i-p').value=S.income.patch||'';
   $('i-w').checked=S.income.welkin;$('i-bp').checked=S.income.bp;$('i-b').checked=S.income.bargains;
-  $('i-ps').value=S.patchStart;$('i-pl').value=S.patchLen;$('i-r').value=String(S.income.rate);
-  $('i-g').value=S.genesis||'';$('i-s').value=S.glitter||'';setMode();
+  fillEndgame();$('i-ps').value=S.patchStart;$('i-pl').value=S.patchLen;$('i-r').value=String(S.income.rate);
+  setMode();
 }
 
 /* ---------- planning mode + latent inventory ---------- */
 function setMode(){document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.mode===S.mode)));
   $('modeNote').textContent=S.mode==='real'?'Average luck, not a guarantee (about half of players need more): ~90 pulls per featured character (62 if already guaranteed) and ~87 per chosen weapon (53 with a Fate Point). Includes the 55% Capturing Radiance win rate; weapon figures are my model estimate.':'Hard pity and a lost 50/50: 180 pulls per character, 160 per weapon.'}
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{S.mode=b.dataset.mode;save();setMode();render()});
-$('i-g').addEventListener('input',()=>{S.genesis=Math.max(0,num($('i-g').value));save();render()});
-$('i-s').addEventListener('input',()=>{S.glitter=Math.max(0,num($('i-s').value));save();render()});
+function invChange(sign){
+  const g=Math.max(0,num($('inv-g').value)),s2=Math.max(0,num($('inv-s').value));
+  if(!g&&!s2){toast('Enter a Genesis or Starglitter amount first.');return}
+  if(sign<0&&(g>S.genesis||s2>S.glitter)){toast('That’s more than you have in inventory.');return}
+  const note=sign>0?(g&&s2?'Inventory added':g?'Genesis top-up':'Starglitter added'):'Inventory correction';
+  const r=commit({mode:'inv',p:0,f:0,date:today(),note,lg:-sign*g,ls:-sign*s2});
+  if(!r.err){$('inv-g').value='';$('inv-s').value='';toast(sign>0?'Added to inventory':'Removed from inventory',()=>undoEntry(r.e))}
+}
+$('invAdd').onclick=()=>invChange(1);$('invRem').onclick=()=>invChange(-1);
 $('conv').onclick=()=>{
-  const gf=Math.floor(S.glitter/5);if(!S.genesis&&!gf){toast('Nothing to convert yet.');return}
-  const r=commit({mode:'add',p:S.genesis,f:gf,date:today(),note:'Converted Genesis/Starglitter',lg:S.genesis,ls:gf*5});
-  if(!r.err){$('i-g').value=S.genesis||'';$('i-s').value=S.glitter||'';toast('Converted into your balance',()=>{undoEntry(r.e);$('i-g').value=S.genesis||'';$('i-s').value=S.glitter||''})}
+  const g=Math.min(S.genesis,$('cv-g').value===''?S.genesis:Math.max(0,num($('cv-g').value)));
+  const gf=Math.floor(Math.min(S.glitter,$('cv-s').value===''?S.glitter:Math.max(0,num($('cv-s').value)))/5);
+  if(!g&&!gf){toast('Nothing to convert yet.');return}
+  const r=commit({mode:'add',p:g,f:gf,date:today(),note:'Converted Genesis/Starglitter',lg:g,ls:gf*5});
+  if(!r.err){$('cv-g').value='';$('cv-s').value='';toast('Converted into your balance',()=>undoEntry(r.e))}
+};
+
+/* ---------- endgame income ---------- */
+(function buildEndgame(){
+  const fl=$('egFloors');
+  [9,10,11,12].forEach((n,i)=>{
+    const lab=document.createElement('label');lab.className='f';lab.append('Floor '+n);
+    const sel=document.createElement('select');sel.id='eg-f'+i;
+    [[0,'Not cleared'],[3,'3★ (50)'],[6,'6★ (100)'],[9,'9★ (200)']].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;sel.append(o)});
+    lab.append(sel);fl.append(lab);
+  });
+})();
+function egIn(){
+  S.endgame={ab:[0,1,2,3].map(i=>Number($('eg-f'+i).value)||0),abN:Number($('eg-an').value)===2?2:1,thMax:Math.min(5000,Math.max(0,num($('eg-tm').value))),thPct:Number($('eg-tp').value)||0,sg:Math.min(3,Math.max(0,Number($('eg-sg').value)||0))};
+  save();render();
+}
+['eg-f0','eg-f1','eg-f2','eg-f3','eg-an','eg-tp','eg-sg'].forEach(id=>$(id).addEventListener('change',egIn));
+$('eg-tm').addEventListener('input',egIn);
+function fillEndgame(){
+  [0,1,2,3].forEach(i=>{$('eg-f'+i).value=String(S.endgame.ab[i])});
+  $('eg-an').value=String(S.endgame.abN);$('eg-tm').value=S.endgame.thMax;$('eg-tp').value=String(S.endgame.thPct);$('eg-sg').value=String(S.endgame.sg);
+}
+
+/* ---------- planned bonuses ---------- */
+function drawBonus(){
+  const el=$('bnList');el.innerHTML='';
+  if(!S.bonus.length){el.innerHTML='<div class="sub">Nothing planned yet.</div>';return}
+  S.bonus.slice().sort((a,b)=>a.date<b.date?-1:1).forEach(b=>{
+    const d=document.createElement('div');d.className='bn';
+    const t=document.createElement('span');
+    const parts=[];if(b.p)parts.push(b.p+' primos');if(b.f)parts.push(b.f+' fates');
+    t.textContent=fmt(b.date)+': '+(b.label||'Bonus')+(parts.length?' ('+parts.join(', ')+')':'');
+    const act=document.createElement('span');
+    if(off(b.date)<=0){const l=document.createElement('button');l.className='sm p';l.textContent='Log it';l.onclick=()=>{
+      const r=commit({mode:'add',p:b.p,f:b.f,date:today(),note:b.label||'Planned bonus'});
+      if(r.err)return;S.bonus=S.bonus.filter(x=>x!==b);save();render();
+      toast('Bonus logged',()=>{undoEntry(r.e);S.bonus.push(b);save();render()});
+    };act.append(l,' ')}
+    const x=document.createElement('button');x.className='sm';x.textContent='Remove';x.onclick=()=>{S.bonus=S.bonus.filter(y=>y!==b);save();render()};
+    act.append(x);d.append(t,act);el.append(d);
+  });
+}
+$('bnAdd').onclick=()=>{
+  const date=$('bn-d').value,p=Math.max(0,num($('bn-p').value)),f=Math.max(0,num($('bn-f').value));
+  if(!isoRe.test(date)){toast('Pick a date first.');return}
+  if(!p&&!f){toast('Enter primogems or fates.');return}
+  S.bonus.push({id:uid(),date,p,f,label:$('bn-l').value.trim().slice(0,40)});
+  $('bn-l').value='';$('bn-p').value='';$('bn-f').value='';$('bn-d').value='';save();render();toast('Bonus added');
 };
 
 /* ---------- backup ---------- */
-function payload(){return JSON.stringify(Object.assign({app:'primogem-tracker'},S),null,1)}
+function payload(){return JSON.stringify(Object.assign({app:'primogem-tracker',profile:(PR.list.find(p=>p.id===PR.active)||{}).name||'Main'},S),null,1)}
 const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 function showText(json){const t=$('expTxt');t.value=json;t.hidden=false;t.focus();t.select();status('Download isn’t available here — copy this text and save it as a file')}
 async function saveFile(name,text,mime,label){
@@ -785,11 +933,11 @@ async function saveFile(name,text,mime,label){
 $('exp').onclick=()=>saveFile('primogem-tracker-'+today()+'.json',payload(),'application/json','Backup');
 const csvCell=v=>{v=String(v==null?'':v);return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
 function csvText(){
-  const rows=[['date','type','primogems','fates','note','result']];
+  const rows=[['date','type','primogems','fates','genesis','starglitter','note','result']];
   S.log.map((e,i)=>({e,i})).sort((a,b)=>a.e.date<b.e.date?-1:a.e.date>b.e.date?1:a.i-b.i).forEach(({e})=>{
-    const type=e.goal?'pull result':e.mode==='set'?'set total':(e.dp<0||e.df<0)?'spent':'gained';
+    const type=e.goal?'pull result':e.mode==='inv'?'inventory':e.mode==='set'?'set total':(e.dp<0||e.df<0)?'spent':'gained';
     const res=e.goal?((e.res==='lost'?(e.goal.type==='weapon'?'missed':'lost 50/50'):e.res==='won'?'won':'spent')+': '+(e.goal.name||'goal')+(e.pulls?', '+e.pulls+' pulls':'')):'';
-    rows.push([e.date,type,e.dp,e.df,e.note||'',res]);
+    rows.push([e.date,type,e.dp,e.df,-(e.lg||0),-(e.ls||0),e.note||'',res]);
   });
   return '\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n');
 }
@@ -811,6 +959,63 @@ $('impNo').onclick=()=>{pending=null;$('impBox').hidden=true;$('imp').value=''};
 $('impOk').onclick=()=>{if(!pending)return;S=pending;pending=null;$('impBox').hidden=true;$('imp').value='';rebuild();save();toast('Backup restored')};
 function rebuild(){cards.clear();$('tl').innerHTML='';fillIncome();refresh()}
 
+/* ---------- profiles ---------- */
+const PKEY='primo-profiles',keyFor=id=>id==='main'?'primo-tracker-v3':'primo-tracker-v3-'+id,docFor=id=>id==='main'?'tracker':'tracker-'+id;
+let PR={active:'main',list:[{id:'main',name:'Main'}]};
+function loadProfiles(){
+  try{
+    const r=JSON.parse(localStorage.getItem(PKEY)||'null');
+    if(r&&Array.isArray(r.list)&&r.list.length){
+      PR.list=r.list.filter(p=>p&&p.id&&p.name).map(p=>({id:String(p.id),name:String(p.name).slice(0,24)}));
+      if(!PR.list.some(p=>p.id==='main'))PR.list.unshift({id:'main',name:'Main'});
+      PR.active=PR.list.some(p=>p.id===r.active)?r.active:'main';
+    }
+  }catch(e){}
+  LS=keyFor(PR.active);
+}
+function saveProfiles(){try{localStorage.setItem(PKEY,JSON.stringify(PR))}catch(e){}if(dbCol)dbCol.doc('profiles').set({list:PR.list}).catch(()=>{})}
+function renderProfiles(){
+  ['profSel','profQuick'].forEach(id=>{const el=$(id);el.innerHTML='';PR.list.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;el.append(o)});el.value=PR.active});
+  $('profQuick').hidden=PR.list.length<2;$('profDel').disabled=PR.active==='main';
+}
+function flush(){clearTimeout(tmr);try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}if(dbDoc)dbDoc.set(JSON.parse(JSON.stringify(S))).catch(()=>{})}
+async function cloudLoad(){
+  const my=PR.active;
+  try{
+    const snap=await dbDoc.get();if(my!==PR.active)return;
+    if(snap.exists){const remote=norm(snap.data());
+      if(remote.updated>=S.updated){S=remote;try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}rebuild()}else save();
+    }else save();
+    status('Synced ✓');
+  }catch(e){status('Saved on this device only')}
+}
+async function switchProfile(id,fresh){
+  if(id===PR.active&&!fresh)return;
+  flush();PR.active=id;LS=keyFor(id);
+  if(fresh){S=norm(null);try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}else loadLocal();
+  saveProfiles();rebuild();renderProfiles();
+  if(dbCol){dbDoc=dbCol.doc(docFor(id));await cloudLoad()}
+}
+$('profSel').onchange=e=>switchProfile(e.target.value);
+$('profQuick').onchange=e=>switchProfile(e.target.value);
+$('profAdd').onclick=()=>{
+  const name=$('profName').value.trim().slice(0,24);if(!name){toast('Give the profile a name first.');return}
+  const id=uid();PR.list.push({id,name});$('profName').value='';switchProfile(id,true);toast('Profile “'+name+'” created');
+};
+$('profRen').onclick=()=>{
+  const name=$('profName').value.trim().slice(0,24);if(!name){toast('Type the new name first.');return}
+  PR.list.find(p=>p.id===PR.active).name=name;$('profName').value='';saveProfiles();renderProfiles();toast('Renamed');
+};
+$('profDel').onclick=()=>{
+  const b=$('profDel');if(PR.active==='main')return;
+  if(!b.dataset.armed){b.dataset.armed='1';b.textContent='Tap again to delete';setTimeout(()=>{delete b.dataset.armed;b.textContent='Delete current'},3000);return}
+  delete b.dataset.armed;b.textContent='Delete current';
+  const gone=PR.active;try{localStorage.removeItem(keyFor(gone))}catch(e){}
+  PR.list=PR.list.filter(p=>p.id!==gone);PR.active='main';LS=keyFor('main');loadLocal();saveProfiles();rebuild();renderProfiles();
+  if(dbCol){dbDoc=dbCol.doc(docFor('main'));cloudLoad()}
+  toast('Profile deleted');
+};
+
 /* ---------- boot ---------- */
 function applyTheme(t){
   const r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
@@ -820,7 +1025,7 @@ function applyTheme(t){
 let themeNow='auto';try{themeNow=localStorage.getItem('primo-theme')||'auto'}catch(e){}
 applyTheme(themeNow);
 $('themeBtn').onclick=()=>{const c=document.documentElement.getAttribute('data-theme')||'auto';applyTheme(c==='auto'?'dark':c==='dark'?'light':'auto')};
-loadLocal();$('ad').value=today();$('ad').max=today();fillIncome();render();history();
+loadProfiles();loadLocal();$('ad').value=today();$('ad').max=today();fillIncome();render();history();renderProfiles();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){$('ad').max=today();if(document.activeElement!==$('ad'))$('ad').value=today();render()}});
 
 (async()=>{
@@ -830,15 +1035,16 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden){$('ad').m
     const [db,user]=await Promise.all([claude.use('db'),claude.use('user')]);
     if(!db||!user)return;
     const id=await user.id();if(!id)return;
-    const ref=db.collection('data/users/'+id).doc('tracker');
-    const snap=await ref.get();
-    dbDoc=ref;
-    if(snap.exists){
-      const remote=norm(snap.data());
-      if(remote.updated>=S.updated){S=remote;try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}rebuild()}
-      else save();
-    }else save();
-    status('Synced ✓');
+    dbCol=db.collection('data/users/'+id);
+    try{
+      const ps=await dbCol.doc('profiles').get();
+      if(ps.exists){
+        const rl=(ps.data()||{}).list;
+        if(Array.isArray(rl)){rl.forEach(p=>{if(p&&p.id&&p.name&&!PR.list.some(x=>x.id===String(p.id)))PR.list.push({id:String(p.id),name:String(p.name).slice(0,24)})});saveProfiles();renderProfiles()}
+      }else saveProfiles();
+    }catch(e){}
+    dbDoc=dbCol.doc(docFor(PR.active));
+    await cloudLoad();
   }catch(e){status('Saved on this device only')}
 })();
 if('serviceWorker' in navigator){
