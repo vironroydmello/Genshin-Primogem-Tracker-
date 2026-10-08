@@ -135,9 +135,34 @@ button:disabled{opacity:.4;cursor:default}
 .bn{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:14px}
 .bn:first-child{border-top:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+[hidden]{display:none!important}
+[data-tab]{display:none}
+body[data-t=home] [data-tab=home],body[data-t=goals] [data-tab=goals],body[data-t=income] [data-tab=income],body[data-t=more] [data-tab=more]{display:block}
+body{padding-bottom:88px}
+.card,.g{border-radius:18px}
+.card{box-shadow:0 1px 2px rgba(40,25,90,.06),0 8px 20px rgba(40,25,90,.05)}
+h2{font-size:19px}
+.tot .big b{font-size:46px}
+button.p{box-shadow:0 2px 0 color-mix(in srgb,var(--acc) 65%,#000)}
+summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
+summary.h2s{font-size:19px}
+details.adv{margin-top:10px}details.adv summary{color:var(--acc);font-size:14px}
+details[open]>summary{margin-bottom:6px}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:8;display:flex;gap:4px;max-width:580px;margin:0 auto;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line)}
+.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;min-height:52px;border:0;border-radius:14px;background:transparent;color:var(--mut);font-size:12px;padding:4px}
+.tabs button span{font-size:20px;line-height:1.2}
+.tabs button[aria-current=page]{color:var(--acc);font-weight:700;background:color-mix(in srgb,var(--acc) 14%,transparent)}
+#toast{bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+.steps{list-style:none;margin:12px 0;padding:0;display:grid;gap:8px}
+.steps li{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.steps li::before{content:"";width:24px;height:24px;border-radius:50%;border:2px solid var(--acc);flex:none}
+.steps li.done::before{content:"✓";background:var(--ok);border-color:var(--ok);color:#fff;display:grid;place-items:center;font-size:14px}
+.steps li.done{opacity:.65}.steps li span{flex:1;font-size:14px}
+.gls dt{font-weight:650;margin-top:10px}.gls dd{margin:2px 0 0;color:var(--mut);font-size:14px}
 </style>
 </head>
-<body>
+<body data-t="home">
 <main>
 <header class="hero">
   <svg class="sky" viewBox="0 0 400 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -148,14 +173,15 @@ button:disabled{opacity:.4;cursor:default}
   <h1 class="disp">✦ Primogem Tracker</h1>
   <button class="theme" id="themeBtn">Auto</button>
   <select class="pq" id="profQuick" aria-label="Profile" hidden></select>
-  <div class="tot disp"><div class="big"><b id="tt">0</b>total pulls</div><div><b id="tp">0</b>primogems</div><div><b id="tf">0</b>fates</div></div>
+  <div class="tot disp"><div class="big"><b id="tt">0</b>pulls ready</div><div><b id="tp">0</b>primogems</div><div><b id="tf">0</b>fates</div></div>
   <div class="nx" id="nx"></div>
 </header>
 
-<section class="card" id="bgCard" hidden><div id="bgTxt"></div><div class="b" id="bgBtns"><button class="p sm" id="bgYes">Got them (+5 fates)</button><button class="sm" id="bgSkip">Skip this month</button></div></section>
+<section class="card" id="wel" data-tab="home" hidden><h2 class="disp">Welcome! Set up in 3 steps</h2><div class="sub">One pull is one wish. This app counts the pulls you’ve saved and tells you when you can afford the character or weapon you want.</div><ol class="steps"><li id="w1"><span><b>Enter what you have now.</b> Type your primogems and fates under “Update your pulls” below, then tap <b>Set balance</b>.</span></li><li id="w2"><span><b>Set your income.</b> Pick how you play (free-to-play, Welkin…).</span><button class="sm" data-go="income">Open Income</button></li><li id="w3"><span><b>Add a goal.</b> Choose a character or weapon you’re saving for.</span><button class="sm" data-go="goals">Open Goals</button></li></ol><button class="sm" id="welHide">Hide this guide</button></section>
+<section class="card" id="bgCard" data-tab="home" hidden><div id="bgTxt"></div><div class="b" id="bgBtns"><button class="p sm" id="bgYes">Got them (+5 fates)</button><button class="sm" id="bgSkip">Skip this month</button></div></section>
 
-<section class="card" aria-labelledby="h-log">
-  <h2 id="h-log" class="disp">Log savings</h2>
+<section class="card" aria-labelledby="h-log" data-tab="home">
+  <h2 id="h-log" class="disp">Update your pulls</h2>
   <div class="chips">
     <button class="chip" data-q="p60">+60 dailies</button>
     <button class="chip" data-q="p90">+90 Welkin</button>
@@ -168,30 +194,26 @@ button:disabled{opacity:.4;cursor:default}
     <label class="f">Primogems<input id="ap" type="number" inputmode="numeric" placeholder="e.g. 120"></label>
     <label class="f">Fates<input id="af" type="number" inputmode="numeric" placeholder="e.g. 2"></label>
   </div>
-  <label class="f" style="display:block;margin-top:8px">Note (optional)<input id="an" maxlength="60" list="cats" autocomplete="off" placeholder="Events, Abyss 36★, Codes, Top-up…"></label>
+  <details class="adv"><summary>Add a note or change the date</summary><label class="f" style="display:block;margin-top:8px">Note (optional)<input id="an" maxlength="60" list="cats" autocomplete="off" placeholder="Events, Abyss 36★, Codes, Top-up…"></label>
   <datalist id="cats"><option value="Events"><option value="Abyss"><option value="Imaginarium Theater"><option value="Livestream codes"><option value="Genesis top-up"><option value="Maintenance"><option value="Quest / Exploration"></datalist>
-  <div class="row" style="margin-top:8px">
-    <label class="f" style="flex:1.6;min-width:130px">Date<input id="ad" type="date"></label>
-    <button class="p" id="add">Add</button>
-    <button id="set">Set total</button>
-  </div>
-  <div class="sub" style="margin-top:8px">160 primogems = 1 pull. <b>Set total</b> replaces your balance; leave a field empty to keep it as is.</div>
-  <div class="panel"><div class="sec-s" style="margin-top:0">Not converted yet</div>
+  <div class="row" style="margin-top:8px"><label class="f">Date<input id="ad" type="date"></label></div></details><div class="row" style="margin-top:12px"><button class="p" id="add">Add to balance</button><button id="set">Set balance</button></div>
+  <div class="sub" style="margin-top:8px"><b>Add to balance</b> adds what you earned (or subtracts it if “Spent” is selected). <b>Set balance</b> replaces your balance with exactly what the game shows. 160 primogems = 1 pull.</div>
+  <details class="panel adv"><summary>Genesis Crystals &amp; Starglitter (optional)</summary>
     <div class="sub" id="latOut"></div>
     <div class="row" style="margin-top:8px"><label class="f">Genesis Crystals<input id="inv-g" type="number" inputmode="numeric" min="0" placeholder="amount"></label><label class="f">Masterless Starglitter<input id="inv-s" type="number" inputmode="numeric" min="0" placeholder="amount"></label></div>
     <div class="b"><button class="sm" id="invAdd">Add to inventory</button><button class="sm" id="invRem">Remove from inventory</button></div>
     <div class="row" style="margin-top:12px"><label class="f">Convert Genesis<input id="cv-g" type="number" inputmode="numeric" min="0" placeholder="all"></label><label class="f">Convert Starglitter<input id="cv-s" type="number" inputmode="numeric" min="0" placeholder="all"></label><button id="conv">Convert</button></div>
-    <div class="sub" style="margin-top:6px">Leave the convert boxes empty to convert everything. Genesis becomes primogems 1:1 and 5 Starglitter become 1 fate. Every change here is logged in History and can be undone.</div></div>
+    <div class="sub" style="margin-top:6px">Leave the convert boxes empty to convert everything. Genesis becomes primogems 1:1 and 5 Starglitter become 1 fate. Every change here is logged in History and can be undone.</div></details>
 </section>
 
-<div class="sec"><h2 class="disp">Goals</h2></div>
+<div data-tab="goals"><div class="sec"><h2 class="disp">Goals</h2></div>
 <p class="sub" style="margin:-4px 2px 10px">Pulls fund goals from the top: Must have first, then Want, then If spare. Change a tier or pause a goal when plans change and everything re-plans.</p>
 <section class="card" id="prio" hidden><div id="prioRows"></div></section>
 <div class="tl" id="tl"></div>
-<div class="empty" id="emptyG" hidden><div class="disp" style="font-weight:600">No goals yet</div><div class="sub">Add a character or weapon banner to start planning.</div></div>
-<div class="addrow" style="margin-bottom:12px"><button class="p" id="addc">＋ Character</button><button class="p" id="addw">＋ Weapon</button><button class="p" id="addn">＋ Chronicled</button><button id="addx">＋ Custom</button></div>
+<div class="empty" id="emptyG" hidden><div class="disp" style="font-weight:600">No goals yet</div><div class="sub">Tap ＋ Character or ＋ Weapon below. The app works out how many pulls you need and when you can afford them.</div></div>
+<div class="addrow" style="margin-bottom:12px"><button class="p" id="addc">＋ Character</button><button class="p" id="addw">＋ Weapon</button><button class="p" id="addn">＋ Chronicled</button><button id="addx">＋ Custom</button></div></div>
 
-<section class="card" aria-labelledby="h-fc">
+<section class="card" aria-labelledby="h-fc" data-tab="goals">
   <h2 id="h-fc" class="disp">Savings forecast</h2>
   <svg class="chart" id="chart" viewBox="0 0 360 200" role="img" aria-label="Savings chart"></svg>
   <div class="sub" id="cap" style="margin-top:6px"></div>
@@ -199,15 +221,15 @@ button:disabled{opacity:.4;cursor:default}
   <div id="ms" style="margin-top:10px"></div>
 </section>
 
-<section class="card" aria-labelledby="h-inc">
-  <h2 id="h-inc" class="disp">Income</h2>
+<section class="card" aria-labelledby="h-inc" data-tab="income">
+  <h2 id="h-inc" class="disp">Income</h2><div class="chips"><span class="sub">Quick setup</span><button class="chip" data-pre="f2p">Free-to-play</button><button class="chip" data-pre="w">Welkin</button><button class="chip" data-pre="wb">Welkin + Battle Pass</button></div>
   <div class="row">
     <label class="f">Dailies per day<input id="i-d" type="number" inputmode="numeric" min="0"></label>
     <label class="f">Other per month (codes, check-ins…)<input id="i-m" type="number" inputmode="numeric" min="0" placeholder="e.g. 100"></label>
   </div>
   <label class="f" style="display:block;margin-top:8px">Events, quests, mail &amp; codes per patch<input id="i-p" type="number" inputmode="numeric" min="0" placeholder="e.g. 4500"></label>
   <div class="chips" style="margin:8px 0 0"><span class="sub">Rough guide</span><button class="chip" data-pp="2000">Light 2,000</button><button class="chip" data-pp="3000">Typical 3,000</button><button class="chip" data-pp="5000">Big 5,000</button></div>
-  <div class="sub" style="margin-top:4px">Typical is about what recent community estimates show for events, maintenance and codes in an ordinary patch (6.5 and 7.1). Light and Big are my judgement, and X.0 region launches run higher. Abyss, Theater and Stygian go in the Endgame card, so leave them out here. If you used the monthly box above for Abyss or Theater, move that amount to Endgame.</div>
+  <details class="adv"><summary>How are these numbers chosen?</summary><div class="sub" style="margin-top:4px">Typical is about what recent community estimates show for events, maintenance and codes in an ordinary patch (6.5 and 7.1). Light and Big are my judgement, and X.0 region launches run higher. Abyss, Theater and Stygian go in the Endgame card, so leave them out here. If you used the monthly box above for Abyss or Theater, move that amount to Endgame.</div></details>
   <label class="chk" style="margin-top:12px"><input type="checkbox" id="i-w"> Welkin Moon active (+90/day)</label>
   <label class="chk" style="margin-top:8px"><input type="checkbox" id="i-bp"> Gnostic Hymn Battle Pass (+4 fates and 680 primogems per patch)</label>
   <label class="chk" style="margin-top:8px"><input type="checkbox" id="i-b"> Paimon’s Bargains (+5 fates on the 1st of each month)</label>
@@ -218,14 +240,14 @@ button:disabled{opacity:.4;cursor:default}
   <div class="sub" style="margin-top:4px">Used for patch-based income and the release-date shortcuts on each goal (phase 2 is about half a patch later). Patches sometimes run a few days longer or shorter.</div>
   <label class="f" style="display:block;margin-top:12px">How much of this income do you actually collect?
     <select id="i-r"><option value="100">Everything</option><option value="90">Most days (about 90%)</option><option value="75">Casual (about 75%)</option></select></label>
-  <div class="chips" style="margin:12px 0 0"><span class="sub">Planning</span><div class="seg" role="radiogroup" aria-label="Planning mode"><button role="radio" aria-checked="true" data-mode="worst">Worst case</button><button role="radio" aria-checked="false" data-mode="real">Average luck</button></div></div>
+  <div class="chips" style="margin:12px 0 0"><span class="sub">Plan for</span><div class="seg" role="radiogroup" aria-label="Planning mode"><button role="radio" aria-checked="true" data-mode="worst">Safe plan</button><button role="radio" aria-checked="false" data-mode="real">Average luck</button></div></div>
   <div class="sub" id="modeNote" style="margin-bottom:6px"></div>
-  <div class="sub">Odds on each goal use the standard pity curves (soft pity from pull 74 for characters and Chronicled, 63 for weapons) with a 55% win rate for characters, 37.5% for a chosen weapon and 50% for Chronicled. The weapon curve is a model estimate.</div>
+  <details class="adv"><summary>How are the odds worked out?</summary><div class="sub">Odds on each goal use the standard pity curves (soft pity from pull 74 for characters and Chronicled, 63 for weapons) with a 55% win rate for characters, 37.5% for a chosen weapon and 50% for Chronicled. The weapon curve is a model estimate.</div></details>
   <div class="sub" style="margin-top:8px" id="incOut"></div>
-</section></section>
+</section>
 
-<section class="card" aria-labelledby="h-eg">
-  <h2 id="h-eg" class="disp">Endgame income</h2>
+<section class="card" aria-labelledby="h-eg" data-tab="income">
+  <details><summary class="disp h2s" id="h-eg">Endgame income: Abyss &amp; Theater (optional)</summary>
   <div class="sec-s" style="margin-top:0">Spiral Abyss (floors 9–12): stars you usually get per floor</div>
   <div class="grid2" id="egFloors"></div>
   <label class="f" style="display:block;margin-top:8px">Resets per month<select id="eg-an"><option value="1">Once a month (the 16th)</option><option value="2">Twice a month</option></select></label>
@@ -234,33 +256,33 @@ button:disabled{opacity:.4;cursor:default}
   <div class="sec-s">Stygian Onslaught (once per patch)</div>
   <label class="f">Difficulties you clear<select id="eg-sg"><option value="0">None</option><option value="1">1 (150)</option><option value="2">2 (300)</option><option value="3">3 (450)</option></select></label>
   <div class="sub" id="egOut" style="margin-top:10px"></div>
-  <div class="sub" style="margin-top:4px">Abyss pays 50, 50 and 100 primogems at 3, 6 and 9 stars on each floor (200 per floor, 800 for all 36 stars). Reward sizes and reset dates change between versions and sources disagree, so check the in-game reward preview and edit the Theater maximum and reset count if yours differ.</div>
+  <div class="sub" style="margin-top:4px">Abyss pays 50, 50 and 100 primogems at 3, 6 and 9 stars on each floor (200 per floor, 800 for all 36 stars). Reward sizes and reset dates change between versions and sources disagree, so check the in-game reward preview and edit the Theater maximum and reset count if yours differ.</div></details>
 </section>
 
-<section class="card" aria-labelledby="h-bn">
-  <h2 id="h-bn" class="disp">Planned bonuses</h2>
+<section class="card" aria-labelledby="h-bn" data-tab="income">
+  <details><summary class="disp h2s" id="h-bn">Planned bonuses (optional)</summary>
   <div class="sub">One-offs you already know about, like an anniversary gift or maintenance compensation. They’re added to your projection on their date.</div>
   <div id="bnList" style="margin:8px 0"></div>
   <label class="f">What<input id="bn-l" maxlength="40" autocomplete="off" placeholder="e.g. Anniversary gift"></label>
   <div class="row" style="margin-top:8px"><label class="f">Date<input id="bn-d" type="date"></label><label class="f">Primogems<input id="bn-p" type="number" inputmode="numeric" min="0"></label><label class="f">Fates<input id="bn-f" type="number" inputmode="numeric" min="0"></label></div>
-  <button class="sm" id="bnAdd" style="margin-top:8px">Add bonus</button>
+  <button class="sm" id="bnAdd" style="margin-top:8px">Add bonus</button></details>
 </section>
 
-<section class="card" aria-labelledby="h-hi">
+<section class="card" aria-labelledby="h-hi" data-tab="more">
   <h2 id="h-hi" class="disp">History</h2>
   <div id="hist" class="sub">No entries yet.</div>
   <div id="doneWrap" hidden><div class="sec-s">Pull results</div><div class="sub" id="rec" style="margin-bottom:4px"></div><div id="doneList" class="sub"></div></div>
 </section>
 
-<section class="card" aria-labelledby="h-bk">
+<section class="card" aria-labelledby="h-bk" data-tab="more">
   <h2 id="h-bk" class="disp">Backup</h2>
   <div class="row"><button id="exp">Export backup</button><button id="expCsv">Export CSV</button><label class="f" style="flex:1"><span class="sr" style="position:absolute;left:-9999px">Import backup file</span><input id="imp" type="file" accept=".json,application/json" style="padding-top:9px"></label></div>
   <textarea id="expTxt" readonly hidden aria-label="Backup data"></textarea>
   <div id="impBox" hidden style="margin-top:10px"><div class="sub" id="impMsg"></div><div class="b"><button class="p sm" id="impOk">Replace my data</button><button class="sm" id="impNo">Cancel</button></div></div>
 </section>
 
-<button class="p wide" id="inst" hidden>Install app</button>
-<section class="card" aria-labelledby="h-pr">
+<button class="p wide" id="inst" hidden data-tab="more">Install app</button>
+<section class="card" aria-labelledby="h-pr" data-tab="more">
   <h2 id="h-pr" class="disp">Profiles</h2>
   <label class="f">Active profile<select id="profSel"></select></label>
   <label class="f" style="display:block;margin-top:8px">Name<input id="profName" maxlength="24" autocomplete="off" placeholder="e.g. Alt account"></label>
@@ -268,9 +290,11 @@ button:disabled{opacity:.4;cursor:default}
   <div class="sub" style="margin-top:8px">Each profile has its own balance, goals, income and history. Backups and CSV export cover the profile you’re in. The Main profile can be renamed but not deleted.</div>
 </section>
 
-<div id="st" role="status" aria-live="polite"></div>
-<div class="sub" style="text-align:center;margin-bottom:18px">Primogem Tracker v5</div>
+<div id="st" role="status data-tab="more"> aria-live="polite"></div>
+<section class="card" data-tab="more"><details><summary class="disp h2s">New here? Quick glossary</summary><dl class="gls"><dt>Pull</dt><dd>One wish. It costs 1 Fate or 160 primogems.</dd><dt>Primogems and Fates</dt><dd>Primogems are the free wish currency. Intertwined Fates are wish tickets. This app counts both as pulls.</dd><dt>Pity</dt><dd>How many pulls since your last 5★. A 5★ is guaranteed at 90 pulls (characters, Chronicled) or 80 (weapons). Odds climb from about pull 74 (63 for weapons), which is called soft pity.</dd><dt>50/50</dt><dd>A character 5★ has a 50% chance to be the featured one. If you lose, the next 5★ is guaranteed.</dd><dt>Welkin Moon</dt><dd>A monthly pass that gives 90 primogems every day.</dd><dt>Genesis Crystals and Starglitter</dt><dd>Genesis (paid) becomes primogems 1:1. 5 Starglitter become 1 fate.</dd><dt>Patch</dt><dd>A game update, about every 6 weeks. New banners arrive in phase 1 and phase 2 of each patch.</dd></dl></details></section>
+<div class="sub" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v6</div>
 </main>
+<nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><span aria-hidden="true">🏠</span>Home</button><button data-tb="goals"><span aria-hidden="true">🎯</span>Goals</button><button data-tb="income"><span aria-hidden="true">📈</span>Income</button><button data-tb="more"><span aria-hidden="true">☰</span>More</button></nav>
 <div id="toast" role="status" aria-live="polite" hidden><span id="tmsg"></span><button id="tund">Undo</button></div>
 
 <script>
@@ -539,7 +563,7 @@ function render(){
   const d=m.e;$('incOut').textContent='≈ '+Math.round(d)+' primos/day, about '+(d*30/160).toFixed(1)+' pulls every 30 days'+(m.eMax>d?' (up to '+Math.round(m.eMax)+'/day if you collect everything).':'. Events arrive in lumps, so the chart smooths them out.');
   $('latOut').textContent=(S.genesis||S.glitter)?'In inventory: '+S.genesis+' Genesis, '+S.glitter+' Starglitter (about '+(lat()/160).toFixed(1)+' pulls once converted). Your balance above only counts what you’ve converted.':'Nothing waiting to be converted.';
   const eg=endgameParts();$('egOut').textContent='Endgame ≈ '+Math.round(eg.total)+' primos a month (Abyss '+Math.round(eg.abyss)+', Theater '+Math.round(eg.theater)+', Stygian '+Math.round(eg.stygian)+').';
-  drawChart(m);drawMilestones(m);drawBargain();drawBonus();
+  drawChart(m);drawMilestones(m);drawBargain();drawBonus();drawWelcome();
 }
 
 /* edit + result panels */
@@ -582,7 +606,7 @@ function ensureEdit(c,g){
    '<label class="f">Type<select data-k="type"><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled Wish</option><option value="custom">Custom pulls</option></select></label>'+
    '<label class="f">Release date<input type="date" data-k="release"></label>'+
    '<label class="f" data-w="copies">Copies (C0 = 1, C1 = 2…)<input data-k="copies" type="number" inputmode="numeric" min="1"></label>'+
-   '<label class="f" data-w="pity">Current pity<input data-k="pity" type="number" inputmode="numeric" min="0"></label>'+
+   '<label class="f" data-w="pity">Current pity (pulls since your last 5★)<input data-k="pity" type="number" inputmode="numeric" min="0"></label>'+
    '<label class="f" data-w="custom">Pulls needed<input data-k="custom" type="number" inputmode="numeric" min="0"></label>'+
    '<label class="chk" data-w="guar"><input type="checkbox" data-k="guar"><span data-gl></span></label><div class="sub" data-w="guarnote" style="grid-column:1/3"></div></div>'+
    '<div class="chips" data-w="phases" style="margin:10px 0 0"></div>'+
@@ -813,9 +837,9 @@ function entry(mode){
     const drop=ledP()-(p+f*160),sb=$('set');
     if(drop>=800&&!sb.dataset.armed){ // lowering the balance by 5+ pulls needs a second tap
       sb.dataset.armed='1';sb.textContent='Confirm: −'+Math.round(drop/160)+' pulls';clearTimeout(sb._t);
-      sb._t=setTimeout(()=>{delete sb.dataset.armed;sb.textContent='Set total'},5000);return;
+      sb._t=setTimeout(()=>{delete sb.dataset.armed;sb.textContent='Set balance'},5000);return;
     }
-    delete sb.dataset.armed;sb.textContent='Set total';
+    delete sb.dataset.armed;sb.textContent='Set balance';
   }
   else{p=num(pv);f=num(fv);if(sign<0){p=-Math.abs(p);f=-Math.abs(f)}}
   const date=$('ad').value&&$('ad').value<=today()?$('ad').value:today();
@@ -823,7 +847,7 @@ function entry(mode){
   if(!r.err){$('an').value='';$('ap').value='';$('af').value='';$('ad').value=today();toast(mode==='set'?'Balance updated':'Entry logged',()=>undoEntry(r.e))}
 }
 $('add').onclick=()=>entry('add');$('set').onclick=()=>entry('set');
-[$('ap'),$('af')].forEach(i=>i.addEventListener('input',()=>{const b=$('set');if(b.dataset.armed){delete b.dataset.armed;b.textContent='Set total'}}));
+[$('ap'),$('af')].forEach(i=>i.addEventListener('input',()=>{const b=$('set');if(b.dataset.armed){delete b.dataset.armed;b.textContent='Set balance'}}));
 [$('ap'),$('af')].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')entry('add')}));
 document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
   const q=b.dataset.q,p=q==='p60'?60:q==='p90'?90:0,f=q==='f1'?1:0;
@@ -1056,6 +1080,18 @@ let ip=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;$('inst').hidden=false});
 $('inst').onclick=async()=>{if(!ip)return;ip.prompt();try{await ip.userChoice}catch(e){}ip=null;$('inst').hidden=true};
 window.addEventListener('appinstalled',()=>{$('inst').hidden=true});
+
+function tab(t){document.body.dataset.t=t;document.querySelectorAll('[data-tb]').forEach(b=>b.dataset.tb===t?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));window.scrollTo(0,0)}
+document.querySelectorAll('[data-tb],[data-go]').forEach(b=>b.addEventListener('click',()=>tab(b.dataset.tb||b.dataset.go)));
+document.querySelectorAll('[data-pre]').forEach(b=>b.onclick=()=>{const p=b.dataset.pre;$('i-w').checked=p!=='f2p';$('i-bp').checked=p==='wb';if(!$('i-p').value)$('i-p').value=3000;incIn();toast('Income updated. Check the numbers below.')});
+function drawWelcome(){
+  const i=S.income,d=[S.log.length>0,!!(i.welkin||i.bp||i.bargains||i.patch||i.monthly||S.patchStart),S.goals.length>0];
+  let off=false;try{off=localStorage.getItem('primo-welcome')==='off'}catch(e){}
+  $('wel').hidden=off||d.every(Boolean);
+  d.forEach((x,k)=>$('w'+(k+1)).classList.toggle('done',x));
+}
+$('welHide').onclick=()=>{try{localStorage.setItem('primo-welcome','off')}catch(e){}drawWelcome()};
+drawWelcome();
 </script>
 </body>
 </html>
