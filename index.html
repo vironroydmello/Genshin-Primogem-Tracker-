@@ -187,6 +187,7 @@ details[open]>summary{margin-bottom:6px}
 <section class="card" id="wel" data-tab="home" hidden><h2 class="disp">Welcome! Set up in 3 steps</h2><div class="sub">One pull is one wish. This app counts the pulls you’ve saved and tells you when you can afford the character or weapon you want.</div><ol class="steps"><li id="w1"><span><b>Enter what you have now.</b> Type your primogems and fates under “Update your pulls” below, then tap <b>Set balance</b>.</span></li><li id="w2"><span><b>Set your income.</b> Pick how you play (free-to-play, Welkin…).</span><button class="sm" data-go="income">Open Income</button></li><li id="w3"><span><b>Add a goal.</b> Choose a character or weapon you’re saving for.</span><button class="sm" data-go="goals">Open Goals</button></li></ol><button class="sm" id="welHide">Hide this guide</button></section>
 <section class="card" id="bgCard" data-tab="home" hidden><div id="bgTxt"></div><div class="b" id="bgBtns"><button class="p sm" id="bgYes">Got them (+5 fates)</button><button class="sm" id="bgSkip">Skip this month</button></div></section>
 
+<section class="card" id="cuCard" data-tab="home" hidden><div id="cuTxt"></div><div class="b"><button class="p sm" id="cuYes"></button><button class="sm" id="cuNo">Not now</button></div></section>
 <section class="card" aria-labelledby="h-log" data-tab="home">
   <h2 id="h-log" class="disp">Update your pulls</h2>
   <div class="chips">
@@ -213,8 +214,9 @@ details[open]>summary{margin-bottom:6px}
     <div class="sub" style="margin-top:6px">Leave the convert boxes empty to convert everything. Genesis becomes primogems 1:1 and 5 Starglitter become 1 fate. Every change here is logged in History and can be undone.</div></details>
 </section>
 
-<div data-tab="goals"><div class="sec"><h2 class="disp">Goals</h2></div>
+<div data-tab="goals"><div class="sec"><h2 class="disp">Goals</h2><button class="sm" id="sortG">Sort by release</button></div>
 <p class="sub" style="margin:-4px 2px 10px">Pulls fund goals from the top: Must have first, then Want, then If spare. Change a tier or pause a goal when plans change and everything re-plans.</p>
+<section class="card" id="ptCard"><h2 class="disp">Pity tracker</h2><div class="sub">Enter your in-game pity once. It is shared by every goal of the same type: the first goal of each type uses it, later ones start fresh. It resets itself when you log a result.</div><div class="grid2" style="margin-top:8px"><label class="f">Character pity<input id="pt-char" type="number" inputmode="numeric" min="0" max="89"></label><label class="f">Weapon pity<input id="pt-weapon" type="number" inputmode="numeric" min="0" max="79"></label><label class="f">Chronicled pity<input id="pt-chron" type="number" inputmode="numeric" min="0" max="89"></label><label class="chk" style="grid-column:auto;align-self:end"><input type="checkbox" id="pt-cg"> Next character 5★ is guaranteed</label></div></section>
 <section class="card" id="prio" hidden><div id="prioRows"></div></section>
 <div class="tl" id="tl"></div>
 <div class="empty" id="emptyG" hidden><div class="disp" style="font-weight:600">No goals yet</div><div class="sub">Tap ＋ Character or ＋ Weapon below. The app works out how many pulls you need and when you can afford them.</div></div>
@@ -287,6 +289,7 @@ details[open]>summary{margin-bottom:6px}
   <h2 id="h-bk" class="disp">Backup</h2>
   <div class="row"><button id="exp">Export backup</button><button id="expCsv">Export CSV</button><label class="f" style="flex:1"><span class="sr" style="position:absolute;left:-9999px">Import backup file</span><input id="imp" type="file" accept=".json,application/json" style="padding-top:9px"></label></div>
   <textarea id="expTxt" readonly hidden aria-label="Backup data"></textarea>
+  <button class="sm wide2" id="bakRes" hidden>Restore data from before this update</button>
   <div id="impBox" hidden style="margin-top:10px"><div class="sub" id="impMsg"></div><div class="b"><button class="p sm" id="impOk">Replace my data</button><button class="sm" id="impNo">Cancel</button></div></div>
 </section>
 
@@ -299,7 +302,7 @@ details[open]>summary{margin-bottom:6px}
   <div class="sub" style="margin-top:8px">Each profile has its own balance, goals, income and history. Backups and CSV export cover the profile you’re in. The Main profile can be renamed but not deleted.</div>
 </section>
 
-<div id="st" role="status" data-tab="more"> aria-live="polite"></div>
+<div id="st" role="status" data-tab="more" aria-live="polite"></div>
 <section class="card" data-tab="more"><h2 class="disp">Banner roster</h2><div class="sub" id="roStat"></div><label class="f" style="display:block;margin-top:8px">Roster link (optional)<input id="roUrl" type="url" inputmode="url" autocomplete="off" placeholder="https://… or leave empty"></label><div class="b"><button class="sm p" id="roGo">Check for new banners</button><button class="sm" id="roReset">Use built-in file</button></div><div class="sub" style="margin-top:8px">This is the only part of the app that needs internet. Paste the link to a roster.json file someone keeps up to date (for example a GitHub “raw” link). The app checks it each time it opens and keeps a saved copy for offline use.</div></section>
 <section class="card" data-tab="more"><details><summary class="disp h2s">New here? Quick glossary</summary><dl class="gls"><dt>Pull</dt><dd>One wish. It costs 1 Fate or 160 primogems.</dd><dt>Primogems and Fates</dt><dd>Primogems are the free wish currency. Intertwined Fates are wish tickets. This app counts both as pulls.</dd><dt>Pity</dt><dd>How many pulls since your last 5★. A 5★ is guaranteed at 90 pulls (characters, Chronicled) or 80 (weapons). Odds climb from about pull 74 (63 for weapons), which is called soft pity.</dd><dt>50/50</dt><dd>A character 5★ has a 50% chance to be the featured one. If you lose, the next 5★ is guaranteed.</dd><dt>Welkin Moon</dt><dd>A monthly pass that gives 90 primogems every day.</dd><dt>Genesis Crystals and Starglitter</dt><dd>Genesis (paid) becomes primogems 1:1. 5 Starglitter become 1 fate.</dd><dt>Patch</dt><dd>A game update, about every 6 weeks. New banners arrive in phase 1 and phase 2 of each patch.</dd></dl></details></section>
 <section class="card" id="adm" data-tab="more" hidden><h2 class="disp">Admin: banner roster</h2><div class="sub">Banners you publish here reach every user the next time they open the app.</div><div id="adList" style="margin:8px 0"></div>
@@ -309,14 +312,15 @@ details[open]>summary{margin-bottom:6px}
 <div class="b"><button class="p sm" id="adSave">Add banner</button><button class="sm" id="adCancel" hidden>Cancel edit</button></div>
 <details class="adv"><summary>Publishing setup (GitHub)</summary><div class="grid2"><label class="f">Repository<input id="ad-repo" placeholder="yourname/primogems" autocomplete="off"></label><label class="f">Branch<input id="ad-br" placeholder="main" autocomplete="off"></label></div><label class="f" style="display:block;margin-top:8px">File path<input id="ad-path" placeholder="roster.json" autocomplete="off"></label><label class="f" style="display:block;margin-top:8px">Access token<input id="ad-tok" type="password" autocomplete="off"></label><div class="sub" style="margin-top:6px">Create a fine-grained token limited to this one repository with “Contents: Read and write”. It is saved on this device only and never sent anywhere except GitHub. Don’t share it.</div></details>
 <div class="b"><button class="p" id="adCopy">Copy roster text</button><button class="sm" id="adExp">Export roster.json</button><button class="sm" id="adPub">Publish with token (advanced)</button><button class="sm" id="adLock">Hide admin tools</button></div><div class="sub" id="adSt" style="margin-top:8px"></div></section>
-<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v10</div>
+<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v11</div>
 </main>
-<div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div></div></div>
+<div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><input id="rsQ" type="search" placeholder="Search banners…" autocomplete="off" style="margin-top:10px"><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div><div id="rsBar" class="b" hidden style="position:sticky;bottom:0;background:var(--card);padding-top:8px"><button class="p wide" id="rsAdd"></button></div></div></div>
 <nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><span aria-hidden="true">🏠</span>Home</button><button data-tb="goals"><span aria-hidden="true">🎯</span>Goals</button><button data-tb="income"><span aria-hidden="true">📈</span>Income</button><button data-tb="more"><span aria-hidden="true">☰</span>More</button></nav>
 <div id="toast" role="status" aria-live="polite" hidden><span id="tmsg"></span><button id="tund">Undo</button></div>
 
 <script>
 'use strict';
+(function(){try{if(localStorage.getItem('primo-bak-v10'))return;const d={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^primo-(tracker|profiles)/.test(k))d[k]=localStorage.getItem(k)}localStorage.setItem('primo-bak-v10',JSON.stringify({at:Date.now(),data:d}))}catch(e){}})();
 let LS='primo-tracker-v3';const OLD=['primo-tracker-v2','primo-tracker-v1'];
 const TAB={worst:{PER:{char:180,weapon:160,chron:180},HALF:{char:90,weapon:80,chron:90}},real:{PER:{char:90,weapon:87,chron:94},HALF:{char:62,weapon:53,chron:62}}},WELKIN=90,BP=1320;
 
@@ -333,6 +337,12 @@ const fmt=s=>{const d=new Date(s+'T00:00:00');return d.toLocaleDateString(undefi
 const uid=()=>Math.random().toString(36).slice(2,8);
 const plural=(n,w)=>n+' '+w+(n===1?'':'s');
 const isoRe=/^\d{4}-\d{2}-\d{2}$/;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function cleanPt(p){p=p||{};return {char:Math.min(89,Math.max(0,num(p.char))),weapon:Math.min(79,Math.max(0,num(p.weapon))),chron:Math.min(89,Math.max(0,num(p.chron))),cg:!!p.cg}}
+function applyPool(){ // pity is shared per banner type: the first active goal of each type uses the tracker, later ones start fresh
+  const seen={};S.goals.map((g,i)=>({g,i})).filter(x=>!x.g.paused&&x.g.type!=='custom').sort((a,b)=>a.g.prio-b.g.prio||a.i-b.i).forEach(({g})=>{
+    const t=g.type,f=!seen[t];seen[t]=1;g.pity=f?S.pt[t]:0;if(t==='char')g.guar=f&&S.pt.cg;clampPity(g)});
+}
 
 /* ---------- state ---------- */
 const newGoal=o=>Object.assign({id:uid(),name:'',patch:'',type:'char',copies:1,pity:0,custom:180,release:'',guar:false,prio:2,paused:false,rid:''},o||{});
@@ -346,7 +356,7 @@ function cleanGoal(raw){
   g.guar=!!g.guar;g.paused=!!g.paused;g.prio=[1,2,3].includes(num(g.prio))?num(g.prio):2;g.release=isoRe.test(g.release||'')?g.release:'';
   capGoal(g);clampPity(g);return g;
 }
-const defState=()=>({v:3,primos:0,fates:0,income:{daily:60,welkin:false,monthly:0,bargains:false,bp:false,patch:0,rate:100},patchLen:42,patchStart:'',bargain:'',endgame:{ab:[0,0,0,0],abN:1,thMax:1000,thPct:0,sg:0},bonus:[],mode:'worst',glitter:0,genesis:0,log:[],goals:[],done:[],updated:0});
+const defState=()=>({v:4,pt:{char:0,weapon:0,chron:0,cg:false},cu:'',primos:0,fates:0,income:{daily:60,welkin:false,monthly:0,bargains:false,bp:false,patch:0,rate:100},patchLen:42,patchStart:'',bargain:'',endgame:{ab:[0,0,0,0],abN:1,thMax:1000,thPct:0,sg:0},bonus:[],mode:'worst',glitter:0,genesis:0,log:[],goals:[],done:[],updated:0});
 function norm(raw){ // accepts v1, v2 and v3 data
   const o=defState();
   if(!raw||typeof raw!=='object')return o;
@@ -362,11 +372,15 @@ function norm(raw){ // accepts v1, v2 and v3 data
     if(e.res==='won'||e.res==='lost'){x.res=e.res;x.pulls=num(e.pulls)}
     if(e.eid)x.eid=String(e.eid);if(e.note)x.note=String(e.note).slice(0,60);if(e.lg)x.lg=num(e.lg);if(e.ls)x.ls=num(e.ls);
     if(e.goal&&typeof e.goal==='object'){x.goal=cleanGoal(e.goal);x.idx=num(e.idx)}
+    if(e.pt&&typeof e.pt==='object')x.pt=cleanPt(e.pt);
     return x;
   });
-  if(Array.isArray(raw.goals)&&(raw.goals.length||raw.v===3))o.goals=raw.goals.filter(g=>g&&typeof g==='object').map(cleanGoal);
+  if(Array.isArray(raw.goals)&&(raw.goals.length||raw.v>=3))o.goals=raw.goals.filter(g=>g&&typeof g==='object').map(cleanGoal);
   else{const t=raw.goalType;o.goals=[cleanGoal({name:raw.goalName||'',type:t==='160'||t==='80'?'weapon':(t==='custom'?'custom':'char'),custom:raw.goalCustom||180,pity:raw.pity||0})]}
   o.done=(Array.isArray(raw.done)?raw.done:[]).filter(d=>d&&typeof d==='object').map(d=>({id:String(d.id||uid()),name:String(d.name||''),patch:String(d.patch||''),pulls:num(d.pulls),date:isoRe.test(d.date||'')?d.date:today(),res:d.res==='lost'?'lost':'won',fifty:!!d.fifty,type:['weapon','chron','custom'].includes(d.type)?d.type:'char',eid:String(d.eid||'')}));
+  if(raw.pt&&typeof raw.pt==='object')o.pt=cleanPt(raw.pt);
+  else{const seen={};o.goals.map((g,i)=>({g,i})).sort((a,b)=>a.g.prio-b.g.prio||a.i-b.i).forEach(({g})=>{if(g.paused||g.type==='custom'||seen[g.type])return;seen[g.type]=1;o.pt[g.type]=g.pity;if(g.type==='char')o.pt.cg=g.guar});o.pt=cleanPt(o.pt)}
+  o.cu=isoRe.test(raw.cu||'')?raw.cu:(raw.cu===undefined?today():'');
   return o;
 }
 let S=defState(),dbDoc=null,dbCol=null,tmr=null,DL=null,pending=null;
@@ -429,6 +443,7 @@ function bonusCum(maxD){
   return a;
 }
 function model(){
+  applyPool();
   const e=eff(),eMax=effMax(),tp=totP(),MAXD=730;let cum=0,curSet=false;
   const cumB=bonusCum(MAXD),bAt=d=>cumB[Math.min(MAXD,Math.max(0,d))];
   const dt=(target,rate)=>{if(tp>=target)return 0;for(let d=1;d<=MAXD;d++)if(tp+rate*d+cumB[d]>=target)return d;return null};
@@ -465,11 +480,12 @@ function applyCore(q){ // q: {mode,p,f,date,goal,idx}
   return {e};
 }
 function refresh(){render();history()}
-function commit(q){const r=applyCore(q);if(r.err){toast(r.err);return r}save();refresh();return r}
+function commit(q){const r=applyCore(q);if(r.err){toast(r.err);return r}S.cu=today();save();refresh();return r}
 function undoEntry(e){
   if(!S.log.includes(e))return;
   if(ledP()-e.dp-e.df*160<0){toast('Undo newer entries first — those pulls were spent since.');return}
   S.primos-=e.dp;S.fates-=e.df;S.genesis+=e.lg||0;S.glitter+=e.ls||0;S.log=S.log.filter(x=>x!==e);
+  if(e.pt)S.pt=cleanPt(e.pt);
   if(e.goal){
     S.done=S.done.filter(d=>e.eid?d.eid!==e.eid:d.id!==e.goal.id);
     const cur=S.goals.find(x=>x.id===e.goal.id);
@@ -577,12 +593,13 @@ function render(){
     const st=last.done?'<span class="ok">covered ✓</span>':last.ready===null?'set income for a date':last.ready>365?'over a year away':'ready by <b>'+fmt(addDays(last.ready))+'</b>';
     ph+='<div class="pr"><b>'+TIER[t]+'</b><span class="sub">'+plural(rs.length,'goal')+', '+pulls+' pulls</span><span>'+st+'</span></div>';
   });
+  ph+=planAdvice(m);
   if(m.paused.length)ph+='<div class="pr"><span class="sub">'+plural(m.paused.length,'goal')+' paused (not counted)</span></div>';
   $('prioRows').innerHTML=ph;$('prio').hidden=!ph;
   const d=m.e;$('incOut').textContent='≈ '+Math.round(d)+' primos/day, about '+(d*30/160).toFixed(1)+' pulls every 30 days'+(m.eMax>d?' (up to '+Math.round(m.eMax)+'/day if you collect everything).':'. Events arrive in lumps, so the chart smooths them out.');
   $('latOut').textContent=(S.genesis||S.glitter)?'In inventory: '+S.genesis+' Genesis, '+S.glitter+' Starglitter (about '+(lat()/160).toFixed(1)+' pulls once converted). Your balance above only counts what you’ve converted.':'Nothing waiting to be converted.';
   const eg=endgameParts();$('egOut').textContent='Endgame ≈ '+Math.round(eg.total)+' primos a month (Abyss '+Math.round(eg.abyss)+', Theater '+Math.round(eg.theater)+', Stygian '+Math.round(eg.stygian)+').';
-  drawChart(m);drawMilestones(m);drawBargain();drawBonus();drawWelcome();
+  drawChart(m);drawMilestones(m);drawBargain();drawBonus();drawWelcome();drawCatchup();fillPity();
 }
 
 /* edit + result panels */
@@ -616,7 +633,7 @@ function populateEdit(c,g){
   c.edit.querySelector('[data-w=guarnote]').textContent=(g.type!=='char'&&g.type!=='custom'&&g.guar)?'Fate Points reset when this banner ends, so only tick this for the banner where you earned it. Your 5★ pity carries over, though.':'';
   renderPhases(c,g);
   const cu=g.type==='custom',w=n=>c.edit.querySelector('[data-w='+n+']');
-  w('copies').style.display=cu?'none':'';w('pity').style.display=cu?'none':'';w('guar').style.display=cu?'none':'';w('custom').style.display=cu?'':'none';
+  w('copies').style.display=cu?'none':'';w('pity').style.display='none';w('guar').style.display=cu||g.type==='char'?'none':'';w('custom').style.display=cu?'':'none';
 }
 function ensureEdit(c,g){
   if(c.edit.dataset.built)return;c.edit.dataset.built='1';
@@ -703,9 +720,11 @@ $('tl').addEventListener('click',ev=>{
     }
     const useF=already?0:Math.min(S.fates,n),rest=already?0:n-useF;
     const fifty=!forced&&(g.type==='char'||g.type==='chron'),eid=uid();
+    const ptB=cleanPt(S.pt);
     const r=applyCore({mode:'spend',p:-rest*160,f:-useF,goal:JSON.parse(JSON.stringify(g)),idx:S.goals.indexOf(g)});
     if(r.err){toast(r.err);return}
-    r.e.res=res;r.e.pulls=n;r.e.eid=eid;
+    r.e.res=res;r.e.pulls=n;r.e.eid=eid;r.e.pt=ptB;
+    if(g.type!=='custom'){S.pt[g.type]=0;if(g.type==='char')S.pt.cg=res==='lost'}
     S.done.push({id:g.id,eid,name:g.name,patch:g.patch,pulls:n,date:r.e.date,res,fifty,type:g.type});
     const nm=g.name||'goal';
     if(res==='lost'){g.guar=true;g.pity=0}
@@ -1061,6 +1080,26 @@ $('profDel').onclick=()=>{
   toast('Profile deleted');
 };
 
+/* ---------- v11: pity tracker, plan advice, catch-up, safety copy ---------- */
+['char','weapon','chron'].forEach(t=>$('pt-'+t).addEventListener('input',()=>{S.pt[t]=cleanPt({[t]:$('pt-'+t).value})[t];save();render()}));
+$('pt-cg').onchange=()=>{S.pt.cg=$('pt-cg').checked;save();render()};
+function fillPity(){['char','weapon','chron'].forEach(t=>{if(document.activeElement!==$('pt-'+t))$('pt-'+t).value=S.pt[t]});$('pt-cg').checked=S.pt.cg}
+function planAdvice(m){
+  const bad=m.rows.find(r=>!r.done&&r.rel>0&&r.cum*160>m.tp+m.e*r.rel+m.bAt(r.rel));if(!bad)return '';
+  const sp=bad.cum*160-(m.tp+m.e*bad.rel+m.bAt(bad.rel)),c=m.rows.slice(0,m.rows.indexOf(bad)).find(r=>!r.done&&r.g.prio===bad.g.prio&&r.n*160>=sp);
+  return '<div class="pr"><span class="warn">⚠ <b>'+esc(bad.g.name||'Untitled goal')+'</b> is about '+plural(Math.ceil(sp/160),'pull')+' short at release. '+(c?'Moving <b>'+esc(c.g.name||'Untitled goal')+'</b> below it, or pausing it, would cover it.':'Raise your income or lower its tier.')+'</span></div>';
+}
+$('sortG').onclick=()=>{const before=S.goals.slice(),k=g=>g.release||'9999';S.goals.sort((a,b)=>a.prio-b.prio||(k(a)<k(b)?-1:k(a)>k(b)?1:0));save();render();toast('Sorted by release date within each tier',()=>{S.goals=before;save();render()})};
+$('rsAdd').onclick=()=>{const pk=RO.banners.filter(b=>rsSel.has(b.id)).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);pk.forEach(b=>S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id})));rsSel.clear();save();render();closeRoster();toast('Added '+plural(pk.length,'goal'))};
+$('rsQ').addEventListener('input',()=>drawRoster());
+function cuInfo(){if(!S.cu||!S.log.length)return null;const n=Math.min(60,-off(S.cu)),per=Math.round((S.income.daily+(S.income.welkin?WELKIN:0))*S.income.rate/100);return n<2||per<=0?null:{n,tot:per*n}}
+function drawCatchup(){const c=cuInfo();$('cuCard').hidden=!c;if(!c)return;$('cuTxt').textContent='It has been '+c.n+' days since your last check-in. Add your usual dailies'+(S.income.welkin?' and Welkin':'')+' (about '+c.tot+' primogems)?';$('cuYes').textContent='Add '+c.tot+' primos'}
+$('cuYes').onclick=()=>{const c=cuInfo();if(!c)return;const old=S.cu,r=commit({mode:'add',p:c.tot,f:0,date:today(),note:'Catch-up, '+c.n+' days (est.)'});if(!r.err)toast('Catch-up added',()=>{undoEntry(r.e);S.cu=old;save();render()})};
+$('cuNo').onclick=()=>{S.cu=today();save();render()};
+const bakRaw=()=>{try{const b=JSON.parse(localStorage.getItem('primo-bak-v10'));return b&&b.data&&Object.keys(b.data).length?b:null}catch(e){return null}};
+$('bakRes').hidden=!bakRaw();
+$('bakRes').onclick=function(){const b=bakRaw();if(!b)return;if(!this.dataset.armed){this.dataset.armed='1';this.textContent='Tap again to replace current data';setTimeout(()=>{delete this.dataset.armed;this.textContent='Restore data from before this update'},4000);return}try{Object.entries(b.data).forEach(([k,v])=>localStorage.setItem(k,v))}catch(e){}location.reload()};
+
 /* ---------- boot ---------- */
 function applyTheme(t){
   const r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
@@ -1141,27 +1180,33 @@ function syncRoster(){
   let n=0;S.goals.forEach(g=>{if(!g.rid)return;const b=RO.banners.find(x=>x.id===g.rid);if(b&&(b.release!==g.release||b.patch!==g.patch)){g.release=b.release;g.patch=b.patch;n++}});
   if(n){save();render();toast('Release dates updated for '+plural(n,'goal')+' from the roster')}
 }
-function openRoster(g){rsGoal=g||null;$('rs').hidden=false;drawRoster();$('rsX').focus()}
+function openRoster(g){rsGoal=g||null;rsSel.clear();$('rsQ').value='';$('rs').hidden=false;drawRoster();$('rsX').focus()}
 function closeRoster(){$('rs').hidden=true}
+let rsSel=new Set();
 function drawRoster(){
-  const L=$('rsL');L.innerHTML='';
-  const list=RO.banners.filter(b=>off(b.release)>=-21&&(rsF==='all'||b.type===rsF)).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);
-  $('rsInfo').textContent=RO.banners.length?'Tap a banner to '+(rsGoal?'fill in this goal.':'add it as a goal.')+' Leaks can change, and linked goals update automatically when the roster does.'+(RO.updated?' Roster updated '+fmt(RO.updated)+'.':''):'No banners yet. Add upcoming banners to roster.json (the notes inside it explain how) and they will appear here. You can still add goals by hand.';
+  const L=$('rsL');L.innerHTML='';const q=($('rsQ').value||'').trim().toLowerCase(),multi=!rsGoal;
+  const list=RO.banners.filter(b=>off(b.release)>=-21&&(rsF==='all'||b.type===rsF||(rsF==='off'&&b.status==='official'))&&(!q||(b.name+' '+b.patch).toLowerCase().includes(q))).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);
+  $('rsInfo').textContent=RO.banners.length?(multi?'Tick one or more banners, then add them in one go. ':'Tap a banner to fill in this goal. ')+'Leaks can change, and linked goals update automatically when the roster does.'+(RO.updated?' Roster updated '+fmt(RO.updated)+'.':''):'No banners yet. Add upcoming banners to roster.json (the notes inside it explain how) and they will appear here. You can still add goals by hand.';
   const F=$('rsF');F.innerHTML='';
-  RO.banners.length&&[['all','All'],['char','Characters'],['weapon','Weapons']].forEach(([k,t])=>{const b=document.createElement('button');b.className='chip';b.textContent=t;b.setAttribute('aria-pressed',String(rsF===k));if(rsF===k){b.style.borderColor='var(--acc)';b.style.color='var(--acc)'}b.onclick=()=>{rsF=k;drawRoster()};F.append(b)});
+  RO.banners.length&&[['all','All'],['char','Characters'],['weapon','Weapons'],['chron','Chronicled'],['off','Official only']].forEach(([k,t])=>{const b=document.createElement('button');b.className='chip';b.textContent=t;b.setAttribute('aria-pressed',String(rsF===k));if(rsF===k){b.style.borderColor='var(--acc)';b.style.color='var(--acc)'}b.onclick=()=>{rsF=k;drawRoster()};F.append(b)});
+  let last='';
   list.forEach(b=>{
-    const c=document.createElement('button'),th=document.createElement('span'),t=document.createElement('span'),o=off(b.release);
+    const hd=(b.patch?'Patch '+b.patch+', ':'')+'phase '+b.phase;
+    if(hd!==last){last=hd;const s=document.createElement('div');s.className='sec-s';s.textContent=hd;L.append(s)}
+    const c=document.createElement('button'),th=document.createElement('span'),t=document.createElement('span'),o=off(b.release),sel=rsSel.has(b.id);
     c.className='rcard';th.className='rth';th.textContent=b.name.charAt(0);
     if(b.img){const im=new Image();im.alt='';im.loading='lazy';im.referrerPolicy='no-referrer';im.onload=()=>{th.textContent='';th.append(im)};im.src=b.img}
     t.className='gt';
-    const added=!rsGoal&&S.goals.some(x=>x.rid===b.id);
+    const added=multi&&S.goals.some(x=>x.rid===b.id);
     t.innerHTML='<span class="gn" style="font-size:16px"></span><span class="sub"></span><span><span class="badge '+(b.status==='official'?'off':'leak')+'">'+(b.status==='official'?'Official':'Leak')+'</span><span class="sub"></span></span>';
-    const q=t.querySelectorAll('span');
-    t.children[0].textContent=b.name;
-    t.children[1].textContent=(b.type==='weapon'?'Weapon':b.type==='chron'?'Chronicled':'Character')+(b.patch?', patch '+b.patch:'')+', phase '+b.phase;
+    t.children[0].textContent=(sel?'✓ ':'')+b.name;
+    t.children[1].textContent=(b.type==='weapon'?'Weapon':b.type==='chron'?'Chronicled':'Character')+', about '+TAB[S.mode].PER[b.type]+' pulls';
     t.children[2].lastChild.textContent=fmt(b.release)+(o>0?' (in '+plural(o,'day')+')':o===0?' (today)':' (live now)')+(added?'. Already on your list':'');
-    c.disabled=added;c.append(th,t);c.onclick=()=>pickBanner(b);L.append(c);
+    if(sel){c.style.borderColor='var(--acc)';c.setAttribute('aria-pressed','true')}
+    c.disabled=added;c.append(th,t);
+    c.onclick=()=>{if(!multi){pickBanner(b);return}sel?rsSel.delete(b.id):rsSel.add(b.id);drawRoster()};L.append(c);
   });
+  const n=rsSel.size;$('rsBar').hidden=!(multi&&n);$('rsAdd').textContent='Add '+plural(n,'goal');
   if(RO.banners.length&&!list.length)L.innerHTML='<div class="sub" style="margin-top:10px">Nothing to show for this filter.</div>';
 }
 function pickBanner(b){
