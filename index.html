@@ -308,11 +308,11 @@ details[open]>summary{margin-bottom:6px}
 <section class="card" id="adm" data-tab="more" hidden><h2 class="disp">Admin: banner roster</h2><div class="sub">Banners you publish here reach every user the next time they open the app.</div><div id="adList" style="margin:8px 0"></div>
 <div class="sec-s" id="adFT">Add a banner</div>
 <div class="grid2"><label class="f">Name<input id="ad-n" maxlength="40" autocomplete="off"></label><label class="f">Type<select id="ad-t"><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled</option></select></label><label class="f">Patch<input id="ad-p" maxlength="8" placeholder="e.g. 7.2" autocomplete="off"></label><label class="f">Phase<select id="ad-ph"><option value="1">1</option><option value="2">2</option></select></label><label class="f">Release date<input id="ad-d" type="date"></label><label class="f">Status<select id="ad-s"><option value="leak">Leak</option><option value="official">Official</option></select></label></div>
-<label class="f" style="display:block;margin-top:8px">Image (optional)<input id="ad-i" autocomplete="off" placeholder="art/name.png or https://…"></label>
+<label class="f" style="display:block;margin-top:8px">Element (optional)<select id="ad-el"><option value="">None</option><option value="pyro">Pyro</option><option value="hydro">Hydro</option><option value="anemo">Anemo</option><option value="electro">Electro</option><option value="dendro">Dendro</option><option value="cryo">Cryo</option><option value="geo">Geo</option></select></label><label class="f" style="display:block;margin-top:8px">Image (optional)<input id="ad-i" autocomplete="off" placeholder="art/name.png or https://…"></label>
 <div class="b"><button class="p sm" id="adSave">Add banner</button><button class="sm" id="adCancel" hidden>Cancel edit</button></div>
 <details class="adv"><summary>Publishing setup (GitHub)</summary><div class="grid2"><label class="f">Repository<input id="ad-repo" placeholder="yourname/primogems" autocomplete="off"></label><label class="f">Branch<input id="ad-br" placeholder="main" autocomplete="off"></label></div><label class="f" style="display:block;margin-top:8px">File path<input id="ad-path" placeholder="roster.json" autocomplete="off"></label><label class="f" style="display:block;margin-top:8px">Access token<input id="ad-tok" type="password" autocomplete="off"></label><div class="sub" style="margin-top:6px">Create a fine-grained token limited to this one repository with “Contents: Read and write”. It is saved on this device only and never sent anywhere except GitHub. Don’t share it.</div></details>
 <div class="b"><button class="p" id="adCopy">Copy roster text</button><button class="sm" id="adExp">Export roster.json</button><button class="sm" id="adPub">Publish with token (advanced)</button><button class="sm" id="adLock">Hide admin tools</button></div><div class="sub" id="adSt" style="margin-top:8px"></div></section>
-<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v11</div>
+<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v11.1</div>
 </main>
 <div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><input id="rsQ" type="search" placeholder="Search banners…" autocomplete="off" style="margin-top:10px"><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div><div id="rsBar" class="b" hidden style="position:sticky;bottom:0;background:var(--card);padding-top:8px"><button class="p wide" id="rsAdd"></button></div></div></div>
 <nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><span aria-hidden="true">🏠</span>Home</button><button data-tb="goals"><span aria-hidden="true">🎯</span>Goals</button><button data-tb="income"><span aria-hidden="true">📈</span>Income</button><button data-tb="more"><span aria-hidden="true">☰</span>More</button></nav>
@@ -338,6 +338,9 @@ const uid=()=>Math.random().toString(36).slice(2,8);
 const plural=(n,w)=>n+' '+w+(n===1?'':'s');
 const isoRe=/^\d{4}-\d{2}-\d{2}$/;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const EL={pyro:{n:'Pyro',e:'🔥',c:'#ffd9cf',s:'#e0583a'},hydro:{n:'Hydro',e:'💧',c:'#d4ecff',s:'#3d8fe0'},anemo:{n:'Anemo',e:'🌀',c:'#d5f5ee',s:'#3fb8a0'},electro:{n:'Electro',e:'⚡',c:'#e6dcff',s:'#9c5de8'},dendro:{n:'Dendro',e:'🌿',c:'#dff3c9',s:'#6aa832'},cryo:{n:'Cryo',e:'❄️',c:'#e0f6ff',s:'#5bbcdf'},geo:{n:'Geo',e:'🪨',c:'#fff0c4',s:'#d1a020'}};
+const elIco=k=>'<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="'+EL[k].c+'" stroke="'+EL[k].s+'" stroke-width="2"/><text x="20" y="27" text-anchor="middle" font-size="20">'+EL[k].e+'</text></svg>';
+const elOpts=Object.keys(EL).map(k=>'<option value="'+k+'">'+EL[k].n+'</option>').join('');
 function cleanPt(p){p=p||{};return {char:Math.min(89,Math.max(0,num(p.char))),weapon:Math.min(79,Math.max(0,num(p.weapon))),chron:Math.min(89,Math.max(0,num(p.chron))),cg:!!p.cg}}
 function applyPool(){ // pity is shared per banner type: the first active goal of each type uses the tracker, later ones start fresh
   const seen={};S.goals.map((g,i)=>({g,i})).filter(x=>!x.g.paused&&x.g.type!=='custom').sort((a,b)=>a.g.prio-b.g.prio||a.i-b.i).forEach(({g})=>{
@@ -345,12 +348,12 @@ function applyPool(){ // pity is shared per banner type: the first active goal o
 }
 
 /* ---------- state ---------- */
-const newGoal=o=>Object.assign({id:uid(),name:'',patch:'',type:'char',copies:1,pity:0,custom:180,release:'',guar:false,prio:2,paused:false,rid:''},o||{});
+const newGoal=o=>Object.assign({id:uid(),name:'',patch:'',type:'char',copies:1,pity:0,custom:180,release:'',guar:false,prio:2,paused:false,rid:'',el:'',img:''},o||{});
 function clampPity(g){if(g.type!=='custom')g.pity=Math.min(Math.max(0,g.pity),TAB.worst.HALF[g.type]-1)}
 function capGoal(g){g.copies=Math.min(10,Math.max(1,g.copies||1));g.custom=Math.min(2000,Math.max(0,g.custom||0))}
 function cleanGoal(raw){
   const g=newGoal(raw);
-  g.id=String(g.id||uid());g.rid=String(g.rid||'');g.name=String(g.name||'');g.patch=String(g.patch||'');
+  g.id=String(g.id||uid());g.rid=String(g.rid||'');g.el=EL[g.el]?g.el:'';g.img=String(g.img||'').slice(0,500);g.name=String(g.name||'');g.patch=String(g.patch||'');
   if(!['char','weapon','chron','custom'].includes(g.type))g.type='char';
   g.copies=Math.max(1,num(g.copies)||1);g.custom=Math.max(0,num(g.custom));g.pity=Math.max(0,num(g.pity));
   g.guar=!!g.guar;g.paused=!!g.paused;g.prio=[1,2,3].includes(num(g.prio))?num(g.prio):2;g.release=isoRe.test(g.release||'')?g.release:'';
@@ -549,7 +552,9 @@ function fillCard(c,r,m){
   const g=r.g,el=c.el,ri=m.rows.indexOf(r);
   el.className='g'+(r.paused?' paused':'')+(r.done?' done':'')+(r.cur?' cur':'')+(!r.paused&&!r.done&&!r.cur?' lock':'');
   el.querySelector('.node').textContent=r.paused?'⏸':r.done?'✓':ri+1;
-  if(c.icon!==g.type){el.querySelector('.icoW').innerHTML=ICO[g.type];c.icon=g.type}
+  const ik=g.type+'|'+(g.el||'')+'|'+(g.img||'');
+  if(c.icon!==ik){c.icon=ik;const w=el.querySelector('.icoW');w.innerHTML=g.el?elIco(g.el):ICO[g.type];
+    if(g.img){const im=new Image();im.className='ico';im.style.cssText='border-radius:50%;object-fit:cover';im.alt='';im.referrerPolicy='no-referrer';im.onload=()=>{if(c.icon===ik){w.innerHTML='';w.append(im)}};im.src=g.img}}
   el.querySelector('.gn').textContent=g.name||'Untitled goal';
   const bd=el.querySelector('.badge');bd.hidden=!g.patch;bd.textContent=g.patch?'Patch '+g.patch:'';
   let lab;
@@ -627,7 +632,7 @@ function renderPhases(c,g){
 function populateEdit(c,g){
   const q=k=>c.edit.querySelector('[data-k='+k+']');
   const set=(k,v)=>{const el=q(k);if(el&&document.activeElement!==el)el.value=v};
-  set('name',g.name);set('patch',g.patch);set('type',g.type);set('release',g.release);set('copies',g.copies);set('pity',g.pity);set('custom',g.custom);
+  set('name',g.name);set('patch',g.patch);set('type',g.type);set('release',g.release);set('el',g.el);set('img',g.img);set('copies',g.copies);set('pity',g.pity);set('custom',g.custom);
   q('guar').checked=g.guar;
   c.edit.querySelector('[data-gl]').textContent=g.type==='weapon'?' Fate Point earned (1/1): next 5★ is your chosen weapon':g.type==='chron'?' Fate Point earned (1/1): next 5★ is your chosen item':' Next 5★ is guaranteed featured (lost 50/50)';
   c.edit.querySelector('[data-w=guarnote]').textContent=(g.type!=='char'&&g.type!=='custom'&&g.guar)?'Fate Points reset when this banner ends, so only tick this for the banner where you earned it. Your 5★ pity carries over, though.':'';
@@ -640,7 +645,7 @@ function ensureEdit(c,g){
   c.edit.innerHTML='<div class="grid2">'+
    '<label class="f">Name<input data-k="name" autocomplete="off"></label><label class="f">Patch<input data-k="patch" placeholder="e.g. 6.2" autocomplete="off"></label>'+
    '<label class="f">Type<select data-k="type"><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled Wish</option><option value="custom">Custom pulls</option></select></label>'+
-   '<label class="f">Release date<input type="date" data-k="release"></label>'+
+   '<label class="f">Release date<input type="date" data-k="release"></label>'+'<label class="f">Element<select data-k="el"><option value="">None</option>'+elOpts+'</select></label><label class="f">Image link (direct .png / .jpg / .webp)<input data-k="img" type="url" autocomplete="off" placeholder="https://…"></label>'+
    '<label class="f" data-w="copies">Copies (C0 = 1, C1 = 2…)<input data-k="copies" type="number" inputmode="numeric" min="1"></label>'+
    '<label class="f" data-w="pity">Current pity (pulls since your last 5★)<input data-k="pity" type="number" inputmode="numeric" min="0"></label>'+
    '<label class="f" data-w="custom">Pulls needed<input data-k="custom" type="number" inputmode="numeric" min="0"></label>'+
@@ -651,7 +656,7 @@ function ensureEdit(c,g){
   const onIn=ev=>{
     const inp=ev.target.closest('[data-k]');if(!inp)return;const k=inp.dataset.k;
     if(k==='guar')g.guar=inp.checked;
-    else if(['name','patch','type'].includes(k))g[k]=inp.value;
+    else if(['name','patch','type','el','img'].includes(k))g[k]=inp.value;
     else if(k==='release'){g.release=isoRe.test(inp.value)?inp.value:'';g.rid=''}
     else g[k]=Math.max(0,num(inp.value));
     {const raw=g[k];capGoal(g);if((k==='copies'||k==='custom')&&raw>g[k])inp.value=g[k]}
@@ -1090,7 +1095,7 @@ function planAdvice(m){
   return '<div class="pr"><span class="warn">⚠ <b>'+esc(bad.g.name||'Untitled goal')+'</b> is about '+plural(Math.ceil(sp/160),'pull')+' short at release. '+(c?'Moving <b>'+esc(c.g.name||'Untitled goal')+'</b> below it, or pausing it, would cover it.':'Raise your income or lower its tier.')+'</span></div>';
 }
 $('sortG').onclick=()=>{const before=S.goals.slice(),k=g=>g.release||'9999';S.goals.sort((a,b)=>a.prio-b.prio||(k(a)<k(b)?-1:k(a)>k(b)?1:0));save();render();toast('Sorted by release date within each tier',()=>{S.goals=before;save();render()})};
-$('rsAdd').onclick=()=>{const pk=RO.banners.filter(b=>rsSel.has(b.id)).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);pk.forEach(b=>S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id})));rsSel.clear();save();render();closeRoster();toast('Added '+plural(pk.length,'goal'))};
+$('rsAdd').onclick=()=>{const pk=RO.banners.filter(b=>rsSel.has(b.id)).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);pk.forEach(b=>S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id,img:b.img,el:b.el})));rsSel.clear();save();render();closeRoster();toast('Added '+plural(pk.length,'goal'))};
 $('rsQ').addEventListener('input',()=>drawRoster());
 function cuInfo(){if(!S.cu||!S.log.length)return null;const n=Math.min(60,-off(S.cu)),per=Math.round((S.income.daily+(S.income.welkin?WELKIN:0))*S.income.rate/100);return n<2||per<=0?null:{n,tot:per*n}}
 function drawCatchup(){const c=cuInfo();$('cuCard').hidden=!c;if(!c)return;$('cuTxt').textContent='It has been '+c.n+' days since your last check-in. Add your usual dailies'+(S.income.welkin?' and Welkin':'')+' (about '+c.tot+' primogems)?';$('cuYes').textContent='Add '+c.tot+' primos'}
@@ -1157,7 +1162,7 @@ let RO={banners:[],updated:''},rsGoal=null,rsF='all';
 function cleanRoster(j){
   const o={banners:[],updated:''};if(!j||typeof j!=='object')return o;
   o.updated=isoRe.test(j.updated||'')?j.updated:'';
-  o.banners=(Array.isArray(j.banners)?j.banners:[]).filter(b=>b&&b.name&&isoRe.test(b.release||'')).map(b=>({id:String(b.id||b.name+b.release),name:String(b.name).slice(0,40),type:['char','weapon','chron'].includes(b.type)?b.type:'char',patch:String(b.patch||'').slice(0,8),phase:b.phase==2?2:1,release:b.release,status:b.status==='official'?'official':'leak',img:typeof b.img==='string'?b.img:''}));
+  o.banners=(Array.isArray(j.banners)?j.banners:[]).filter(b=>b&&b.name&&isoRe.test(b.release||'')).map(b=>({id:String(b.id||b.name+b.release),name:String(b.name).slice(0,40),type:['char','weapon','chron'].includes(b.type)?b.type:'char',patch:String(b.patch||'').slice(0,8),phase:b.phase==2?2:1,release:b.release,status:b.status==='official'?'official':'leak',img:typeof b.img==='string'?b.img:'',el:EL[b.el]?b.el:''}));
   return o;
 }
 const lsGet=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}};
@@ -1177,7 +1182,8 @@ function drawRoStat(m){
   $('roStat').textContent=(RO.banners.length?plural(RO.banners.length,'banner')+' in the roster, up to '+fmt(last)+'.':'No banners in the roster yet.')+(at?' Last checked '+new Date(at).toLocaleDateString()+'.':'')+(m==='fail'?' Offline, or the link isn’t reachable, so the saved copy is used.':'');
 }
 function syncRoster(){
-  let n=0;S.goals.forEach(g=>{if(!g.rid)return;const b=RO.banners.find(x=>x.id===g.rid);if(b&&(b.release!==g.release||b.patch!==g.patch)){g.release=b.release;g.patch=b.patch;n++}});
+  let n=0;S.goals.forEach(g=>{if(!g.rid)return;const b=RO.banners.find(x=>x.id===g.rid);if(b&&((b.img&&b.img!==g.img)||(b.el&&b.el!==g.el))){g.img=b.img||g.img;g.el=b.el||g.el;save();render()}
+    if(b&&(b.release!==g.release||b.patch!==g.patch)){g.release=b.release;g.patch=b.patch;n++}});
   if(n){save();render();toast('Release dates updated for '+plural(n,'goal')+' from the roster')}
 }
 function openRoster(g){rsGoal=g||null;rsSel.clear();$('rsQ').value='';$('rs').hidden=false;drawRoster();$('rsX').focus()}
@@ -1194,7 +1200,7 @@ function drawRoster(){
     const hd=(b.patch?'Patch '+b.patch+', ':'')+'phase '+b.phase;
     if(hd!==last){last=hd;const s=document.createElement('div');s.className='sec-s';s.textContent=hd;L.append(s)}
     const c=document.createElement('button'),th=document.createElement('span'),t=document.createElement('span'),o=off(b.release),sel=rsSel.has(b.id);
-    c.className='rcard';th.className='rth';th.textContent=b.name.charAt(0);
+    c.className='rcard';th.className='rth';th.textContent=b.el?EL[b.el].e:b.name.charAt(0);
     if(b.img){const im=new Image();im.alt='';im.loading='lazy';im.referrerPolicy='no-referrer';im.onload=()=>{th.textContent='';th.append(im)};im.src=b.img}
     t.className='gt';
     const added=multi&&S.goals.some(x=>x.rid===b.id);
@@ -1210,8 +1216,8 @@ function drawRoster(){
   if(RO.banners.length&&!list.length)L.innerHTML='<div class="sub" style="margin-top:10px">Nothing to show for this filter.</div>';
 }
 function pickBanner(b){
-  if(rsGoal){Object.assign(rsGoal,{name:b.name,patch:b.patch,release:b.release,rid:b.id,type:b.type});clampPity(rsGoal)}
-  else S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id}));
+  if(rsGoal){Object.assign(rsGoal,{name:b.name,patch:b.patch,release:b.release,rid:b.id,type:b.type,img:b.img||rsGoal.img,el:b.el||rsGoal.el});clampPity(rsGoal)}
+  else S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id,img:b.img,el:b.el}));
   save();render();closeRoster();toast((rsGoal?'Filled in ':'Added ')+b.name);
 }
 $('addr').onclick=()=>openRoster(null);$('rsX').onclick=closeRoster;
@@ -1234,18 +1240,18 @@ function drawAdmin(){
   });
   if(adDirty)$('adSt').textContent='You have changes that aren’t published yet.';
 }
-function adReset(){adEdit=null;['ad-n','ad-p','ad-i','ad-d'].forEach(i=>$(i).value='');$('adSave').textContent='Add banner';$('adCancel').hidden=true;$('adFT').textContent='Add a banner'}
-function adFill(b){adEdit=b;$('ad-n').value=b.name;$('ad-t').value=b.type;$('ad-p').value=b.patch;$('ad-ph').value=String(b.phase);$('ad-d').value=b.release;$('ad-s').value=b.status;$('ad-i').value=b.img||'';$('adSave').textContent='Save changes';$('adCancel').hidden=false;$('adFT').textContent='Editing '+b.name;$('adFT').scrollIntoView({behavior:'smooth',block:'center'})}
+function adReset(){adEdit=null;$('ad-el').value='';['ad-n','ad-p','ad-i','ad-d'].forEach(i=>$(i).value='');$('adSave').textContent='Add banner';$('adCancel').hidden=true;$('adFT').textContent='Add a banner'}
+function adFill(b){adEdit=b;$('ad-n').value=b.name;$('ad-t').value=b.type;$('ad-p').value=b.patch;$('ad-ph').value=String(b.phase);$('ad-d').value=b.release;$('ad-s').value=b.status;$('ad-i').value=b.img||'';$('ad-el').value=b.el||'';$('adSave').textContent='Save changes';$('adCancel').hidden=false;$('adFT').textContent='Editing '+b.name;$('adFT').scrollIntoView({behavior:'smooth',block:'center'})}
 $('adCancel').onclick=adReset;
 $('adSave').onclick=()=>{
   const n=$('ad-n').value.trim(),d=$('ad-d').value;
   if(!n){toast('Enter a name.');return}if(!isoRe.test(d)){toast('Pick a release date.');return}
-  const v={name:n.slice(0,40),type:$('ad-t').value,patch:$('ad-p').value.trim().slice(0,8),phase:Number($('ad-ph').value)===2?2:1,release:d,status:$('ad-s').value,img:$('ad-i').value.trim()},list=adAll();
+  const v={name:n.slice(0,40),type:$('ad-t').value,patch:$('ad-p').value.trim().slice(0,8),phase:Number($('ad-ph').value)===2?2:1,release:d,status:$('ad-s').value,img:$('ad-i').value.trim(),el:$('ad-el').value},list=adAll();
   if(adEdit)Object.assign(adEdit,v);
   else{const base=(v.patch||'x')+'-p'+v.phase+'-'+slug(n);let k=base,i=2;while(list.some(x=>x.id===k))k=base+'-'+i++;list.push(Object.assign({id:k},v))}
   adDirty=true;adReset();drawAdmin();toast('Saved here. Tap Publish to send it to everyone.');
 };
-const rosterJson=()=>JSON.stringify({updated:today(),banners:adAll().slice().sort(byDate).map(b=>({id:b.id,name:b.name,type:b.type,patch:b.patch,phase:b.phase,release:b.release,status:b.status,img:b.img||undefined}))},null,2);
+const rosterJson=()=>JSON.stringify({updated:today(),banners:adAll().slice().sort(byDate).map(b=>({id:b.id,name:b.name,type:b.type,patch:b.patch,phase:b.phase,release:b.release,status:b.status,img:b.img||undefined,el:b.el||undefined}))},null,2);
 $('adExp').onclick=()=>saveFile('roster.json',rosterJson(),'application/json','roster.json');
 $('adCopy').onclick=async()=>{const t=rosterJson();try{await navigator.clipboard.writeText(t);toast('Copied. Now paste it into roster.json on GitHub.')}catch(e){saveFile('roster.json',t,'application/json','roster.json')}};
 $('adPub').onclick=async()=>{
