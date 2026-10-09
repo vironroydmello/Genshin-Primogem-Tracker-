@@ -308,8 +308,8 @@ details[open]>summary{margin-bottom:6px}
 <label class="f" style="display:block;margin-top:8px">Image (optional)<input id="ad-i" autocomplete="off" placeholder="art/name.png or https://…"></label>
 <div class="b"><button class="p sm" id="adSave">Add banner</button><button class="sm" id="adCancel" hidden>Cancel edit</button></div>
 <details class="adv"><summary>Publishing setup (GitHub)</summary><div class="grid2"><label class="f">Repository<input id="ad-repo" placeholder="yourname/primogems" autocomplete="off"></label><label class="f">Branch<input id="ad-br" placeholder="main" autocomplete="off"></label></div><label class="f" style="display:block;margin-top:8px">File path<input id="ad-path" placeholder="roster.json" autocomplete="off"></label><label class="f" style="display:block;margin-top:8px">Access token<input id="ad-tok" type="password" autocomplete="off"></label><div class="sub" style="margin-top:6px">Create a fine-grained token limited to this one repository with “Contents: Read and write”. It is saved on this device only and never sent anywhere except GitHub. Don’t share it.</div></details>
-<div class="b"><button class="p" id="adPub">Publish to all users</button><button class="sm" id="adExp">Export roster.json</button><button class="sm" id="adLock">Hide admin tools</button></div><div class="sub" id="adSt" style="margin-top:8px"></div></section>
-<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v9</div>
+<div class="b"><button class="p" id="adCopy">Copy roster text</button><button class="sm" id="adExp">Export roster.json</button><button class="sm" id="adPub">Publish with token (advanced)</button><button class="sm" id="adLock">Hide admin tools</button></div><div class="sub" id="adSt" style="margin-top:8px"></div></section>
+<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v10</div>
 </main>
 <div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div></div></div>
 <nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><span aria-hidden="true">🏠</span>Home</button><button data-tb="goals"><span aria-hidden="true">🎯</span>Goals</button><button data-tb="income"><span aria-hidden="true">📈</span>Income</button><button data-tb="more"><span aria-hidden="true">☰</span>More</button></nav>
@@ -322,7 +322,7 @@ const TAB={worst:{PER:{char:180,weapon:160,chron:180},HALF:{char:90,weapon:80,ch
 
 /* ---------- helpers ---------- */
 const $=id=>document.getElementById(id);
-const num=v=>{const n=parseInt(v,10);return isNaN(n)?0:n};
+const num=v=>{const n=typeof v==='number'?v:parseInt(v,10);return isFinite(n)?Math.max(-1e6,Math.min(1e6,Math.trunc(n))):0};
 const pad=n=>String(n).padStart(2,'0');
 const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 const t0=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
@@ -337,19 +337,20 @@ const isoRe=/^\d{4}-\d{2}-\d{2}$/;
 /* ---------- state ---------- */
 const newGoal=o=>Object.assign({id:uid(),name:'',patch:'',type:'char',copies:1,pity:0,custom:180,release:'',guar:false,prio:2,paused:false,rid:''},o||{});
 function clampPity(g){if(g.type!=='custom')g.pity=Math.min(Math.max(0,g.pity),TAB.worst.HALF[g.type]-1)}
+function capGoal(g){g.copies=Math.min(10,Math.max(1,g.copies||1));g.custom=Math.min(2000,Math.max(0,g.custom||0))}
 function cleanGoal(raw){
   const g=newGoal(raw);
   g.id=String(g.id||uid());g.rid=String(g.rid||'');g.name=String(g.name||'');g.patch=String(g.patch||'');
   if(!['char','weapon','chron','custom'].includes(g.type))g.type='char';
   g.copies=Math.max(1,num(g.copies)||1);g.custom=Math.max(0,num(g.custom));g.pity=Math.max(0,num(g.pity));
   g.guar=!!g.guar;g.paused=!!g.paused;g.prio=[1,2,3].includes(num(g.prio))?num(g.prio):2;g.release=isoRe.test(g.release||'')?g.release:'';
-  clampPity(g);return g;
+  capGoal(g);clampPity(g);return g;
 }
 const defState=()=>({v:3,primos:0,fates:0,income:{daily:60,welkin:false,monthly:0,bargains:false,bp:false,patch:0,rate:100},patchLen:42,patchStart:'',bargain:'',endgame:{ab:[0,0,0,0],abN:1,thMax:1000,thPct:0,sg:0},bonus:[],mode:'worst',glitter:0,genesis:0,log:[],goals:[],done:[],updated:0});
 function norm(raw){ // accepts v1, v2 and v3 data
   const o=defState();
   if(!raw||typeof raw!=='object')return o;
-  o.primos=num(raw.primos);o.fates=num(raw.fates);o.updated=Number(raw.updated)||0;o.mode=raw.mode==='real'?'real':'worst';o.glitter=Math.max(0,num(raw.glitter));o.genesis=Math.max(0,num(raw.genesis));o.patchLen=Math.min(60,Math.max(28,num(raw.patchLen)||42));o.patchStart=isoRe.test(raw.patchStart||'')?raw.patchStart:'';o.bargain=String(raw.bargain||'').slice(0,7);
+  o.primos=Math.min(1e6,Math.max(-1e6,num(raw.primos)));o.fates=Math.min(1e4,Math.max(-1e4,num(raw.fates)));o.updated=Number(raw.updated)||0;o.mode=raw.mode==='real'?'real':'worst';o.glitter=Math.max(0,num(raw.glitter));o.genesis=Math.max(0,num(raw.genesis));o.patchLen=Math.min(60,Math.max(28,num(raw.patchLen)||42));o.patchStart=isoRe.test(raw.patchStart||'')?raw.patchStart:'';o.bargain=String(raw.bargain||'').slice(0,7);
   const eg=raw.endgame&&typeof raw.endgame==='object'?raw.endgame:{};
   o.endgame={ab:[0,1,2,3].map(i=>[0,3,6,9].includes(num((eg.ab||[])[i]))?num(eg.ab[i]):0),abN:num(eg.abN)===2?2:1,thMax:eg.thMax===undefined?1000:Math.min(5000,Math.max(0,num(eg.thMax))),thPct:[0,25,50,75,100].includes(num(eg.thPct))?num(eg.thPct):0,sg:Math.min(3,Math.max(0,num(eg.sg)))};
   o.bonus=(Array.isArray(raw.bonus)?raw.bonus:[]).filter(b=>b&&isoRe.test(b.date||'')).map(b=>({id:String(b.id||uid()),date:b.date,p:Math.max(0,num(b.p)),f:Math.max(0,num(b.f)),label:String(b.label||'').slice(0,40)}));
@@ -413,7 +414,7 @@ function mix(wa,A,wb,B){const n=Math.max(A.length,B.length),r=new Array(n).fill(
 const cdf=(a,n)=>{let t=0;for(let i=0;i<a.length&&i<=n;i++)t+=a[i];return Math.min(1,t)};
 const PMF=new Map();
 function goalPmf(g){
-  if(g.type==='custom'){const n=Math.max(0,g.custom),a=new Array(n+1).fill(0);a[n]=1;return a}
+  if(g.type==='custom'){const n=Math.min(2000,Math.max(0,g.custom)),a=new Array(n+1).fill(0);a[n]=1;return a}
   const key=[g.type,g.copies,g.pity,g.guar].join();if(PMF.has(key))return PMF.get(key);
   const t=PH[g.type],F=firstFive(t,g.pity),F0=firstFive(t,0);
   const first=g.guar?F:mix(t.win,F,1-t.win,conv(F,F0));
@@ -636,7 +637,7 @@ function ensureEdit(c,g){
     else if(['name','patch','type'].includes(k))g[k]=inp.value;
     else if(k==='release'){g.release=isoRe.test(inp.value)?inp.value:'';g.rid=''}
     else g[k]=Math.max(0,num(inp.value));
-    if(k==='copies'&&g.copies<1)g.copies=1;
+    {const raw=g[k];capGoal(g);if((k==='copies'||k==='custom')&&raw>g[k])inp.value=g[k]}
     if(k==='type'||k==='pity'){const before=g.pity;clampPity(g);if(k==='pity'&&before!==g.pity)inp.value=g.pity}
     save();render();
   };
@@ -861,6 +862,7 @@ function entry(mode){
     delete sb.dataset.armed;sb.textContent='Set balance';
   }
   else{p=num(pv);f=num(fv);if(sign<0){p=-Math.abs(p);f=-Math.abs(f)}}
+  {const tP=mode==='set'?p:S.primos+p,tF=mode==='set'?f:S.fates+f;if(tP>1e6||tF>1e4){toast('That’s more than the app can track (max 1,000,000 primogems and 10,000 fates).');return}}
   const date=$('ad').value&&$('ad').value<=today()?$('ad').value:today();
   const r=commit({mode,p,f,date,note:$('an').value.trim()});
   if(!r.err){$('an').value='';$('ap').value='';$('af').value='';$('ad').value=today();toast(mode==='set'?'Balance updated':'Entry logged',()=>undoEntry(r.e))}
@@ -1200,6 +1202,7 @@ $('adSave').onclick=()=>{
 };
 const rosterJson=()=>JSON.stringify({updated:today(),banners:adAll().slice().sort(byDate).map(b=>({id:b.id,name:b.name,type:b.type,patch:b.patch,phase:b.phase,release:b.release,status:b.status,img:b.img||undefined}))},null,2);
 $('adExp').onclick=()=>saveFile('roster.json',rosterJson(),'application/json','roster.json');
+$('adCopy').onclick=async()=>{const t=rosterJson();try{await navigator.clipboard.writeText(t);toast('Copied. Now paste it into roster.json on GitHub.')}catch(e){saveFile('roster.json',t,'application/json','roster.json')}};
 $('adPub').onclick=async()=>{
   const c={repo:$('ad-repo').value.trim(),br:$('ad-br').value.trim()||'main',path:$('ad-path').value.trim()||'roster.json',tok:$('ad-tok').value.trim()};
   if(!/^[\w.-]+\/[\w.-]+$/.test(c.repo)||!c.tok){toast('Open “Publishing setup” and enter the repository and token.');return}
