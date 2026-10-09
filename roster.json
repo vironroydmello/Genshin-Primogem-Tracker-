@@ -1,0 +1,15 @@
+{
+  "_howto": "Edit this file and re-upload it. The app reads it every time it opens. Each banner needs a unique id, a name, a release date (YYYY-MM-DD) and a type. Keep the id the same when a date moves, and goals already linked to it will update their release date by themselves. Use status leak until it's official, then change it to official. img is optional: put the picture in an art/ folder next to index.html and write art/name.png so it also works offline. Only use art you're allowed to use.",
+  "updated": "",
+  "banners": [],
+  "_example": {
+    "id": "7.2-p1-example",
+    "name": "Character Name",
+    "type": "char",
+    "patch": "7.2",
+    "phase": 1,
+    "release": "2027-01-01",
+    "status": "leak",
+    "img": "art/character-name.png"
+  }
+}
