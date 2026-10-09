@@ -167,6 +167,7 @@ details[open]>summary{margin-bottom:6px}
 .rth{width:64px;height:64px;flex:none;border-radius:12px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;font:700 24px "Bricolage Grotesque",system-ui;overflow:hidden}
 .rth img{width:100%;height:100%;object-fit:cover}
 .badge.leak{color:var(--warn);border-color:currentColor}.badge.off{color:var(--ok);border-color:currentColor}
+.icoW{flex:none;display:block}.icoW .ico{width:76px;height:76px}.icoW img.ico{border-radius:16px;object-position:top}.rth{width:84px;height:84px}.rth img{object-position:top}.rth .ico{width:100%;height:100%}
 </style>
 </head>
 <body data-t="home">
@@ -312,7 +313,7 @@ details[open]>summary{margin-bottom:6px}
 <div class="b"><button class="p sm" id="adSave">Add banner</button><button class="sm" id="adCancel" hidden>Cancel edit</button></div>
 <details class="adv"><summary>Publishing setup (GitHub)</summary><div class="grid2"><label class="f">Repository<input id="ad-repo" placeholder="yourname/primogems" autocomplete="off"></label><label class="f">Branch<input id="ad-br" placeholder="main" autocomplete="off"></label></div><label class="f" style="display:block;margin-top:8px">File path<input id="ad-path" placeholder="roster.json" autocomplete="off"></label><label class="f" style="display:block;margin-top:8px">Access token<input id="ad-tok" type="password" autocomplete="off"></label><div class="sub" style="margin-top:6px">Create a fine-grained token limited to this one repository with “Contents: Read and write”. It is saved on this device only and never sent anywhere except GitHub. Don’t share it.</div></details>
 <div class="b"><button class="p" id="adCopy">Copy roster text</button><button class="sm" id="adExp">Export roster.json</button><button class="sm" id="adPub">Publish with token (advanced)</button><button class="sm" id="adLock">Hide admin tools</button></div><div class="sub" id="adSt" style="margin-top:8px"></div></section>
-<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v11.1</div>
+<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v11.2</div>
 </main>
 <div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><input id="rsQ" type="search" placeholder="Search banners…" autocomplete="off" style="margin-top:10px"><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div><div id="rsBar" class="b" hidden style="position:sticky;bottom:0;background:var(--card);padding-top:8px"><button class="p wide" id="rsAdd"></button></div></div></div>
 <nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><span aria-hidden="true">🏠</span>Home</button><button data-tb="goals"><span aria-hidden="true">🎯</span>Goals</button><button data-tb="income"><span aria-hidden="true">📈</span>Income</button><button data-tb="more"><span aria-hidden="true">☰</span>More</button></nav>
@@ -338,8 +339,8 @@ const uid=()=>Math.random().toString(36).slice(2,8);
 const plural=(n,w)=>n+' '+w+(n===1?'':'s');
 const isoRe=/^\d{4}-\d{2}-\d{2}$/;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const EL={pyro:{n:'Pyro',e:'🔥',c:'#ffd9cf',s:'#e0583a'},hydro:{n:'Hydro',e:'💧',c:'#d4ecff',s:'#3d8fe0'},anemo:{n:'Anemo',e:'🌀',c:'#d5f5ee',s:'#3fb8a0'},electro:{n:'Electro',e:'⚡',c:'#e6dcff',s:'#9c5de8'},dendro:{n:'Dendro',e:'🌿',c:'#dff3c9',s:'#6aa832'},cryo:{n:'Cryo',e:'❄️',c:'#e0f6ff',s:'#5bbcdf'},geo:{n:'Geo',e:'🪨',c:'#fff0c4',s:'#d1a020'}};
-const elIco=k=>'<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="'+EL[k].c+'" stroke="'+EL[k].s+'" stroke-width="2"/><text x="20" y="27" text-anchor="middle" font-size="20">'+EL[k].e+'</text></svg>';
+const EL={pyro:{n:'Pyro',c:'#ffe3da',s:'#f0643c',k:'f',d:'M20 3c1 7-8 10-8 19a8 8 0 0 0 16 0c0-5-3-8-4-12-1 4-3 5-4 5 2-6 1-9-0-12z'},hydro:{n:'Hydro',c:'#d9f1ff',s:'#2fb4ff',k:'f',d:'M20 3C14 12 8 18 8 25a12 12 0 0 0 24 0c0-7-6-13-12-22z'},anemo:{n:'Anemo',c:'#dcf6ee',s:'#4fc3a1',k:'s',d:'M6 13h17a4.5 4.5 0 1 0-4.5-4.5M6 21h26a4.5 4.5 0 1 1-4.500 4.5M6 29h13a3.500 3.500 0 1 1-3.500 3.500'},electro:{n:'Electro',c:'#eadfff',s:'#a35cf0',k:'f',d:'M24 2L8 22h10l-3 16 17-22H22z'},dendro:{n:'Dendro',c:'#e6f5c8',s:'#8fbf1f',k:'f',d:'M33 5C15 5 7 14 7 26c0 3 1 6 3 9 1-9 6-15 14-18-7 5-10 11-11 18 12 2 20-8 20-30z'},cryo:{n:'Cryo',c:'#e3f4ff',s:'#7cc6ee',k:'s',d:'M20 3v34M5 11.500l30 17M5 28.500l30-17M14 5l6 5 6-5M14 35l6-5 6 5'},geo:{n:'Geo',c:'#fff0c8',s:'#f5aa1e',k:'f',d:'M20 3l13 17-13 17L7 20z M20 11l6.500 9-6.500 9-6.500-9z'}};
+const elIco=k=>{const e=EL[k],st=e.k==='s';return '<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="'+e.c+'" stroke="'+e.s+'" stroke-width="2"/><g transform="translate(8 8) scale(.6)" '+(st?'fill="none" stroke="'+e.s+'" stroke-width="3.400" stroke-linecap="round" stroke-linejoin="round"':'fill="'+e.s+'" fill-rule="evenodd"')+'><path d="'+e.d+'"/></g></svg>'};
 const elOpts=Object.keys(EL).map(k=>'<option value="'+k+'">'+EL[k].n+'</option>').join('');
 function cleanPt(p){p=p||{};return {char:Math.min(89,Math.max(0,num(p.char))),weapon:Math.min(79,Math.max(0,num(p.weapon))),chron:Math.min(89,Math.max(0,num(p.chron))),cg:!!p.cg}}
 function applyPool(){ // pity is shared per banner type: the first active goal of each type uses the tracker, later ones start fresh
@@ -554,7 +555,7 @@ function fillCard(c,r,m){
   el.querySelector('.node').textContent=r.paused?'⏸':r.done?'✓':ri+1;
   const ik=g.type+'|'+(g.el||'')+'|'+(g.img||'');
   if(c.icon!==ik){c.icon=ik;const w=el.querySelector('.icoW');w.innerHTML=g.el?elIco(g.el):ICO[g.type];
-    if(g.img){const im=new Image();im.className='ico';im.style.cssText='border-radius:50%;object-fit:cover';im.alt='';im.referrerPolicy='no-referrer';im.onload=()=>{if(c.icon===ik){w.innerHTML='';w.append(im)}};im.src=g.img}}
+    if(g.img){const im=new Image();im.className='ico';im.style.cssText='object-fit:cover';im.alt='';im.referrerPolicy='no-referrer';im.onload=()=>{if(c.icon===ik){w.innerHTML='';w.append(im)}};im.src=g.img}}
   el.querySelector('.gn').textContent=g.name||'Untitled goal';
   const bd=el.querySelector('.badge');bd.hidden=!g.patch;bd.textContent=g.patch?'Patch '+g.patch:'';
   let lab;
@@ -1095,7 +1096,7 @@ function planAdvice(m){
   return '<div class="pr"><span class="warn">⚠ <b>'+esc(bad.g.name||'Untitled goal')+'</b> is about '+plural(Math.ceil(sp/160),'pull')+' short at release. '+(c?'Moving <b>'+esc(c.g.name||'Untitled goal')+'</b> below it, or pausing it, would cover it.':'Raise your income or lower its tier.')+'</span></div>';
 }
 $('sortG').onclick=()=>{const before=S.goals.slice(),k=g=>g.release||'9999';S.goals.sort((a,b)=>a.prio-b.prio||(k(a)<k(b)?-1:k(a)>k(b)?1:0));save();render();toast('Sorted by release date within each tier',()=>{S.goals=before;save();render()})};
-$('rsAdd').onclick=()=>{const pk=RO.banners.filter(b=>rsSel.has(b.id)).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);pk.forEach(b=>S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id,img:b.img,el:b.el})));rsSel.clear();save();render();closeRoster();toast('Added '+plural(pk.length,'goal'))};
+$('rsAdd').onclick=()=>{const pk=RO.banners.filter(b=>rsSel.has(b.id)).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);pk.forEach(b=>S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id,img:imgFor(b),el:b.el})));rsSel.clear();save();render();closeRoster();toast('Added '+plural(pk.length,'goal'))};
 $('rsQ').addEventListener('input',()=>drawRoster());
 function cuInfo(){if(!S.cu||!S.log.length)return null;const n=Math.min(60,-off(S.cu)),per=Math.round((S.income.daily+(S.income.welkin?WELKIN:0))*S.income.rate/100);return n<2||per<=0?null:{n,tot:per*n}}
 function drawCatchup(){const c=cuInfo();$('cuCard').hidden=!c;if(!c)return;$('cuTxt').textContent='It has been '+c.n+' days since your last check-in. Add your usual dailies'+(S.income.welkin?' and Welkin':'')+' (about '+c.tot+' primogems)?';$('cuYes').textContent='Add '+c.tot+' primos'}
@@ -1189,6 +1190,8 @@ function syncRoster(){
 function openRoster(g){rsGoal=g||null;rsSel.clear();$('rsQ').value='';$('rs').hidden=false;drawRoster();$('rsX').focus()}
 function closeRoster(){$('rs').hidden=true}
 let rsSel=new Set();
+const BI=(()=>{try{return JSON.parse(localStorage.getItem('primo-banner-img')||'{}')}catch(e){return {}}})();
+const imgFor=b=>b.img||BI[b.id]||((S.goals.find(g=>g.rid===b.id&&g.img)||{}).img)||'';
 function drawRoster(){
   const L=$('rsL');L.innerHTML='';const q=($('rsQ').value||'').trim().toLowerCase(),multi=!rsGoal;
   const list=RO.banners.filter(b=>off(b.release)>=-21&&(rsF==='all'||b.type===rsF||(rsF==='off'&&b.status==='official'))&&(!q||(b.name+' '+b.patch).toLowerCase().includes(q))).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);
@@ -1200,8 +1203,8 @@ function drawRoster(){
     const hd=(b.patch?'Patch '+b.patch+', ':'')+'phase '+b.phase;
     if(hd!==last){last=hd;const s=document.createElement('div');s.className='sec-s';s.textContent=hd;L.append(s)}
     const c=document.createElement('button'),th=document.createElement('span'),t=document.createElement('span'),o=off(b.release),sel=rsSel.has(b.id);
-    c.className='rcard';th.className='rth';th.textContent=b.el?EL[b.el].e:b.name.charAt(0);
-    if(b.img){const im=new Image();im.alt='';im.loading='lazy';im.referrerPolicy='no-referrer';im.onload=()=>{th.textContent='';th.append(im)};im.src=b.img}
+    c.className='rcard';th.className='rth';if(b.el)th.innerHTML=elIco(b.el);else th.textContent=b.name.charAt(0);
+    const iu=imgFor(b);if(iu){const im=new Image();im.alt='';im.loading='lazy';im.referrerPolicy='no-referrer';im.onload=()=>{th.textContent='';th.append(im)};im.src=iu}
     t.className='gt';
     const added=multi&&S.goals.some(x=>x.rid===b.id);
     t.innerHTML='<span class="gn" style="font-size:16px"></span><span class="sub"></span><span><span class="badge '+(b.status==='official'?'off':'leak')+'">'+(b.status==='official'?'Official':'Leak')+'</span><span class="sub"></span></span>';
@@ -1210,14 +1213,17 @@ function drawRoster(){
     t.children[2].lastChild.textContent=fmt(b.release)+(o>0?' (in '+plural(o,'day')+')':o===0?' (today)':' (live now)')+(added?'. Already on your list':'');
     if(sel){c.style.borderColor='var(--acc)';c.setAttribute('aria-pressed','true')}
     c.disabled=added;c.append(th,t);
-    c.onclick=()=>{if(!multi){pickBanner(b);return}sel?rsSel.delete(b.id):rsSel.add(b.id);drawRoster()};L.append(c);
+    c.onclick=()=>{if(!multi){pickBanner(b);return}sel?rsSel.delete(b.id):rsSel.add(b.id);drawRoster()};
+    const wr=document.createElement('div');wr.style.cssText='display:flex;gap:6px';c.style.cssText+=';flex:1;width:auto';const ib=document.createElement('button');ib.className='sm';ib.textContent='🖼';ib.style.cssText='align-self:center;margin-top:8px';ib.setAttribute('aria-label','Set image for '+b.name);
+    ib.onclick=()=>{const u=prompt('Direct image link for '+b.name+' (.png / .jpg / .webp). Leave empty to remove.',imgFor(b));if(u===null)return;const v=u.trim();if(v)BI[b.id]=v;else delete BI[b.id];try{localStorage.setItem('primo-banner-img',JSON.stringify(BI))}catch(e){}S.goals.forEach(g=>{if(g.rid===b.id)g.img=v});save();render();drawRoster()};
+    wr.append(c,ib);L.append(wr);
   });
   const n=rsSel.size;$('rsBar').hidden=!(multi&&n);$('rsAdd').textContent='Add '+plural(n,'goal');
   if(RO.banners.length&&!list.length)L.innerHTML='<div class="sub" style="margin-top:10px">Nothing to show for this filter.</div>';
 }
 function pickBanner(b){
-  if(rsGoal){Object.assign(rsGoal,{name:b.name,patch:b.patch,release:b.release,rid:b.id,type:b.type,img:b.img||rsGoal.img,el:b.el||rsGoal.el});clampPity(rsGoal)}
-  else S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id,img:b.img,el:b.el}));
+  if(rsGoal){Object.assign(rsGoal,{name:b.name,patch:b.patch,release:b.release,rid:b.id,type:b.type,img:imgFor(b)||rsGoal.img,el:b.el||rsGoal.el});clampPity(rsGoal)}
+  else S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id,img:imgFor(b),el:b.el}));
   save();render();closeRoster();toast((rsGoal?'Filled in ':'Added ')+b.name);
 }
 $('addr').onclick=()=>openRoster(null);$('rsX').onclick=closeRoster;
