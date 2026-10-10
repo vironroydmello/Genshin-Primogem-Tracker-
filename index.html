@@ -324,7 +324,7 @@ details[open]>summary{margin-bottom:6px}
 <div class="row"><label class="f">Days ahead<input id="c-d" data-cc type="number" inputmode="numeric" placeholder="0"></label><label class="f">Primogems per day<input id="c-i" data-cc type="number" inputmode="numeric" placeholder="0"></label></div>
 <div class="row"><label class="f">One-off extra primogems<input id="c-x" data-cc type="number" inputmode="numeric" placeholder="events, codes, top-up"></label><label class="f">Target pulls<input id="c-gp" data-cc type="number" inputmode="numeric" placeholder="e.g. 90"></label></div><div id="c2o" style="margin-top:10px;line-height:1.6"></div></section>
 <section class="card"><h2 class="disp">Converter</h2><div class="row"><label class="f">Amount<input id="c-v" data-cc type="number" inputmode="numeric" placeholder="0"></label><label class="f">Unit<select id="c-u" data-cc><option value="primos">Primogems</option><option value="fates">Fates</option><option value="genesis">Genesis Crystals</option><option value="starglitter">Starglitter</option><option value="pulls">Pulls</option></select></label></div><div id="c3o" style="margin-top:10px;line-height:1.6"></div></section></div>
-<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v11.3</div>
+<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v11.4</div>
 </main>
 <div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><input id="rsQ" type="search" placeholder="Search banners…" autocomplete="off" style="margin-top:10px"><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div><div id="rsBar" class="b" hidden style="position:sticky;bottom:0;background:var(--card);padding-top:8px"><button class="p wide" id="rsAdd"></button></div></div></div>
 <nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><span aria-hidden="true">🏠</span>Home</button><button data-tb="goals"><span aria-hidden="true">🎯</span>Goals</button><button data-tb="income"><span aria-hidden="true">📈</span>Income</button><button data-tb="calc"><span aria-hidden="true">🧮</span>Calc</button><button data-tb="more"><span aria-hidden="true">☰</span>More</button></nav>
@@ -564,6 +564,7 @@ function fillCard(c,r,m){
   const g=r.g,el=c.el,ri=m.rows.indexOf(r);
   el.className='g'+(r.paused?' paused':'')+(r.done?' done':'')+(r.cur?' cur':'')+(!r.paused&&!r.done&&!r.cur?' lock':'');
   el.querySelector('.node').textContent=r.paused?'⏸':r.done?'✓':ri+1;
+  {const w0=el.querySelector('.icoW');w0.onclick=g.img?()=>openImg(g.img,g.name):null;w0.style.cursor=g.img?'zoom-in':''}
   const ik=g.type+'|'+(g.el||'')+'|'+(g.img||'');
   if(c.icon!==ik){c.icon=ik;const w=el.querySelector('.icoW');w.innerHTML=g.el?elIco(g.el):ICO[g.type];
     if(g.img){const im=new Image();im.className='ico';im.style.cssText='object-fit:cover';im.alt='';im.referrerPolicy='no-referrer';im.onload=()=>{if(c.icon===ik){w.innerHTML='';w.append(im)}};im.src=g.img}}
@@ -1229,6 +1230,13 @@ const nk=b=>'n:'+String(b.name||'').toLowerCase().trim();
 const gm=(b,f)=>{const g=S.goals.find(g=>g[f]&&(g.rid===b.id||(g.name||'').toLowerCase().trim()===nk(b).slice(2)));return g?g[f]:''};
 const imgFor=b=>gm(b,'img')||b.img||BI[b.id]||BI[nk(b)]||'';
 const elFor=b=>gm(b,'el')||(EL[b.el]?b.el:'')||BE[b.id]||BE[nk(b)]||'';
+function openImg(u,name){
+  const o=document.createElement('div'),im=new Image(),t=document.createElement('div'),k=e=>{if(e.key==='Escape')x()},x=()=>{o.remove();document.removeEventListener('keydown',k)};
+  o.setAttribute('role','dialog');o.setAttribute('aria-label',name||'Image');o.style.cssText='position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:12px';
+  im.referrerPolicy='no-referrer';im.alt=name||'';im.src=u;im.style.cssText='max-width:100%;max-height:80vh;object-fit:contain;border-radius:14px';
+  t.textContent=(name?name+'. ':'')+'Tap anywhere to close';t.style.cssText='color:#fff;font-size:14px;text-align:center';im.onerror=()=>{t.textContent='This image could not be loaded. Tap anywhere to close'};
+  o.onclick=x;document.addEventListener('keydown',k);o.append(im,t);document.body.append(o);
+}
 function syncBanner(g,k){const M=k==='img'?BI:BE,v=String(g[k]||'').trim();[g.rid,g.name&&'n:'+g.name.toLowerCase().trim()].forEach(x=>{if(!x)return;if(v)M[x]=v;else delete M[x]});try{localStorage.setItem(k==='img'?'primo-banner-img':'primo-banner-el',JSON.stringify(M))}catch(e){}}
 function drawRoster(){
   const L=$('rsL');L.innerHTML='';const q=($('rsQ').value||'').trim().toLowerCase(),multi=!rsGoal;
@@ -1242,7 +1250,7 @@ function drawRoster(){
     if(hd!==last){last=hd;const s=document.createElement('div');s.className='sec-s';s.textContent=hd;L.append(s)}
     const c=document.createElement('button'),th=document.createElement('span'),t=document.createElement('span'),o=off(b.release),sel=rsSel.has(b.id);
     c.className='rcard';th.className='rth';const ee=elFor(b);if(ee)th.innerHTML=elIco(ee);else th.textContent=b.name.charAt(0);
-    const iu=imgFor(b);if(iu){const im=new Image();im.alt='';im.loading='lazy';im.referrerPolicy='no-referrer';im.onload=()=>{th.textContent='';th.append(im)};im.src=iu}
+    const iu=imgFor(b);if(iu){const im=new Image();im.alt='';im.referrerPolicy='no-referrer';im.onload=()=>{th.textContent='';th.append(im);th.style.cursor='zoom-in';th.onclick=ev=>{ev.stopPropagation();openImg(iu,b.name)}};im.src=iu}
     t.className='gt';
     const added=multi&&S.goals.some(x=>x.rid===b.id);
     t.innerHTML='<span class="gn" style="font-size:16px"></span><span class="sub"></span><span><span class="badge '+(b.status==='official'?'off':'leak')+'">'+(b.status==='official'?'Official':'Leak')+'</span><span class="sub"></span></span>';
