@@ -9,7 +9,8 @@
       "phase": 2,
       "release": "2026-10-13",
       "status": "official",
-      "img": "https://imgs.search.brave.com/yK-NKylrFx5Y0DPPcyVYAsWl92kBMVbMj2xIESb6Qak/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/YXNvd29ybGQuY29t/L2ltZy8zNDE2MTVl/OTFjYmM0NTdkYjFk/NGZkYTVjY2FkMTQ0/Zi5qcGc"
+      "img": "https://imgs.search.brave.com/yK-NKylrFx5Y0DPPcyVYAsWl92kBMVbMj2xIESb6Qak/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/YXNvd29ybGQuY29t/L2ltZy8zNDE2MTVl/OTFjYmM0NTdkYjFk/NGZkYTVjY2FkMTQ0/Zi5qcGc",
+      "el": "cryo"
     },
     {
       "id": "7.1-p2-skirk",
@@ -19,7 +20,8 @@
       "phase": 2,
       "release": "2026-10-13",
       "status": "official",
-      "img": "https://imgs.search.brave.com/AqbhlgJYqt5VtejzWKtNjGHL5mCZgXlSApMve_SVvbU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/c2hvcGlmeS5jb20v/cy9maWxlcy8xLzA3/NDcvNTMxNy85OTQ0/L2ZpbGVzL0dlbnNo/aW5fSW1wYWN0X1Nr/aXJrX1Bvc3Rlci5w/bmc_dj0xNzQ3Mjky/MDgw"
+      "img": "https://imgs.search.brave.com/AqbhlgJYqt5VtejzWKtNjGHL5mCZgXlSApMve_SVvbU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/c2hvcGlmeS5jb20v/cy9maWxlcy8xLzA3/NDcvNTMxNy85OTQ0/L2ZpbGVzL0dlbnNo/aW5fSW1wYWN0X1Nr/aXJrX1Bvc3Rlci5w/bmc_dj0xNzQ3Mjky/MDgw",
+      "el": "cryo"
     },
     {
       "id": "7.2-p1-mitya",
@@ -29,7 +31,8 @@
       "phase": 1,
       "release": "2026-11-04",
       "status": "leak",
-      "img": "https://www.u7buy.com/blog/wp-content/uploads/genshin-mitya-build-1.webp"
+      "img": "https://www.u7buy.com/blog/wp-content/uploads/genshin-mitya-build-1.webp",
+      "el": "electro"
     },
     {
       "id": "7.2-p1-zibai",
@@ -49,7 +52,8 @@
       "phase": 2,
       "release": "2026-11-04",
       "status": "leak",
-      "img": "https://imgs.search.brave.com/rW7gOtaZ0_VYc7D4VjTzP3fGP5Oc5A6fqkuNd5a6bw4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zaG9w/LmxkcmVzY2RuLmNv/bS9ybXMvbGQtc3Bh/Y2UvcHJvY2Vzcy9p/bWcvZTg3NDllNTgz/OWY0NGZmOWI3YTRl/N2MxNTNlZmQ5M2Ex/NzczMjgwMjc0Lndl/YnA_eC1vc3MtcHJv/Y2Vzcz1pbWFnZS9m/b3JtYXQsd2VicA"
+      "img": "https://imgs.search.brave.com/rW7gOtaZ0_VYc7D4VjTzP3fGP5Oc5A6fqkuNd5a6bw4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zaG9w/LmxkcmVzY2RuLmNv/bS9ybXMvbGQtc3Bh/Y2UvcHJvY2Vzcy9p/bWcvZTg3NDllNTgz/OWY0NGZmOWI3YTRl/N2MxNTNlZmQ5M2Ex/NzczMjgwMjc0Lndl/YnA_eC1vc3MtcHJv/Y2Vzcz1pbWFnZS9m/b3JtYXQsd2VicA",
+      "el": "geo"
     },
     {
       "id": "7.3-p1-tsaritsa",
@@ -69,7 +73,8 @@
       "phase": 1,
       "release": "2026-12-16",
       "status": "leak",
-      "img": "https://imgs.search.brave.com/cG26hG8JhqANhryJrotMRHxu8MslMPrDnVcDGI7nhxo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWNnLnNwb3J0c2tl/ZWRhLmNvbS9lZGl0/b3IvMjAyNi8wNi8y/NDcxYS0xNzgyNDU2/ODk4Njk3NC0xOTIw/LmpwZw"
+      "img": "https://imgs.search.brave.com/cG26hG8JhqANhryJrotMRHxu8MslMPrDnVcDGI7nhxo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWNnLnNwb3J0c2tl/ZWRhLmNvbS9lZGl0/b3IvMjAyNi8wNi8y/NDcxYS0xNzgyNDU2/ODk4Njk3NC0xOTIw/LmpwZw",
+      "el": "electro"
     },
     {
       "id": "7.4-p1-zhongli",
@@ -79,7 +84,8 @@
       "phase": 1,
       "release": "2027-01-27",
       "status": "leak",
-      "img": "https://imgs.search.brave.com/8g4yLS5r9_eJIHA4zTs5Bq-Q0hSxfyvGGfhSpHGPlBM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMwLmdhbWVyYW50/aW1hZ2VzLmNvbS93/b3JkcHJlc3Mvd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDMv/R2Vuc2hpbi1JbXBh/Y3QtWmhvbmdsaS1X/aXNoLmpwZz9xPTUw/JmZpdD1jcm9wJnc9/ODI1JmRwcj0xLjU"
+      "img": "https://imgs.search.brave.com/8g4yLS5r9_eJIHA4zTs5Bq-Q0hSxfyvGGfhSpHGPlBM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMwLmdhbWVyYW50/aW1hZ2VzLmNvbS93/b3JkcHJlc3Mvd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDMv/R2Vuc2hpbi1JbXBh/Y3QtWmhvbmdsaS1X/aXNoLmpwZz9xPTUw/JmZpdD1jcm9wJnc9/ODI1JmRwcj0xLjU",
+      "el": "geo"
     },
     {
       "id": "7.5-p1-noy",
@@ -89,7 +95,8 @@
       "phase": 1,
       "release": "2027-03-10",
       "status": "leak",
-      "img": "https://imgs.search.brave.com/y5EMyb62p-9_tC8vYPklL7Hvj3hA8a2RLPOhW5Qu6VQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wcmV2/aWV3LnJlZGQuaXQv/OTFmNmV6dmcxbjlo/MS5qcGVnP2F1dG89/d2VicCZzPTI4MmMy/ZjE4YzE3NDUzNGI5/ODk0NTU2N2QzMzM5/OGMwNTViYTI5Y2M"
+      "img": "https://imgs.search.brave.com/y5EMyb62p-9_tC8vYPklL7Hvj3hA8a2RLPOhW5Qu6VQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wcmV2/aWV3LnJlZGQuaXQv/OTFmNmV6dmcxbjlo/MS5qcGVnP2F1dG89/d2VicCZzPTI4MmMy/ZjE4YzE3NDUzNGI5/ODk0NTU2N2QzMzM5/OGMwNTViYTI5Y2M",
+      "el": "dendro"
     }
   ]
 }
