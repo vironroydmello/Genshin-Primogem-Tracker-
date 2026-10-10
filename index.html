@@ -138,7 +138,7 @@ button:disabled{opacity:.4;cursor:default}
 
 [hidden]{display:none!important}
 [data-tab]{display:none}
-body[data-t=home] [data-tab=home],body[data-t=goals] [data-tab=goals],body[data-t=income] [data-tab=income],body[data-t=more] [data-tab=more]{display:block}
+body[data-t=home] [data-tab=home],body[data-t=goals] [data-tab=goals],body[data-t=income] [data-tab=income],body[data-t=calc] [data-tab=calc],body[data-t=more] [data-tab=more]{display:block}
 body{padding-bottom:88px}
 .card,.g{border-radius:18px}
 .card{box-shadow:0 1px 2px rgba(40,25,90,.06),0 8px 20px rgba(40,25,90,.05)}
@@ -200,13 +200,14 @@ details[open]>summary{margin-bottom:6px}
     </div>
   </div>
   <div class="row">
-    <label class="f">Primogems<input id="ap" type="number" inputmode="numeric" placeholder="e.g. 120"></label>
-    <label class="f">Fates<input id="af" type="number" inputmode="numeric" placeholder="e.g. 2"></label>
+    <label class="f">Primogems<input id="ap" type="number" inputmode="numeric" placeholder="game total or amount"></label>
+    <label class="f">Fates<input id="af" type="number" inputmode="numeric" placeholder="game total or amount"></label>
   </div>
   <details class="adv"><summary>Add a note or change the date</summary><label class="f" style="display:block;margin-top:8px">Note (optional)<input id="an" maxlength="60" list="cats" autocomplete="off" placeholder="Events, Abyss 36★, Codes, Top-up…"></label>
   <datalist id="cats"><option value="Events"><option value="Abyss"><option value="Imaginarium Theater"><option value="Livestream codes"><option value="Genesis top-up"><option value="Maintenance"><option value="Quest / Exploration"></datalist>
-  <div class="row" style="margin-top:8px"><label class="f">Date<input id="ad" type="date"></label></div></details><div class="row" style="margin-top:12px"><button class="p" id="add">Add to balance</button><button id="set">Set balance</button></div>
-  <div class="sub" style="margin-top:8px"><b>Add to balance</b> adds what you earned (or subtracts it if “Spent” is selected). <b>Set balance</b> replaces your balance with exactly what the game shows. 160 primogems = 1 pull.</div>
+  <div class="row" style="margin-top:8px"><label class="f">Date<input id="ad" type="date"></label></div></details><div class="sub" id="setHint" style="margin-top:10px"></div>
+  <div class="row" style="margin-top:8px"><button class="p" id="set">Update to in-game total</button><button id="add">Add / spend instead</button></div>
+  <div class="sub" style="margin-top:8px"><b>Update to in-game total</b>: type exactly what your game shows (leave a box empty to keep it). The app works out the difference and logs it for you. <b>Add / spend instead</b> adds or subtracts an amount. 160 primogems = 1 pull.</div>
   <details class="panel adv"><summary>Genesis Crystals &amp; Starglitter (optional)</summary>
     <div class="sub" id="latOut"></div>
     <div class="row" style="margin-top:8px"><label class="f">Genesis Crystals<input id="inv-g" type="number" inputmode="numeric" min="0" placeholder="amount"></label><label class="f">Masterless Starglitter<input id="inv-s" type="number" inputmode="numeric" min="0" placeholder="amount"></label></div>
@@ -313,10 +314,20 @@ details[open]>summary{margin-bottom:6px}
 <div class="b"><button class="p sm" id="adSave">Add banner</button><button class="sm" id="adCancel" hidden>Cancel edit</button></div>
 <details class="adv"><summary>Publishing setup (GitHub)</summary><div class="grid2"><label class="f">Repository<input id="ad-repo" placeholder="yourname/primogems" autocomplete="off"></label><label class="f">Branch<input id="ad-br" placeholder="main" autocomplete="off"></label></div><label class="f" style="display:block;margin-top:8px">File path<input id="ad-path" placeholder="roster.json" autocomplete="off"></label><label class="f" style="display:block;margin-top:8px">Access token<input id="ad-tok" type="password" autocomplete="off"></label><div class="sub" style="margin-top:6px">Create a fine-grained token limited to this one repository with “Contents: Read and write”. It is saved on this device only and never sent anywhere except GitHub. Don’t share it.</div></details>
 <div class="b"><button class="p" id="adCopy">Copy roster text</button><button class="sm" id="adExp">Export roster.json</button><button class="sm" id="adPub">Publish with token (advanced)</button><button class="sm" id="adLock">Hide admin tools</button></div><div class="sub" id="adSt" style="margin-top:8px"></div></section>
-<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v11.2</div>
+<div data-tab="calc"><div class="sec"><h2 class="disp">Calculator</h2></div>
+<div class="sub" style="margin:0 0 10px">A private scratchpad for planning. Nothing here changes your primogems, fates or goals.</div>
+<section class="card"><h2 class="disp">Wish odds</h2><div class="row"><label class="f">Banner<select id="c-t" data-cc><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled</option></select></label><label class="f">Copies you want<select id="c-n" data-cc><option value="1">C0 (1 copy)</option><option value="2">C1 (2 copies)</option><option value="3">C2 (3 copies)</option><option value="4">C3 (4 copies)</option><option value="5">C4 (5 copies)</option><option value="6">C5 (6 copies)</option><option value="7">C6 (7 copies)</option></select></label></div>
+<div class="row"><label class="f">Current pity<input id="c-pi" data-cc type="number" inputmode="numeric" min="0" placeholder="0"></label><label class="f">Pulls you have<input id="c-pl" data-cc type="number" inputmode="numeric" min="0" placeholder="0"></label></div>
+<label class="chk" style="margin-top:8px"><input type="checkbox" id="c-g" data-cc> Next 5★ is guaranteed (Fate Point for weapons)</label><div id="c1o" style="margin-top:10px;line-height:1.6"></div></section>
+<section class="card"><h2 class="disp">Primogem forecast</h2><div class="b"><button class="sm" id="c-use">Copy my balance</button><button class="sm" id="c-uinc">Copy my daily income</button></div>
+<div class="row" style="margin-top:8px"><label class="f">Primogems now<input id="c-p" data-cc type="number" inputmode="numeric" placeholder="0"></label><label class="f">Fates now<input id="c-f" data-cc type="number" inputmode="numeric" placeholder="0"></label></div>
+<div class="row"><label class="f">Days ahead<input id="c-d" data-cc type="number" inputmode="numeric" placeholder="0"></label><label class="f">Primogems per day<input id="c-i" data-cc type="number" inputmode="numeric" placeholder="0"></label></div>
+<div class="row"><label class="f">One-off extra primogems<input id="c-x" data-cc type="number" inputmode="numeric" placeholder="events, codes, top-up"></label><label class="f">Target pulls<input id="c-gp" data-cc type="number" inputmode="numeric" placeholder="e.g. 90"></label></div><div id="c2o" style="margin-top:10px;line-height:1.6"></div></section>
+<section class="card"><h2 class="disp">Converter</h2><div class="row"><label class="f">Amount<input id="c-v" data-cc type="number" inputmode="numeric" placeholder="0"></label><label class="f">Unit<select id="c-u" data-cc><option value="primos">Primogems</option><option value="fates">Fates</option><option value="genesis">Genesis Crystals</option><option value="starglitter">Starglitter</option><option value="pulls">Pulls</option></select></label></div><div id="c3o" style="margin-top:10px;line-height:1.6"></div></section></div>
+<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v11.3</div>
 </main>
 <div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><input id="rsQ" type="search" placeholder="Search banners…" autocomplete="off" style="margin-top:10px"><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div><div id="rsBar" class="b" hidden style="position:sticky;bottom:0;background:var(--card);padding-top:8px"><button class="p wide" id="rsAdd"></button></div></div></div>
-<nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><span aria-hidden="true">🏠</span>Home</button><button data-tb="goals"><span aria-hidden="true">🎯</span>Goals</button><button data-tb="income"><span aria-hidden="true">📈</span>Income</button><button data-tb="more"><span aria-hidden="true">☰</span>More</button></nav>
+<nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><span aria-hidden="true">🏠</span>Home</button><button data-tb="goals"><span aria-hidden="true">🎯</span>Goals</button><button data-tb="income"><span aria-hidden="true">📈</span>Income</button><button data-tb="calc"><span aria-hidden="true">🧮</span>Calc</button><button data-tb="more"><span aria-hidden="true">☰</span>More</button></nav>
 <div id="toast" role="status" aria-live="polite" hidden><span id="tmsg"></span><button id="tund">Undo</button></div>
 
 <script>
@@ -605,7 +616,7 @@ function render(){
   const d=m.e;$('incOut').textContent='≈ '+Math.round(d)+' primos/day, about '+(d*30/160).toFixed(1)+' pulls every 30 days'+(m.eMax>d?' (up to '+Math.round(m.eMax)+'/day if you collect everything).':'. Events arrive in lumps, so the chart smooths them out.');
   $('latOut').textContent=(S.genesis||S.glitter)?'In inventory: '+S.genesis+' Genesis, '+S.glitter+' Starglitter (about '+(lat()/160).toFixed(1)+' pulls once converted). Your balance above only counts what you’ve converted.':'Nothing waiting to be converted.';
   const eg=endgameParts();$('egOut').textContent='Endgame ≈ '+Math.round(eg.total)+' primos a month (Abyss '+Math.round(eg.abyss)+', Theater '+Math.round(eg.theater)+', Stygian '+Math.round(eg.stygian)+').';
-  drawChart(m);drawMilestones(m);drawBargain();drawBonus();drawWelcome();drawCatchup();fillPity();
+  drawChart(m);drawMilestones(m);drawBargain();drawBonus();drawWelcome();drawCatchup();fillPity();setHint();
 }
 
 /* edit + result panels */
@@ -882,9 +893,9 @@ function entry(mode){
     const drop=ledP()-(p+f*160),sb=$('set');
     if(drop>=800&&!sb.dataset.armed){ // lowering the balance by 5+ pulls needs a second tap
       sb.dataset.armed='1';sb.textContent='Confirm: −'+Math.round(drop/160)+' pulls';clearTimeout(sb._t);
-      sb._t=setTimeout(()=>{delete sb.dataset.armed;sb.textContent='Set balance'},5000);return;
+      sb._t=setTimeout(()=>{delete sb.dataset.armed;sb.textContent='Update to in-game total'},5000);return;
     }
-    delete sb.dataset.armed;sb.textContent='Set balance';
+    delete sb.dataset.armed;sb.textContent='Update to in-game total';
   }
   else{p=num(pv);f=num(fv);if(sign<0){p=-Math.abs(p);f=-Math.abs(f)}}
   {const tP=mode==='set'?p:S.primos+p,tF=mode==='set'?f:S.fates+f;if(tP>1e6||tF>1e4){toast('That’s more than the app can track (max 1,000,000 primogems and 10,000 fates).');return}}
@@ -893,7 +904,7 @@ function entry(mode){
   if(!r.err){$('an').value='';$('ap').value='';$('af').value='';$('ad').value=today();toast(mode==='set'?'Balance updated':'Entry logged',()=>undoEntry(r.e))}
 }
 $('add').onclick=()=>entry('add');$('set').onclick=()=>entry('set');
-[$('ap'),$('af')].forEach(i=>i.addEventListener('input',()=>{const b=$('set');if(b.dataset.armed){delete b.dataset.armed;b.textContent='Set balance'}}));
+[$('ap'),$('af')].forEach(i=>i.addEventListener('input',()=>{const b=$('set');if(b.dataset.armed){delete b.dataset.armed;b.textContent='Update to in-game total'}}));
 [$('ap'),$('af')].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')entry('add')}));
 document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
   const q=b.dataset.q,p=q==='p60'?60:q==='p90'?90:0,f=q==='f1'?1:0;
@@ -1096,7 +1107,7 @@ function planAdvice(m){
   return '<div class="pr"><span class="warn">⚠ <b>'+esc(bad.g.name||'Untitled goal')+'</b> is about '+plural(Math.ceil(sp/160),'pull')+' short at release. '+(c?'Moving <b>'+esc(c.g.name||'Untitled goal')+'</b> below it, or pausing it, would cover it.':'Raise your income or lower its tier.')+'</span></div>';
 }
 $('sortG').onclick=()=>{const before=S.goals.slice(),k=g=>g.release||'9999';S.goals.sort((a,b)=>a.prio-b.prio||(k(a)<k(b)?-1:k(a)>k(b)?1:0));save();render();toast('Sorted by release date within each tier',()=>{S.goals=before;save();render()})};
-$('rsAdd').onclick=()=>{const pk=RO.banners.filter(b=>rsSel.has(b.id)).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);pk.forEach(b=>S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id,img:imgFor(b),el:b.el})));rsSel.clear();save();render();closeRoster();toast('Added '+plural(pk.length,'goal'))};
+$('rsAdd').onclick=()=>{const pk=RO.banners.filter(b=>rsSel.has(b.id)).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);pk.forEach(b=>S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id,img:imgFor(b),el:elFor(b)})));rsSel.clear();save();render();closeRoster();toast('Added '+plural(pk.length,'goal'))};
 $('rsQ').addEventListener('input',()=>drawRoster());
 function cuInfo(){if(!S.cu||!S.log.length)return null;const n=Math.min(60,-off(S.cu)),per=Math.round((S.income.daily+(S.income.welkin?WELKIN:0))*S.income.rate/100);return n<2||per<=0?null:{n,tot:per*n}}
 function drawCatchup(){const c=cuInfo();$('cuCard').hidden=!c;if(!c)return;$('cuTxt').textContent='It has been '+c.n+' days since your last check-in. Add your usual dailies'+(S.income.welkin?' and Welkin':'')+' (about '+c.tot+' primogems)?';$('cuYes').textContent='Add '+c.tot+' primos'}
@@ -1105,6 +1116,28 @@ $('cuNo').onclick=()=>{S.cu=today();save();render()};
 const bakRaw=()=>{try{const b=JSON.parse(localStorage.getItem('primo-bak-v10'));return b&&b.data&&Object.keys(b.data).length?b:null}catch(e){return null}};
 $('bakRes').hidden=!bakRaw();
 $('bakRes').onclick=function(){const b=bakRaw();if(!b)return;if(!this.dataset.armed){this.dataset.armed='1';this.textContent='Tap again to replace current data';setTimeout(()=>{delete this.dataset.armed;this.textContent='Restore data from before this update'},4000);return}try{Object.entries(b.data).forEach(([k,v])=>localStorage.setItem(k,v))}catch(e){}location.reload()};
+
+/* ---------- Calc tab (never touches your balance or goals) ---------- */
+const CCK='primo-calc',fm=n=>Math.round(n).toLocaleString();
+function calc(){
+  const q=id=>num($(id).value),t=$('c-t').value,pm=goalPmf({type:t,copies:Math.min(7,Math.max(1,num($('c-n').value))),pity:Math.min(t==='weapon'?79:89,Math.max(0,q('c-pi'))),guar:$('c-g').checked}),N=Math.max(0,Math.floor(q('c-pl')));
+  const at=x=>{let c=0;for(let i=0;i<pm.length;i++){c+=pm[i];if(c>=x)return i}return pm.length-1},avg=pm.reduce((a,p,i)=>a+p*i,0);
+  $('c1o').innerHTML='<b>'+(cdf(pm,N)*100).toFixed(1)+'%</b> chance with '+fm(N)+' pulls<br>Pulls for 50%: <b>'+at(.5)+'</b>, 75%: <b>'+at(.75)+'</b>, 90%: <b>'+at(.9)+'</b>, 99%: <b>'+at(.99)+'</b><br>Average: about <b>'+Math.round(avg)+'</b> pulls ('+fm(avg*160)+' primogems)';
+  const now=q('c-p')+q('c-f')*160,d=Math.max(0,q('c-d')),inc=q('c-i'),ex=q('c-x'),tg=Math.max(0,q('c-gp')),tot=now+d*inc+ex;
+  let o='In '+fm(d)+' days: <b>'+fm(tot)+'</b> primogems = <b>'+Math.floor(tot/160)+'</b> pulls ('+fm(tot%160)+' left over)';
+  if(tg){const nd=tg*160-now-ex;o+='<br>'+(nd<=0?'You already reach '+tg+' pulls with what you have.':inc>0?'You reach '+tg+' pulls in about <b>'+Math.ceil(nd/inc)+'</b> days ('+new Date(Date.now()+Math.ceil(nd/inc)*864e5).toLocaleDateString(undefined,{day:'numeric',month:'short'})+').':'Add a daily income to estimate the date.')}
+  $('c2o').innerHTML=o;
+  const v=q('c-v'),u=$('c-u').value,pl=u==='primos'||u==='genesis'?v/160:u==='starglitter'?v/5:v,r1=x=>Math.round(x*10)/10;
+  $('c3o').innerHTML='Pulls: <b>'+r1(pl)+'</b><br>Primogems: <b>'+fm(pl*160)+'</b>, Fates: <b>'+r1(pl)+'</b><br>Starglitter: <b>'+fm(pl*5)+'</b>';
+  try{const w={};document.querySelectorAll('[data-cc]').forEach(i=>w[i.id]=i.type==='checkbox'?i.checked:i.value);localStorage.setItem(CCK,JSON.stringify(w))}catch(e){}
+}
+try{const w=JSON.parse(localStorage.getItem(CCK)||'{}');document.querySelectorAll('[data-cc]').forEach(i=>{if(i.id in w){if(i.type==='checkbox')i.checked=!!w[i.id];else i.value=w[i.id]}})}catch(e){}
+document.querySelectorAll('[data-cc]').forEach(i=>i.addEventListener('input',calc));
+$('c-use').onclick=()=>{$('c-p').value=S.primos;$('c-f').value=S.fates;calc()};
+$('c-uinc').onclick=()=>{$('c-i').value=Math.round(eff());calc()};
+calc();
+function setHint(){const sg=v=>(v>0?'+':'')+v,pv=$('ap').value,fv=$('af').value,h=$('setHint');if(!h)return;if(pv===''&&fv===''){h.textContent='App balance now: '+fm(S.primos)+' primogems, '+S.fates+' fates. Type the totals your game shows.';return}const a=[];if(pv!=='')a.push('primogems '+fm(S.primos)+' → '+fm(num(pv))+' ('+sg(num(pv)-S.primos)+')');if(fv!=='')a.push('fates '+S.fates+' → '+num(fv)+' ('+sg(num(fv)-S.fates)+')');h.textContent='Update sets: '+a.join(', ')}
+['ap','af'].forEach(i=>$(i).addEventListener('input',setHint));
 
 /* ---------- boot ---------- */
 function applyTheme(t){
@@ -1191,7 +1224,11 @@ function openRoster(g){rsGoal=g||null;rsSel.clear();$('rsQ').value='';$('rs').hi
 function closeRoster(){$('rs').hidden=true}
 let rsSel=new Set();
 const BI=(()=>{try{return JSON.parse(localStorage.getItem('primo-banner-img')||'{}')}catch(e){return {}}})();
-const imgFor=b=>b.img||BI[b.id]||((S.goals.find(g=>g.rid===b.id&&g.img)||{}).img)||'';
+const BE=(()=>{try{return JSON.parse(localStorage.getItem('primo-banner-el')||'{}')}catch(e){return {}}})();
+const nk=b=>'n:'+String(b.name||'').toLowerCase().trim();
+const gm=(b,f)=>{const g=S.goals.find(g=>g[f]&&(g.rid===b.id||(g.name||'').toLowerCase().trim()===nk(b).slice(2)));return g?g[f]:''};
+const imgFor=b=>b.img||BI[b.id]||BI[nk(b)]||gm(b,'img')||'';
+const elFor=b=>(EL[b.el]?b.el:'')||BE[b.id]||BE[nk(b)]||gm(b,'el')||'';
 function drawRoster(){
   const L=$('rsL');L.innerHTML='';const q=($('rsQ').value||'').trim().toLowerCase(),multi=!rsGoal;
   const list=RO.banners.filter(b=>off(b.release)>=-21&&(rsF==='all'||b.type===rsF||(rsF==='off'&&b.status==='official'))&&(!q||(b.name+' '+b.patch).toLowerCase().includes(q))).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);
@@ -1203,7 +1240,7 @@ function drawRoster(){
     const hd=(b.patch?'Patch '+b.patch+', ':'')+'phase '+b.phase;
     if(hd!==last){last=hd;const s=document.createElement('div');s.className='sec-s';s.textContent=hd;L.append(s)}
     const c=document.createElement('button'),th=document.createElement('span'),t=document.createElement('span'),o=off(b.release),sel=rsSel.has(b.id);
-    c.className='rcard';th.className='rth';if(b.el)th.innerHTML=elIco(b.el);else th.textContent=b.name.charAt(0);
+    c.className='rcard';th.className='rth';const ee=elFor(b);if(ee)th.innerHTML=elIco(ee);else th.textContent=b.name.charAt(0);
     const iu=imgFor(b);if(iu){const im=new Image();im.alt='';im.loading='lazy';im.referrerPolicy='no-referrer';im.onload=()=>{th.textContent='';th.append(im)};im.src=iu}
     t.className='gt';
     const added=multi&&S.goals.some(x=>x.rid===b.id);
@@ -1214,16 +1251,18 @@ function drawRoster(){
     if(sel){c.style.borderColor='var(--acc)';c.setAttribute('aria-pressed','true')}
     c.disabled=added;c.append(th,t);
     c.onclick=()=>{if(!multi){pickBanner(b);return}sel?rsSel.delete(b.id):rsSel.add(b.id);drawRoster()};
-    const wr=document.createElement('div');wr.style.cssText='display:flex;gap:6px';c.style.cssText+=';flex:1;width:auto';const ib=document.createElement('button');ib.className='sm';ib.textContent='🖼';ib.style.cssText='align-self:center;margin-top:8px';ib.setAttribute('aria-label','Set image for '+b.name);
-    ib.onclick=()=>{const u=prompt('Direct image link for '+b.name+' (.png / .jpg / .webp). Leave empty to remove.',imgFor(b));if(u===null)return;const v=u.trim();if(v)BI[b.id]=v;else delete BI[b.id];try{localStorage.setItem('primo-banner-img',JSON.stringify(BI))}catch(e){}S.goals.forEach(g=>{if(g.rid===b.id)g.img=v});save();render();drawRoster()};
-    wr.append(c,ib);L.append(wr);
+    const wr=document.createElement('div');wr.style.cssText='display:flex;gap:6px';c.style.cssText+=';flex:1;width:auto';const ib=document.createElement('button');ib.className='sm';ib.textContent='🖼';ib.style.cssText='';ib.setAttribute('aria-label','Set image for '+b.name);
+    ib.onclick=()=>{const u=prompt('Direct image link for '+b.name+' (.png / .jpg / .webp). Leave empty to remove.',imgFor(b));if(u===null)return;const v=u.trim();if(v){BI[b.id]=v;BI[nk(b)]=v}else{delete BI[b.id];delete BI[nk(b)]}try{localStorage.setItem('primo-banner-img',JSON.stringify(BI))}catch(e){}S.goals.forEach(g=>{if(g.rid===b.id)g.img=v});save();render();drawRoster()};
+    const se=document.createElement('select');se.className='sm';se.style.cssText='width:78px;font-size:12px';se.setAttribute('aria-label','Element for '+b.name);se.innerHTML='<option value="">Element</option>'+elOpts;se.value=elFor(b);
+    se.onchange=()=>{const v=se.value;if(v){BE[b.id]=v;BE[nk(b)]=v}else{delete BE[b.id];delete BE[nk(b)]}try{localStorage.setItem('primo-banner-el',JSON.stringify(BE))}catch(e){}S.goals.forEach(g=>{if(g.rid===b.id)g.el=v});save();render();drawRoster()};
+    const col=document.createElement('div');col.style.cssText='display:flex;flex-direction:column;gap:6px;justify-content:center;margin-top:8px';col.append(ib,se);wr.append(c,col);L.append(wr);
   });
   const n=rsSel.size;$('rsBar').hidden=!(multi&&n);$('rsAdd').textContent='Add '+plural(n,'goal');
   if(RO.banners.length&&!list.length)L.innerHTML='<div class="sub" style="margin-top:10px">Nothing to show for this filter.</div>';
 }
 function pickBanner(b){
-  if(rsGoal){Object.assign(rsGoal,{name:b.name,patch:b.patch,release:b.release,rid:b.id,type:b.type,img:imgFor(b)||rsGoal.img,el:b.el||rsGoal.el});clampPity(rsGoal)}
-  else S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id,img:imgFor(b),el:b.el}));
+  if(rsGoal){Object.assign(rsGoal,{name:b.name,patch:b.patch,release:b.release,rid:b.id,type:b.type,img:imgFor(b)||rsGoal.img,el:elFor(b)||rsGoal.el});clampPity(rsGoal)}
+  else S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id,img:imgFor(b),el:elFor(b)}));
   save();render();closeRoster();toast((rsGoal?'Filled in ':'Added ')+b.name);
 }
 $('addr').onclick=()=>openRoster(null);$('rsX').onclick=closeRoster;
