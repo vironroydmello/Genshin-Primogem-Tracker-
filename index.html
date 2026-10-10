@@ -668,7 +668,7 @@ function ensureEdit(c,g){
   const onIn=ev=>{
     const inp=ev.target.closest('[data-k]');if(!inp)return;const k=inp.dataset.k;
     if(k==='guar')g.guar=inp.checked;
-    else if(['name','patch','type','el','img'].includes(k))g[k]=inp.value;
+    else if(['name','patch','type','el','img'].includes(k)){g[k]=inp.value;if(k==='img'||k==='el')syncBanner(g,k)}
     else if(k==='release'){g.release=isoRe.test(inp.value)?inp.value:'';g.rid=''}
     else g[k]=Math.max(0,num(inp.value));
     {const raw=g[k];capGoal(g);if((k==='copies'||k==='custom')&&raw>g[k])inp.value=g[k]}
@@ -1227,8 +1227,9 @@ const BI=(()=>{try{return JSON.parse(localStorage.getItem('primo-banner-img')||'
 const BE=(()=>{try{return JSON.parse(localStorage.getItem('primo-banner-el')||'{}')}catch(e){return {}}})();
 const nk=b=>'n:'+String(b.name||'').toLowerCase().trim();
 const gm=(b,f)=>{const g=S.goals.find(g=>g[f]&&(g.rid===b.id||(g.name||'').toLowerCase().trim()===nk(b).slice(2)));return g?g[f]:''};
-const imgFor=b=>b.img||BI[b.id]||BI[nk(b)]||gm(b,'img')||'';
-const elFor=b=>(EL[b.el]?b.el:'')||BE[b.id]||BE[nk(b)]||gm(b,'el')||'';
+const imgFor=b=>gm(b,'img')||b.img||BI[b.id]||BI[nk(b)]||'';
+const elFor=b=>gm(b,'el')||(EL[b.el]?b.el:'')||BE[b.id]||BE[nk(b)]||'';
+function syncBanner(g,k){const M=k==='img'?BI:BE,v=String(g[k]||'').trim();[g.rid,g.name&&'n:'+g.name.toLowerCase().trim()].forEach(x=>{if(!x)return;if(v)M[x]=v;else delete M[x]});try{localStorage.setItem(k==='img'?'primo-banner-img':'primo-banner-el',JSON.stringify(M))}catch(e){}}
 function drawRoster(){
   const L=$('rsL');L.innerHTML='';const q=($('rsQ').value||'').trim().toLowerCase(),multi=!rsGoal;
   const list=RO.banners.filter(b=>off(b.release)>=-21&&(rsF==='all'||b.type===rsF||(rsF==='off'&&b.status==='official'))&&(!q||(b.name+' '+b.patch).toLowerCase().includes(q))).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);
