@@ -72,7 +72,7 @@ button.wide{width:100%;margin-top:10px}
 .gh{display:flex;gap:10px;align-items:center}
 .gt{flex:1;min-width:0}
 .ico{width:38px;height:38px;flex:none}
-.gn{font-weight:700;font-size:18px;line-height:1.2;overflow-wrap:anywhere}
+.gn{font-weight:700;font-size:18px;line-height:1.2;overflow-wrap:break-word;word-break:normal}
 .badge{display:inline-block;font-size:11px;padding:1px 8px;border-radius:99px;background:var(--bg);border:1px solid var(--line);color:var(--mut);margin-right:6px}
 .bar{position:relative;height:18px;border-radius:10px;background:var(--bg);border:1px solid var(--line);margin:14px 0 8px}
 .fill{height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,var(--acc),var(--gold-f));transition:width .5s}
@@ -138,8 +138,8 @@ button:disabled{opacity:.4;cursor:default}
 
 [hidden]{display:none!important}
 [data-tab]{display:none}
-body[data-t=home] [data-tab=home],body[data-t=goals] [data-tab=goals],body[data-t=income] [data-tab=income],body[data-t=calc] [data-tab=calc],body[data-t=more] [data-tab=more]{display:block}
-body{padding-bottom:88px}
+body[data-t=home] [data-tab=home],body[data-t=goals] [data-tab=goals],body[data-t=income] [data-tab=income],body[data-t=leaks] [data-tab=leaks],body[data-t=calc] [data-tab=calc],body[data-t=more] [data-tab=more]{display:block}
+body{padding-bottom:116px}
 .card,.g{border-radius:18px}
 .card{box-shadow:0 1px 2px rgba(40,25,90,.06),0 8px 20px rgba(40,25,90,.05)}
 h2{font-size:19px}
@@ -203,9 +203,25 @@ button{transition:transform .08s,box-shadow .15s}button:active{transform:scale(.
 .g:not(.open) .eta,.g:not(.open) .tools,.g:not(.open) .lab{display:none}
 .g:not(.open):not(.done) .acts{display:none}
 .g .stat{margin-top:4px;font-size:14px}.g.open .stat{display:none}
-.g .gh{align-items:center}
+.g .gh{align-items:center}.gbt{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.gbt .sm{min-height:34px}
 .cbig{font-size:32px;font-weight:800;line-height:1.1;color:var(--acc);margin-bottom:4px}
 #c1o,#c2o,#c3o,#m4o{background:color-mix(in srgb,var(--acc) 8%,transparent);border-radius:12px;padding:12px}
+.tabs .ti{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin:1px 0}
+.tabs .ti .f{fill:currentColor;fill-opacity:0;transition:fill-opacity .2s}.tabs button[aria-current=page] .ti .f{fill-opacity:.22}
+
+/* v12 floating colour nav */
+.tabs{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:6px;gap:2px;border-radius:28px;border:1px solid color-mix(in srgb,var(--line) 70%,#fff 8%);background:color-mix(in srgb,var(--card) 78%,transparent);backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);box-shadow:0 14px 36px rgba(8,4,28,.42),inset 0 1px 0 rgba(255,255,255,.07)}
+.tabs button{--tc:#8b7bff;--tc2:#5ad1ff;border-radius:22px;min-height:56px;gap:2px;font-size:11.5px;letter-spacing:.01em;transition:background .25s,box-shadow .25s,color .25s,transform .12s}
+.tabs button[data-tb=home]{--tc:#8b7bff;--tc2:#5ad1ff}.tabs button[data-tb=goals]{--tc:#ffb52e;--tc2:#ff7a45}.tabs button[data-tb=income]{--tc:#2fd68c;--tc2:#b4f05a}
+.tabs button[data-tb=calc]{--tc:#3cc6f2;--tc2:#7b8cff}.tabs button[data-tb=leaks]{--tc:#ff5f98;--tc2:#ffa042}.tabs button[data-tb=more]{--tc:#a9a4ff;--tc2:#e29bff}
+.tabs .ti{color:var(--tc);opacity:.85;stroke-width:1.9;transition:opacity .2s,transform .2s}
+.tabs .ti .f{fill:var(--tc2);fill-opacity:.2}
+.tabs button[aria-current=page]{color:var(--tc);background:linear-gradient(160deg,color-mix(in srgb,var(--tc) 28%,transparent),color-mix(in srgb,var(--tc2) 10%,transparent));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tc) 45%,transparent),0 6px 18px color-mix(in srgb,var(--tc) 28%,transparent)}
+.tabs button[aria-current=page] .ti{opacity:1;transform:translateY(-1px) scale(1.08);filter:drop-shadow(0 0 7px color-mix(in srgb,var(--tc) 60%,transparent))}
+.tabs button[aria-current=page] .ti .f{fill-opacity:.42}
+.tabs button[aria-current=page]::after{display:none}
+.tabs button:active{transform:scale(.94)}
+#toast{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 </style>
 </head>
 <body data-t="home">
@@ -226,6 +242,9 @@ button{transition:transform .08s,box-shadow .15s}button:active{transform:scale(.
 <section class="card" id="wel" data-tab="home" hidden><h2 class="disp">Welcome! Set up in 3 steps</h2><div class="sub">One pull is one wish. This app counts the pulls you’ve saved and tells you when you can afford the character or weapon you want.</div><ol class="steps"><li id="w1"><span><b>Enter what you have now.</b> Type your primogems and fates under “Update your pulls” below, then tap <b>Set balance</b>.</span></li><li id="w2"><span><b>Set your income.</b> Pick how you play (free-to-play, Welkin…).</span><button class="sm" data-go="income">Open Income</button></li><li id="w3"><span><b>Add a goal.</b> Choose a character or weapon you’re saving for.</span><button class="sm" data-go="goals">Open Goals</button></li></ol><button class="sm" id="welHide">Hide this guide</button></section>
 <section class="card" id="bgCard" data-tab="home" hidden><div id="bgTxt"></div><div class="b" id="bgBtns"><button class="p sm" id="bgYes">Got them (+5 fates)</button><button class="sm" id="bgSkip">Skip this month</button></div></section>
 
+<section class="card" id="sumCard" data-tab="home" hidden><div id="sumTxt" style="line-height:1.5"></div><div class="b" style="margin-top:8px"><button class="sm" id="sumShare">Share my plan</button></div></section>
+<section class="card" id="sumCard" data-tab="home" hidden><div id="sumTxt" style="font-size:16px;line-height:1.5"></div></section>
+<section class="card" id="bkCard" data-tab="home" hidden><div id="bkTxt"></div><div class="b" style="margin-top:8px"><button class="p sm" id="bkYes">Back up now</button><button class="sm" id="bkNo">Remind me later</button></div></section>
 <section class="card" id="cdCard" data-tab="home" hidden><h2 class="disp">Banner clock</h2><div id="cdL"></div><div class="sub" style="margin-top:6px">Assumes an 11:00 start and half-patch phases. Check in game for exact times.</div></section>
 <section class="card" id="cuCard" data-tab="home" hidden><div id="cuTxt"></div><div class="b"><button class="p sm" id="cuYes"></button><button class="sm" id="cuNo">Not now</button></div></section>
 <section class="card" aria-labelledby="h-log" data-tab="home">
@@ -255,6 +274,12 @@ button{transition:transform .08s,box-shadow .15s}button:active{transform:scale(.
 
 <div data-tab="goals"><div class="sec"><h2 class="disp">Goals</h2><span style="display:flex;gap:6px"><select class="sm" id="isz" aria-label="Icon size"><option value="48">Small icons</option><option value="76">Medium icons</option><option value="112">Large icons</option></select><button class="sm" id="sortG">Sort by release</button></span></div>
 <p class="sub" style="margin:-4px 2px 10px">Pulls fund goals from the top: Must have first, then Want, then If spare. Change a tier or pause a goal when plans change and everything re-plans.</p>
+<section class="card" id="plCard" data-tab="home"><h2 class="disp">Log pulls</h2><div class="sub">Just pulled? Log it and your balance and pity update themselves.</div>
+<div class="row" style="margin-top:8px"><label class="f">Banner<select id="pl-t"><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled</option></select></label><label class="f">Pulls done<input id="pl-n" type="number" inputmode="numeric" min="1" placeholder="10"></label></div>
+<div class="row"><label class="f">Result<select id="pl-r"><option value="none">No 5★</option><option value="won">5★ (the one I wanted)</option><option value="lost">5★ (not the featured one)</option></select></label><label class="f" id="pl-lw" hidden>Which pull was it?<input id="pl-l" type="number" inputmode="numeric" min="1" placeholder="e.g. 8"></label></div>
+<div class="b" style="margin-top:10px"><button class="p wide" id="pl-go">Log these pulls</button></div>
+<details class="adv" style="margin-top:8px"><summary>Luck stats</summary><div id="plS" class="sub" style="margin-top:6px;line-height:1.6"></div></details></section>
+<section class="card" id="rsCard" data-tab="home"><h2 class="disp">Resets &amp; checklist</h2><label class="f">Server<select id="rk-s"><option value="8">Asia / TW-HK-MO (UTC+8)</option><option value="1">Europe (UTC+1)</option><option value="-5">America (UTC-5)</option></select></label><div id="rkL" style="margin-top:8px"></div><div class="sub" style="margin-top:6px">Everything resets at 04:00 server time, and ticks clear themselves.</div></section>
 <section class="card" id="ptCard"><h2 class="disp">Pity tracker</h2><div class="sub" id="ptSum"></div><details class="adv" style="margin-top:8px"><summary>More details / edit pity</summary><div class="sub" style="margin-top:6px">Enter your in-game pity once. It is shared by every goal of the same type: the first goal of each type uses it, later ones start fresh. It resets itself when you log a result.</div><div class="grid2" style="margin-top:8px"><label class="f">Character pity<input id="pt-char" type="number" inputmode="numeric" min="0" max="89"></label><label class="f">Weapon pity<input id="pt-weapon" type="number" inputmode="numeric" min="0" max="79"></label><label class="f">Chronicled pity<input id="pt-chron" type="number" inputmode="numeric" min="0" max="89"></label><label class="chk" style="grid-column:auto;align-self:end"><input type="checkbox" id="pt-cg"> Next character 5★ is guaranteed</label></div></details></section>
 <section class="card" id="prio" hidden><div id="prioRows"></div></section>
 <div class="tl" id="tl"></div>
@@ -352,6 +377,15 @@ button{transition:transform .08s,box-shadow .15s}button:active{transform:scale(.
 <div class="b"><button class="p sm" id="adSave">Add banner</button><button class="sm" id="adCancel" hidden>Cancel edit</button></div>
 <details class="adv"><summary>Publishing setup (GitHub)</summary><div class="grid2"><label class="f">Repository<input id="ad-repo" placeholder="yourname/primogems" autocomplete="off"></label><label class="f">Branch<input id="ad-br" placeholder="main" autocomplete="off"></label></div><label class="f" style="display:block;margin-top:8px">File path<input id="ad-path" placeholder="roster.json" autocomplete="off"></label><label class="f" style="display:block;margin-top:8px">Access token<input id="ad-tok" type="password" autocomplete="off"></label><div class="sub" style="margin-top:6px">Create a fine-grained token limited to this one repository with “Contents: Read and write”. It is saved on this device only and never sent anywhere except GitHub. Don’t share it.</div></details>
 <div class="b"><button class="p" id="adCopy">Copy roster text</button><button class="sm" id="adExp">Export roster.json</button><button class="sm" id="adPub">Publish with token (advanced)</button><button class="sm" id="adLock">Hide admin tools</button></div><div class="sub" id="adSt" style="margin-top:8px"></div></section>
+<div data-tab="leaks"><div class="sec"><h2 class="disp">Leaks</h2><select class="sm" id="lkS" aria-label="Sort leaks"><option value="upd">Newest update</option><option value="conf">Most reliable</option><option value="patch">Patch</option></select></div>
+<div class="sub" style="margin:0 0 10px">Leaks are unofficial and can change. Each one is tagged and rated, kept up to date, and removed when it turns out to be wrong. They are saved on this device.</div>
+<section class="card"><h2 class="disp">Update leaks with AI</h2><div class="sub">No API key needed: copy the prompt, paste it into an AI that can search the web (like Claude), then paste its answer back here.</div>
+<div class="b" style="margin-top:8px"><button class="p sm" id="lkCopy">1. Copy AI prompt</button></div>
+<textarea id="lkIn" rows="4" placeholder="2. Paste the AI’s answer here" style="width:100%;margin-top:8px"></textarea>
+<div class="b" style="margin-top:8px"><button class="p sm" id="lkApply">3. Apply update</button></div><div class="sub" id="lkRes" style="margin-top:6px"></div>
+<details class="adv" style="margin-top:8px"><summary>Automatic check (needs an Anthropic API key)</summary><input id="lkKey" type="password" autocomplete="off" placeholder="sk-ant-…" style="width:100%;margin-top:8px"><div class="sub" style="margin-top:6px">Stored only on this device. Each check costs a few cents of your API credit.</div><div class="b" style="margin-top:8px"><button class="sm" id="lkAuto">Check for leaks now</button></div></details></section>
+<div class="chips" id="lkF" style="margin:10px 0"></div><div id="lkL"></div>
+<details class="adv" style="margin-top:10px"><summary>Add a leak yourself</summary><div class="row" style="margin-top:8px"><label class="f">Title<input id="lk-t" placeholder="Name and what was leaked"></label><label class="f">Patch<input id="lk-p" placeholder="e.g. 7.3"></label></div><div class="row"><label class="f">Type<select id="lk-y"><option value="character">Character</option><option value="weapon">Weapon</option><option value="banner">Banner</option><option value="event">Event</option><option value="other">Other</option></select></label><label class="f">Reliability<select id="lk-c"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label></div><div class="row"><label class="f">Tags (comma separated)<input id="lk-g" placeholder="dendro, 5-star"></label><label class="f">Source<input id="lk-s" placeholder="link or name"></label></div><label class="f" style="display:block;margin-top:8px">Note<input id="lk-n" placeholder="One short sentence"></label><div class="b" style="margin-top:8px"><button class="p sm" id="lk-add">Add leak</button></div></details></div>
 <div data-tab="calc"><div class="sec"><h2 class="disp">Calculator</h2></div>
 <div class="sub" style="margin:0 0 10px">A private scratchpad for planning. Nothing here changes your primogems, fates or goals.</div><div class="b" style="margin-bottom:10px"><button class="sm" id="c-reset">Reset all fields</button></div>
 <section class="card"><h2 class="disp">Wish odds</h2><div class="row"><label class="f">Banner<select id="c-t" data-cc><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled</option></select></label><label class="f">Copies you want<select id="c-n" data-cc><option value="1">C0 (1 copy)</option><option value="2">C1 (2 copies)</option><option value="3">C2 (3 copies)</option><option value="4">C3 (4 copies)</option><option value="5">C4 (5 copies)</option><option value="6">C5 (6 copies)</option><option value="7">C6 (7 copies)</option></select></label></div>
@@ -370,7 +404,7 @@ button{transition:transform .08s,box-shadow .15s}button:active{transform:scale(.
 <div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v12</div>
 </main>
 <div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><input id="rsQ" type="search" placeholder="Search banners…" autocomplete="off" style="margin-top:10px"><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div><div id="rsBar" class="b" hidden style="position:sticky;bottom:0;background:var(--card);padding-top:8px"><button class="p wide" id="rsAdd"></button></div></div></div>
-<nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><span aria-hidden="true">🏠</span>Home</button><button data-tb="goals"><span aria-hidden="true">🎯</span>Goals</button><button data-tb="income"><span aria-hidden="true">📈</span>Income</button><button data-tb="calc"><span aria-hidden="true">🧮</span>Calc</button><button data-tb="more"><span aria-hidden="true">☰</span>More</button></nav>
+<nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5 20 9l-8 12.5L4 9z"/><path d="M4 9h16M9 9l3 12.5L15 9M9 9l3-6.5L15 9"/></svg>Home</button><button data-tb="goals"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5c.7 4.8 4.2 8.3 9 9-4.8.7-8.3 4.2-9 9-.7-4.8-4.2-8.3-9-9 4.8-.7 8.3-4.2 9-9z"/></svg>Goals</button><button data-tb="income"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="12" cy="12" r="9"/><path d="M12 16.5V8M8.2 11.8 12 8l3.8 3.8"/></svg>Income</button><button data-tb="calc"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect class="f" x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7.5h7"/><g fill="currentColor" stroke="none"><circle cx="9" cy="12" r=".95"/><circle cx="12" cy="12" r=".95"/><circle cx="15" cy="12" r=".95"/><circle cx="9" cy="16" r=".95"/><circle cx="12" cy="16" r=".95"/><circle cx="15" cy="16" r=".95"/></g></svg>Calc</button><button data-tb="leaks"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="10.5" cy="10.5" r="7"/><path d="M15.6 15.6 21 21"/><path d="M10.5 7.2c.3 1.9 1.4 3 3.3 3.3-1.9.3-3 1.4-3.3 3.3-.3-1.9-1.4-3-3.3-3.3 1.9-.3 3-1.4 3.3-3.3z"/></svg>Leaks</button><button data-tb="more"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="7" cy="7" r="2.6"/><circle class="f" cx="17" cy="7" r="2.6"/><circle class="f" cx="7" cy="17" r="2.6"/><circle class="f" cx="17" cy="17" r="2.6"/></svg>More</button></nav>
 <div id="toast" role="status" aria-live="polite" hidden><span id="tmsg"></span><button id="tund">Undo</button></div>
 
 <script>
@@ -574,7 +608,7 @@ const ICO={
 const cards=new Map();
 function makeCard(g){
   const el=document.createElement('div');el.dataset.id=g.id;
-  el.innerHTML='<div class="node"></div><div class="gh"><span class="icoW"></span><div class="gt"><div class="gn"></div><div class="sub"><span class="badge" hidden></span><span class="lab"></span></div></div><button class="sm" data-a="more" aria-expanded="false">Details</button><button class="sm" data-a="edit" aria-expanded="false">Edit</button></div>'+
+  el.innerHTML='<div class="node"></div><div class="gh"><span class="icoW"></span><div class="gt"><div class="gn"></div><div class="sub"><span class="badge" hidden></span><span class="lab"></span></div><div class="gbt"><button class="sm" data-a="more" aria-expanded="false">Details</button><button class="sm" data-a="edit" aria-expanded="false">Edit</button></div></div></div>'+
    '<div class="bar" role="progressbar" aria-label="Pulls saved toward this goal" aria-valuemin="0"><div class="fill"></div>'+gemSvg+'</div><div class="prog"></div><div class="stat"></div><div class="eta"></div>'+
    '<div class="tools"><select class="sm" data-prio aria-label="Priority"><option value="1">★ Must have</option><option value="2">Want</option><option value="3">If spare</option></select><button class="sm" data-a="up" aria-label="Move up within this tier">↑</button><button class="sm" data-a="dn" aria-label="Move down within this tier">↓</button><button class="sm" data-a="pause">Pause</button></div>'+
    '<div class="acts"></div><div class="panel edit" hidden></div><div class="panel spend" hidden></div>';
@@ -665,7 +699,7 @@ function render(){
   const d=m.e;$('incOut').textContent='≈ '+Math.round(d)+' primos/day, about '+(d*30/160).toFixed(1)+' pulls every 30 days'+(m.eMax>d?' (up to '+Math.round(m.eMax)+'/day if you collect everything).':'. Events arrive in lumps, so the chart smooths them out.');
   $('latOut').textContent=(S.genesis||S.glitter)?'In inventory: '+S.genesis+' Genesis, '+S.glitter+' Starglitter (about '+(lat()/160).toFixed(1)+' pulls once converted). Your balance above only counts what you’ve converted.':'Nothing waiting to be converted.';
   const eg=endgameParts();$('egOut').textContent='Endgame ≈ '+Math.round(eg.total)+' primos a month (Abyss '+Math.round(eg.abyss)+', Theater '+Math.round(eg.theater)+', Stygian '+Math.round(eg.stygian)+').';
-  drawChart(m);drawMilestones(m);drawBargain();drawBonus();drawWelcome();drawCatchup();fillPity();setHint();drawCountdown();applyAccent();
+  drawChart(m);drawMilestones(m);drawBargain();drawBonus();drawWelcome();drawCatchup();fillPity();setHint();drawCountdown();applyAccent();drawSummary(m);drawBackupNudge();drawSummary(m);
 }
 
 /* edit + result panels */
@@ -1228,6 +1262,106 @@ function applyAccent(){
 try{$('accSel').value=localStorage.getItem('primo-accent')||''}catch(e){}
 $('accSel').onchange=()=>{try{localStorage.setItem('primo-accent',$('accSel').value)}catch(e){}applyAccent()};
 new MutationObserver(applyAccent).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+/* ---------- Leaks ---------- */
+const LKK='primo-leaks',lkSlug=t=>String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60),CF={high:3,medium:2,low:1},pn=p=>{const m=String(p).match(/(\d+)\.(\d+)/);return m?+m[1]*100+ +m[2]:0};
+let LK={items:[]},lkF='all',lkTag='';
+try{const r=JSON.parse(localStorage.getItem(LKK)||'{}');if(Array.isArray(r.items))LK.items=r.items}catch(e){}
+const lkSave=()=>{try{localStorage.setItem(LKK,JSON.stringify(LK))}catch(e){}};
+function lkClean(x){const tg=[...new Set((Array.isArray(x.tags)?x.tags:String(x.tags||'').split(',')).map(t=>String(t).toLowerCase().trim().replace(/^#/,'')).filter(Boolean))].slice(0,6);return {title:String(x.title||'').slice(0,80),type:['character','weapon','banner','event','other'].includes(x.type)?x.type:'other',patch:String(x.patch||'').slice(0,10),tags:tg,confidence:CF[x.confidence]?x.confidence:'low',source:String(x.source||'').slice(0,300),note:String(x.note||'').slice(0,300)}}
+function lkMerge(arr){const r={n:0,u:0,c:0,r:0},d=today();arr.forEach(x=>{if(!x||!x.title)return;const c=lkClean(x),key=lkSlug(x.key||x.title),v=x.verdict;let it=LK.items.find(i=>i.key===key);
+  if(!it){if(v==='debunked')return;LK.items.push(Object.assign({id:uid(),key,status:'new',updated:d,history:[d+': added']},c));r.n++;return}
+  if(v==='debunked'){if(it.status!=='removed'){it.status='removed';it.updated=d;it.history.push(d+': removed. '+(c.note||'no longer valid'));r.r++}return}
+  const ch=['title','patch','confidence','note','source'].filter(k=>c[k]&&c[k]!==it[k]);
+  if(ch.length){const o=ch.map(k=>k+': '+(it[k]||'-')+' → '+c[k]);ch.forEach(k=>it[k]=c[k]);it.tags=[...new Set(it.tags.concat(c.tags))].slice(0,6);it.type=c.type;it.history.push(d+': '+o.join('; '));it.status=v==='confirmed'?'confirmed':'updated';it.updated=d;r.u++}
+  else if(v==='confirmed'&&it.status!=='confirmed'){it.status='confirmed';it.updated=d;it.history.push(d+': confirmed');r.c++}
+  else if(it.status==='removed'){it.status='updated';it.updated=d;it.history.push(d+': back on the list');r.u++}
+ });LK.items=LK.items.slice(0,200);return r}
+function lkParse(t){const a=t.indexOf('['),b=t.lastIndexOf(']');if(a<0||b<a)throw new Error('no list');return JSON.parse(t.slice(a,b+1))}
+function lkPrompt(){const cur=LK.items.filter(i=>i.status!=='removed').map(i=>({key:i.key,title:i.title,type:i.type,patch:i.patch,confidence:i.confidence,note:i.note}));
+ return 'You track Genshin Impact leaks. Search the web for the latest leaks about upcoming characters, weapons, banners and events, and compare them with my saved list below. Reply with ONLY a JSON array and no other text. Each item: {"key":"short-slug","title":"","type":"character|weapon|banner|event|other","patch":"","tags":[""],"confidence":"low|medium|high","source":"url","note":"one short sentence","verdict":"new|updated|confirmed|debunked"}. Reuse my key when it is the same leak. Use "updated" when details changed, "confirmed" when it became official, and "debunked" when newer information shows a saved leak is wrong or cancelled. Only include items that are new or changed. My saved list: '+JSON.stringify(cur)}
+function lkDone(r){lkSave();drawLeaks();$('lkRes').textContent='Added '+r.n+', changed '+r.u+', confirmed '+r.c+', removed '+r.r+'.'}
+function drawLeaks(){
+  const L=$('lkL'),it=LK.items,cnt=k=>it.filter(i=>k==='all'?i.status!=='removed':i.status===k).length,F=$('lkF');F.innerHTML='';
+  const mk=(t,on,fn)=>{const b=document.createElement('button');b.className='chip';b.textContent=t;b.setAttribute('aria-pressed',String(on));if(on){b.style.borderColor='var(--acc)';b.style.color='var(--acc)'}b.onclick=fn;F.append(b)};
+  [['all','All'],['new','New'],['updated','Updated'],['confirmed','Confirmed'],['removed','Removed']].forEach(([k,t])=>mk(t+' '+cnt(k),lkF===k,()=>{lkF=k;drawLeaks()}));
+  [...new Set(it.filter(i=>i.status!=='removed').flatMap(i=>i.tags))].sort().forEach(t=>mk('#'+t,lkTag===t,()=>{lkTag=lkTag===t?'':t;drawLeaks()}));
+  const so=$('lkS').value,list=it.filter(i=>(lkF==='all'?i.status!=='removed':i.status===lkF)&&(!lkTag||i.tags.includes(lkTag))).sort((a,b)=>so==='conf'?CF[b.confidence]-CF[a.confidence]:so==='patch'?pn(b.patch)-pn(a.patch):a.updated<b.updated?1:a.updated>b.updated?-1:0);
+  L.innerHTML=list.length?'':'<div class="sub">Nothing here yet. Add a leak yourself or use the AI update above.</div>';
+  list.forEach(i=>{const c=document.createElement('section'),col={high:'#3ecf8e',medium:'#f0b429',low:'#ff7a8a'}[i.confidence];c.className='card';c.dataset.id=i.id;let host='';try{host=new URL(i.source).hostname}catch(e){}
+    c.innerHTML='<div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><b class="gn" style="font-size:17px">'+esc(i.title)+'</b><span class="badge" style="color:'+col+';border-color:'+col+'">'+i.confidence+'</span></div><div class="sub">'+esc(i.type)+(i.patch?' · patch '+esc(i.patch):'')+' · '+i.status+' · '+fmt(i.updated)+'</div>'+(i.note?'<div style="margin-top:6px">'+esc(i.note)+'</div>':'')+(i.tags.length?'<div style="margin:8px 0;display:flex;gap:6px;flex-wrap:wrap">'+i.tags.map(t=>'<span class="badge">#'+esc(t)+'</span>').join('')+'</div>':'')+(i.source?'<div class="sub">Source: '+(host?'<a href="'+esc(i.source)+'" target="_blank" rel="noopener">'+esc(host)+'</a>':esc(i.source))+'</div>':'')+'<details class="adv" style="margin-top:6px"><summary>History</summary><div class="sub" style="margin-top:4px">'+i.history.map(esc).join('<br>')+'</div></details><div class="b" style="margin-top:8px">'+(i.status==='removed'?'<button class="sm" data-act="re">Restore</button><button class="sm" data-act="del">Delete forever</button>':'<button class="sm" data-act="ok">Mark confirmed</button><button class="sm" data-act="rm">Remove</button>')+'</div>';
+    L.append(c)});
+}
+$('lkL').onclick=e=>{const b=e.target.closest('[data-act]');if(!b)return;const it=LK.items.find(x=>x.id===b.closest('[data-id]').dataset.id);if(!it)return;const a=b.dataset.act;
+  if(a==='del')LK.items=LK.items.filter(x=>x!==it);else{it.status=a==='ok'?'confirmed':a==='rm'?'removed':'updated';it.updated=today();it.history.push(today()+': '+{ok:'confirmed by you',rm:'removed by you',re:'restored'}[a])}lkSave();drawLeaks()};
+$('lkS').onchange=drawLeaks;
+$('lkCopy').onclick=async()=>{const t=lkPrompt();try{await navigator.clipboard.writeText(t);toast('Prompt copied. Paste it into an AI that can search the web.')}catch(e){$('lkIn').value=t;$('lkIn').select();toast('Select all and copy the text in the box')}};
+$('lkApply').onclick=()=>{try{const r=lkMerge(lkParse($('lkIn').value));$('lkIn').value='';lkDone(r)}catch(e){$('lkRes').textContent='Could not read that answer. Paste the AI’s full reply; it should contain a JSON list.'}};
+try{$('lkKey').value=localStorage.getItem('primo-lkkey')||''}catch(e){}
+$('lkAuto').onclick=async()=>{const key=$('lkKey').value.trim();if(!key){toast('Add your API key first');return}try{localStorage.setItem('primo-lkkey',key)}catch(e){}$('lkRes').textContent='Searching the web…';
+  try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-5-5',max_tokens:4000,tools:[{type:'web_search_20250305',name:'web_search',max_uses:6}],messages:[{role:'user',content:lkPrompt()}]})}),j=await r.json();if(!r.ok)throw new Error(j.error&&j.error.message||r.status);lkDone(lkMerge(lkParse((j.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n'))))}catch(e){$('lkRes').textContent='Could not finish: '+e.message}};
+$('lk-add').onclick=()=>{const t=$('lk-t').value.trim();if(!t){toast('Add a title first');return}LK.items.push(Object.assign({id:uid(),key:lkSlug(t),status:'new',updated:today(),history:[today()+': added by you']},lkClean({title:t,patch:$('lk-p').value,type:$('lk-y').value,confidence:$('lk-c').value,tags:$('lk-g').value,source:$('lk-s').value,note:$('lk-n').value})));lkSave();['lk-t','lk-p','lk-g','lk-s','lk-n'].forEach(i=>$(i).value='');drawLeaks()};
+drawLeaks();
+
+/* ---------- v13: pull log, resets checklist, plan summary ---------- */
+const PLK='primo-pulls';let PL=[];try{PL=JSON.parse(localStorage.getItem(PLK)||'[]')}catch(e){}
+const plSave=()=>{try{localStorage.setItem(PLK,JSON.stringify(PL.slice(-500)))}catch(e){}};
+$('pl-r').onchange=()=>{$('pl-lw').hidden=$('pl-r').value==='none'};
+$('pl-go').onclick=()=>{
+  const t=$('pl-t').value,n=Math.floor(num($('pl-n').value)),res=$('pl-r').value,H=TAB.worst.HALF[t];
+  if(n<1||n>1000){toast('Enter how many pulls you did');return}
+  let land=0;if(res!=='none'){land=Math.floor(num($('pl-l').value));if(land<1||land>n||land>H){toast('Which pull was the 5★? Enter 1 to '+Math.min(n,H));return}}
+  const fe=Math.min(Math.max(S.fates,0),n),ptB=cleanPt(S.pt),r=commit({mode:'add',p:-(n-fe)*160,f:-fe,date:today(),note:'Pulled '+n+' on the '+{char:'character',weapon:'weapon',chron:'chronicled'}[t]+' banner'});
+  if(r.err)return;r.e.pt=ptB;
+  if(res==='none')S.pt[t]=Math.min(H-1,S.pt[t]+n);else{S.pt[t]=Math.min(H-1,n-land);if(t==='char')S.pt.cg=res==='lost'}
+  const rec={id:uid(),d:today(),t,n,res,pa:res==='none'?0:Math.min(H,ptB[t]+land),g:t==='char'&&ptB.cg};
+  PL.push(rec);plSave();save();render();drawPulls();$('pl-n').value='';$('pl-l').value='';$('pl-r').value='none';$('pl-lw').hidden=true;
+  toast('Logged '+n+' pulls',()=>{undoEntry(r.e);PL=PL.filter(x=>x.id!==rec.id);plSave();drawPulls()});
+};
+function drawPulls(){
+  const el=$('plS');if(!PL.length){el.textContent='No pulls logged yet. Your luck stats will appear here.';return}
+  const tot=PL.reduce((a,x)=>a+x.n,0),f5=PL.filter(x=>x.res!=='none'),avg=f5.length?f5.reduce((a,x)=>a+x.pa,0)/f5.length:0,ch=f5.filter(x=>x.t==='char'&&!x.g),w=ch.filter(x=>x.res==='won').length,tn={char:'Character',weapon:'Weapon',chron:'Chronicled'};
+  el.innerHTML='Pulls logged: <b>'+fm(tot)+'</b> · 5★ found: <b>'+f5.length+'</b>'+(f5.length?' ('+(f5.length/tot*100).toFixed(1)+'% rate)':'')+(f5.length?'<br>Average pity at a 5★: <b>'+avg.toFixed(1)+'</b> '+(avg<62?'(luckier than the typical ~62)':'(about or above the typical ~62)'):'')+(ch.length?'<br>50/50 record: <b>'+w+' won, '+(ch.length-w)+' lost</b> (about 55% wins is typical)':'')+(f5.length?'<br>Latest 5★: '+f5.slice(-4).reverse().map(x=>fmt(x.d)+' '+tn[x.t].toLowerCase()+' at '+x.pa).join(', '):'');
+}
+const RKK='primo-reset';let RK={s:'8',done:{}};try{Object.assign(RK,JSON.parse(localStorage.getItem(RKK)||'{}'))}catch(e){}
+const RKI=[['dc','Daily commissions','d'],['wm','Claim Welkin','d'],['wb','Weekly bosses (3 discounted)','w'],['ab','Spiral Abyss','a'],['it','Imaginarium Theater','m'],['pb','Paimon’s Bargain','m']];
+function rkInfo(p){const sv=Date.now()+(+RK.s-4)*36e5,D=new Date(sv),di=Math.floor(sv/864e5),y=D.getUTCFullYear(),mo=D.getUTCMonth(),dd=D.getUTCDate(),dow=D.getUTCDay();let key,nx;
+  if(p==='d'){key=di;nx=(di+1)*864e5}else if(p==='w'){const mon=di-((dow+6)%7);key=mon;nx=(mon+7)*864e5}
+  else if(p==='a'){key=y+'-'+mo+(dd>=16?'b':'a');nx=dd>=16?Date.UTC(y,mo+1,1):Date.UTC(y,mo,16)}else{key=y+'-'+mo;nx=Date.UTC(y,mo+1,1)}
+  return {key:String(key),ms:nx-sv}}
+function drawResets(){
+  const L=$('rkL');$('rk-s').value=RK.s;
+  L.innerHTML=RKI.filter(x=>x[0]!=='wm'||S.income.welkin).map(([id,t,p])=>{const i=rkInfo(p),on=RK.done[id]===i.key;return '<div class="pr"><label class="chk" style="margin:0"><input type="checkbox" data-i="'+id+'"'+(on?' checked':'')+'> '+esc(t)+'</label><span class="cdn">'+cdText(i.ms)+'</span></div>'}).join('');
+}
+$('rkL').onchange=e=>{const c=e.target.closest('[data-i]');if(!c)return;const id=c.dataset.i,p=RKI.find(x=>x[0]===id)[2];if(c.checked)RK.done[id]=rkInfo(p).key;else delete RK.done[id];try{localStorage.setItem(RKK,JSON.stringify(RK))}catch(e){}};
+$('rk-s').onchange=()=>{RK.s=$('rk-s').value;try{localStorage.setItem(RKK,JSON.stringify(RK))}catch(e){}drawResets()};
+setInterval(drawResets,30000);
+function drawSummary(m){
+  const c=$('sumCard');if(!c)return;const now=Math.floor((S.primos+S.fates*160)/160),r=m.rows.find(x=>!x.done&&!x.paused&&x.g.release&&x.rel>0);
+  let t='You have <b>'+fm(now)+' pulls</b> ('+fm(S.primos)+' primogems and '+S.fates+' fates). ';
+  if(r){const av=Math.floor((m.tp+m.e*r.rel+m.bAt(r.rel))/160),per=TAB[S.mode].PER[r.g.type]||180;t+='By <b>'+esc(r.g.name||'your next goal')+'</b> ('+fmt(r.g.release)+', in '+plural(r.rel,'day')+') you will have about <b>'+fm(av)+' pulls</b>, enough for roughly <b>'+(av/per).toFixed(1)+'</b> featured 5★ in a typical run.'}
+  else if(!S.goals.length)t+='Add a goal to see what you can afford.';
+  c.hidden=false;$('sumTxt').innerHTML=t;
+}
+$('sumShare').onclick=async()=>{const m=model(),L=m.rows.filter(r=>!r.paused).slice(0,8).map((r,i)=>(i+1)+'. '+(r.g.name||'Goal')+': '+(r.done?'ready':r.ready===null?'no date yet':r.ready>365?'over a year away':'ready in '+r.ready+' days')+(r.g.release?' (releases '+r.g.release+')':'')),t='My Genshin plan\n'+fm(Math.floor((S.primos+S.fates*160)/160))+' pulls saved\n'+L.join('\n');try{if(navigator.share)await navigator.share({text:t});else{await navigator.clipboard.writeText(t);toast('Plan copied')}}catch(e){}};
+drawPulls();drawResets();
+
+/* ---------- v12: summary + backup reminder ---------- */
+function drawSummary(m){
+  const c=$('sumCard'),act=m.rows.filter(r=>!r.done&&!r.paused);c.hidden=!act.length;if(!act.length)return;
+  const dated=act.filter(r=>r.g.release&&r.rel>0),ok=dated.filter(r=>r.cum*160<=m.tp+m.e*r.rel+m.bAt(r.rel)),nx=act[0];
+  let t='You have <b>'+plural(Math.floor(m.tp/160),'pull')+'</b> saved.';
+  if(dated.length)t+=' <b>'+ok.length+' of '+dated.length+'</b> goals with a release date are on track.';
+  t+=' Next up: <b>'+esc(nx.g.name||'Untitled goal')+'</b>, '+(nx.ready===null?'add your income to get a date.':nx.ready<=0?'ready now.':'ready in <b>'+plural(nx.ready,'day')+'</b>.');
+  $('sumTxt').innerHTML=t;
+}
+function drawBackupNudge(){
+  const c=$('bkCard');if(!c)return;let l='';try{l=localStorage.getItem('primo-lastbak')||'';if(!l){localStorage.setItem('primo-lastbak',today());l=today()}}catch(e){}
+  const n=l?-off(l):0;c.hidden=!(S.log.length>=3&&n>=14);if(!c.hidden)$('bkTxt').textContent='Your data lives only on this device. It has been '+n+' days since your last backup.';
+}
+const bkMark=()=>{try{localStorage.setItem('primo-lastbak',today())}catch(e){}};
+$('exp').addEventListener('click',bkMark);
+$('bkYes').onclick=()=>{$('exp').click();drawBackupNudge()};$('bkNo').onclick=()=>{bkMark();drawBackupNudge()};
 
 /* ---------- boot ---------- */
 function applyTheme(t){
