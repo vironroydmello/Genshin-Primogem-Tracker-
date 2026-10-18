@@ -205,7 +205,7 @@ button{transition:transform .08s,box-shadow .15s}button:active{transform:scale(.
 .g .stat{margin-top:4px;font-size:14px}.g.open .stat{display:none}
 .g .gh{align-items:center}.gbt{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.gbt .sm{min-height:34px}
 .cbig{font-size:32px;font-weight:800;line-height:1.1;color:var(--acc);margin-bottom:4px}
-#c1o,#c2o,#c3o,#m4o{background:color-mix(in srgb,var(--acc) 8%,transparent);border-radius:12px;padding:12px}
+#c1o,#c2o,#c5o,#c6o,#m4o{background:color-mix(in srgb,var(--acc) 8%,transparent);border-radius:12px;padding:12px}
 .tabs .ti{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin:1px 0}
 .tabs .ti .f{fill:currentColor;fill-opacity:0;transition:fill-opacity .2s}.tabs button[aria-current=page] .ti .f{fill-opacity:.22}
 
@@ -222,6 +222,16 @@ button{transition:transform .08s,box-shadow .15s}button:active{transform:scale(.
 .tabs button[aria-current=page]::after{display:none}
 .tabs button:active{transform:scale(.94)}
 #toast{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+
+/* minimize + jump + books */
+.mnh{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mnb{flex:none;width:34px;height:34px;min-height:34px;padding:0;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc);border:1px solid color-mix(in srgb,var(--acc) 30%,transparent)}
+.mnb svg{transition:transform .2s}.card.min .mnb svg{transform:rotate(-90deg)}
+.card.min>:not(h2):not(.mns):not(#ptSum){display:none!important}
+.mns{display:none;margin:2px 0 0;font-size:14px;font-weight:600;color:var(--acc);line-height:1.4}.card.min .mns{display:block}.mns:empty{display:none!important}.card.min{padding-bottom:12px}.card.min .mnh{margin-bottom:0}
+.jb{margin:10px 0}.jbc{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}.jbc::-webkit-scrollbar{display:none}.jbc .chip{white-space:nowrap;flex:none}
+.bkl input{border-color:var(--bc)!important;box-shadow:inset 5px 0 0 var(--bc);background:color-mix(in srgb,var(--bc) 10%,transparent)}
+.bkd{display:inline-block;width:11px;height:11px;border-radius:3px;background:var(--bc);margin-right:6px;vertical-align:-1px}.bkl small{color:var(--bc);font-weight:600}
 </style>
 </head>
 <body data-t="home">
@@ -377,17 +387,26 @@ button{transition:transform .08s,box-shadow .15s}button:active{transform:scale(.
 <div class="b"><button class="p sm" id="adSave">Add banner</button><button class="sm" id="adCancel" hidden>Cancel edit</button></div>
 <details class="adv"><summary>Publishing setup (GitHub)</summary><div class="grid2"><label class="f">Repository<input id="ad-repo" placeholder="yourname/primogems" autocomplete="off"></label><label class="f">Branch<input id="ad-br" placeholder="main" autocomplete="off"></label></div><label class="f" style="display:block;margin-top:8px">File path<input id="ad-path" placeholder="roster.json" autocomplete="off"></label><label class="f" style="display:block;margin-top:8px">Access token<input id="ad-tok" type="password" autocomplete="off"></label><div class="sub" style="margin-top:6px">Create a fine-grained token limited to this one repository with “Contents: Read and write”. It is saved on this device only and never sent anywhere except GitHub. Don’t share it.</div></details>
 <div class="b"><button class="p" id="adCopy">Copy roster text</button><button class="sm" id="adExp">Export roster.json</button><button class="sm" id="adPub">Publish with token (advanced)</button><button class="sm" id="adLock">Hide admin tools</button></div><div class="sub" id="adSt" style="margin-top:8px"></div></section>
-<div data-tab="leaks"><div class="sec"><h2 class="disp">Leaks</h2><select class="sm" id="lkS" aria-label="Sort leaks"><option value="upd">Newest update</option><option value="conf">Most reliable</option><option value="patch">Patch</option></select></div>
+<div data-tab="leaks"><div class="sec"><h2 class="disp">Leaks</h2><span style="display:flex;gap:6px"><button class="sm" id="lkSum">Copy summary</button><select class="sm" id="lkS" aria-label="Sort leaks"><option value="upd">Newest update</option><option value="conf">Most reliable</option><option value="patch">Patch</option></select></span></div>
 <div class="sub" style="margin:0 0 10px">Leaks are unofficial and can change. Each one is tagged and rated, kept up to date, and removed when it turns out to be wrong. They are saved on this device.</div>
 <section class="card"><h2 class="disp">Update leaks with AI</h2><div class="sub">No API key needed: copy the prompt, paste it into an AI that can search the web (like Claude), then paste its answer back here.</div>
 <div class="b" style="margin-top:8px"><button class="p sm" id="lkCopy">1. Copy AI prompt</button></div>
 <textarea id="lkIn" rows="4" placeholder="2. Paste the AI’s answer here" style="width:100%;margin-top:8px"></textarea>
-<div class="b" style="margin-top:8px"><button class="p sm" id="lkApply">3. Apply update</button></div><div class="sub" id="lkRes" style="margin-top:6px"></div>
+<div class="b" style="margin-top:8px"><button class="p sm" id="lkApply">3. Apply update</button></div><div class="sub" id="lkRes" style="margin-top:6px"></div><div id="lkRev"></div>
 <details class="adv" style="margin-top:8px"><summary>Automatic check (needs an Anthropic API key)</summary><input id="lkKey" type="password" autocomplete="off" placeholder="sk-ant-…" style="width:100%;margin-top:8px"><div class="sub" style="margin-top:6px">Stored only on this device. Each check costs a few cents of your API credit.</div><div class="b" style="margin-top:8px"><button class="sm" id="lkAuto">Check for leaks now</button></div></details></section>
-<div class="chips" id="lkF" style="margin:10px 0"></div><div id="lkL"></div>
+<input id="lkQ" type="search" placeholder="Search leaks…" autocomplete="off" style="width:100%;margin-top:10px"><div class="chips" id="lkF" style="margin:10px 0"></div><div id="lkL"></div>
 <details class="adv" style="margin-top:10px"><summary>Add a leak yourself</summary><div class="row" style="margin-top:8px"><label class="f">Title<input id="lk-t" placeholder="Name and what was leaked"></label><label class="f">Patch<input id="lk-p" placeholder="e.g. 7.3"></label></div><div class="row"><label class="f">Type<select id="lk-y"><option value="character">Character</option><option value="weapon">Weapon</option><option value="banner">Banner</option><option value="event">Event</option><option value="other">Other</option></select></label><label class="f">Reliability<select id="lk-c"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label></div><div class="row"><label class="f">Tags (comma separated)<input id="lk-g" placeholder="dendro, 5-star"></label><label class="f">Source<input id="lk-s" placeholder="link or name"></label></div><label class="f" style="display:block;margin-top:8px">Note<input id="lk-n" placeholder="One short sentence"></label><div class="b" style="margin-top:8px"><button class="p sm" id="lk-add">Add leak</button></div></details></div>
 <div data-tab="calc"><div class="sec"><h2 class="disp">Calculator</h2></div>
 <div class="sub" style="margin:0 0 10px">A private scratchpad for planning. Nothing here changes your primogems, fates or goals.</div><div class="b" style="margin-bottom:10px"><button class="sm" id="c-reset">Reset all fields</button></div>
+<section class="card"><h2 class="disp">Character leveling planner</h2><div class="sub">Choose the levels to see the EXP books, Mora and resin needed. It assumes you start at the beginning of your current level.</div>
+<div class="row" style="margin-top:8px"><label class="f">From level<input id="c-lf" data-cc type="number" inputmode="numeric" min="1" max="89" placeholder="1"></label><label class="f">To level<input id="c-lt" data-cc type="number" inputmode="numeric" min="2" max="90" placeholder="90"></label></div>
+<div class="b" style="margin-top:8px"><button class="sm" data-lt="40">Lv 40</button><button class="sm" data-lt="50">Lv 50</button><button class="sm" data-lt="60">Lv 60</button><button class="sm" data-lt="70">Lv 70</button><button class="sm" data-lt="80">Lv 80</button><button class="sm" data-lt="90">Lv 90</button></div>
+<label class="chk" style="margin-top:8px"><input type="checkbox" id="c-asc" data-cc> Already ascended at my current level</label>
+<div class="row" style="margin-top:8px"><label class="f">World Level (sets resin rewards)<select id="c-wl" data-cc><option value="0">World Level 0</option><option value="1">World Level 1</option><option value="2">World Level 2</option><option value="3">World Level 3</option><option value="4">World Level 4</option><option value="5">World Level 5</option><option value="6">World Level 6</option><option value="7">World Level 7</option><option value="8" selected>World Level 8</option><option value="9">World Level 9</option></select></label><label class="chk" style="align-self:end"><input type="checkbox" id="c-ov" data-cc> Ley Line Overflow (double)</label></div>
+<details class="adv" open style="margin-top:8px"><summary>Books and Mora I already have</summary><div class="sub" style="margin-top:6px">Match the colour of the book in your bag. Purple is the biggest.</div><div class="row" style="margin-top:8px"><label class="f bkl" style="--bc:#b07cff"><span><i class="bkd"></i>Hero’s Wit <small>(purple, 20,000 EXP)</small></span><input id="c-hw" data-cc type="number" inputmode="numeric" placeholder="0"></label><label class="f bkl" style="--bc:#4d9bff"><span><i class="bkd"></i>Adventurer’s Experience <small>(blue, 5,000 EXP)</small></span><input id="c-ae" data-cc type="number" inputmode="numeric" placeholder="0"></label></div><div class="row"><label class="f bkl" style="--bc:#4cc08a"><span><i class="bkd"></i>Wanderer’s Advice <small>(green, 1,000 EXP)</small></span><input id="c-wa" data-cc type="number" inputmode="numeric" placeholder="0"></label><label class="f">Mora I have<input id="c-mo" data-cc type="number" inputmode="numeric" placeholder="0"></label></div></details>
+<details class="adv" style="margin-top:8px"><summary>Override farming rates</summary><div class="sub" style="margin-top:6px">Leave empty to use the World Level rewards. Fill in only if your own runs give different amounts per 20 resin.</div><div class="row" style="margin-top:8px"><label class="f">EXP per 20 resin<input id="c-xr" data-cc type="number" inputmode="numeric" placeholder="auto"></label><label class="f">Mora per 20 resin<input id="c-mr" data-cc type="number" inputmode="numeric" placeholder="auto"></label></div></details>
+<div id="c5o" style="margin-top:10px;line-height:1.6"></div></section>
+<section class="card"><h2 class="disp">Resin timer</h2><div class="row"><label class="f">Resin now<input id="c-rn" data-cc type="number" inputmode="numeric" min="0" placeholder="0"></label><label class="f">Resin you want<input id="c-rt" data-cc type="number" inputmode="numeric" min="1" placeholder="160"></label></div><div id="c6o" style="margin-top:10px;line-height:1.6"></div><div class="sub" style="margin-top:6px">1 resin every 8 minutes, so 180 a day. Times are approximate.</div></section>
 <section class="card"><h2 class="disp">Wish odds</h2><div class="row"><label class="f">Banner<select id="c-t" data-cc><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled</option></select></label><label class="f">Copies you want<select id="c-n" data-cc><option value="1">C0 (1 copy)</option><option value="2">C1 (2 copies)</option><option value="3">C2 (3 copies)</option><option value="4">C3 (4 copies)</option><option value="5">C4 (5 copies)</option><option value="6">C5 (6 copies)</option><option value="7">C6 (7 copies)</option></select></label></div>
 <div class="row"><label class="f">Current pity<input id="c-pi" data-cc type="number" inputmode="numeric" min="0" placeholder="0"></label><label class="f">Pulls you have<input id="c-pl" data-cc type="number" inputmode="numeric" min="0" placeholder="0"></label></div>
 <label class="chk" style="margin-top:8px"><input type="checkbox" id="c-g" data-cc> Next 5★ is guaranteed (Fate Point for weapons)</label><div id="c1o" style="margin-top:10px;line-height:1.6"></div></section>
@@ -399,7 +418,7 @@ button{transition:transform .08s,box-shadow .15s}button:active{transform:scale(.
 <section class="card"><h2 class="disp">Money to primogems</h2><div class="row"><label class="f">Amount you spend<input id="m-a" data-cc type="number" inputmode="decimal" min="0" placeholder="0"></label><label class="f">Currency<select id="m-c" data-cc><option value="USD">USD</option><option value="INR">INR</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="JPY">JPY</option><option value="KRW">KRW</option><option value="PHP">PHP</option><option value="IDR">IDR</option><option value="BRL">BRL</option><option value="CAD">CAD</option><option value="AUD">AUD</option><option value="OTHER">OTHER</option></select></label></div>
 <div class="row"><label class="f">1 USD =<input id="m-r" data-cc type="number" inputmode="decimal" step="any" min="0" placeholder="1"></label><label class="f">Pulls you want<input id="m-w" data-cc type="number" inputmode="numeric" min="0" placeholder="e.g. 90"></label></div>
 <label class="chk" style="margin-top:8px"><input type="checkbox" id="m-f" data-cc> Count the first-time double bonus (once per pack size)</label><div id="m4o" style="margin-top:10px;line-height:1.6"></div><div class="sub" style="margin-top:6px">Uses the standard Genesis Crystal packs ($0.99 to $99.99), buying the biggest packs first. Rates are approximate, so edit the rate to match your store. Local prices differ by country. For comparison, a Welkin Moon gives about 3,000 primogems (18 pulls) over 30 days.</div></section>
-<section class="card"><h2 class="disp">Converter</h2><div class="row"><label class="f">Amount<input id="c-v" data-cc type="number" inputmode="numeric" placeholder="0"></label><label class="f">Unit<select id="c-u" data-cc><option value="primos">Primogems</option><option value="fates">Fates</option><option value="genesis">Genesis Crystals</option><option value="stardust">Masterless Stardust</option><option value="pulls">Pulls</option></select></label></div><div id="c3o" style="margin-top:10px;line-height:1.6"></div></section></div>
+</div>
 <section class="card" data-tab="more"><h2 class="disp">Accent colour</h2><div class="sub">Match the app to your favourite element, or follow the element of your top goal.</div><select id="accSel" style="margin-top:8px"><option value="">Default</option><option value="auto">Match my top goal</option><option value="pyro">Pyro</option><option value="hydro">Hydro</option><option value="anemo">Anemo</option><option value="electro">Electro</option><option value="dendro">Dendro</option><option value="cryo">Cryo</option><option value="geo">Geo</option></select></section>
 <div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v12</div>
 </main>
@@ -1206,7 +1225,7 @@ $('bakRes').hidden=!bakRaw();
 $('bakRes').onclick=function(){const b=bakRaw();if(!b)return;if(!this.dataset.armed){this.dataset.armed='1';this.textContent='Tap again to replace current data';setTimeout(()=>{delete this.dataset.armed;this.textContent='Restore data from before this update'},4000);return}try{Object.entries(b.data).forEach(([k,v])=>localStorage.setItem(k,v))}catch(e){}location.reload()};
 
 /* ---------- Calc tab (never touches your balance or goals) ---------- */
-const CCK='primo-calc',fm=n=>Math.round(n).toLocaleString();
+const WLX=[25000,38500,52500,67500,82500,102500,122500,122500,122500,122500],WLM=[12000,20000,28000,36000,44000,52000,60000,60000,60000,60000],CX=[0,1000,2325,4025,6175,8800,11950,15675,20025,25025,30725,37175,44400,52450,61375,71200,81950,93675,106400,120175,135050,151850,169850,189100,209650,231525,254775,279425,305525,333100,362200,392850,425100,458975,494525,531775,570750,611500,654075,698500,744800,795425,848125,902900,959800,1018875,1080150,1143675,1209475,1277600,1348075,1424575,1503625,1585275,1669550,1756500,1846150,1938550,2033725,2131725,2232600,2341550,2453600,2568775,2687100,2808625,2933400,3061475,3192875,3327650,3465825,3614525,3766900,3922975,4082800,4246400,4413825,4585125,4760350,4939525,5122700,5338925,5581950,5855050,6161850,6506450,6893400,7327825,7815450,8362650],CCK='primo-calc',fm=n=>Math.round(n).toLocaleString();
 function calc(){
   const q=id=>num($(id).value),t=$('c-t').value,pm=goalPmf({type:t,copies:Math.min(7,Math.max(1,num($('c-n').value))),pity:Math.min(t==='weapon'?79:89,Math.max(0,q('c-pi'))),guar:$('c-g').checked}),N=Math.max(0,Math.floor(q('c-pl')));
   const at=x=>{let c=0;for(let i=0;i<pm.length;i++){c+=pm[i];if(c>=x)return i}return pm.length-1},avg=pm.reduce((a,p,i)=>a+p*i,0);
@@ -1216,13 +1235,19 @@ function calc(){
   let o='<div class="cbig">'+Math.floor(tot/160)+' pulls</div>In '+fm(d)+' days you will have <b>'+fm(tot)+'</b> primogems ('+fm(tot%160)+' left over)';
   if(tg){const nd=tg*160-now-ex;o+='<br>'+(nd<=0?'You already reach '+tg+' pulls with what you have.':inc>0?'You reach '+tg+' pulls in about <b>'+Math.ceil(nd/inc)+'</b> days ('+new Date(Date.now()+Math.ceil(nd/inc)*864e5).toLocaleDateString(undefined,{day:'numeric',month:'short'})+').':'Add a daily income to estimate the date.')}
   $('c2o').innerHTML=o;
-  const v=q('c-v'),u=$('c-u').value,pl=u==='primos'||u==='genesis'?v/160:v,r1=x=>Math.round(x*10)/10;
-  $('c3o').innerHTML=u==='stardust'?'Acquaint Fates (standard banner): <b>'+r1(v/75)+'</b><br><span class="sub">75 Stardust per fate. These cannot be used on event banners.</span>':'<div class="cbig">'+r1(pl)+' pulls</div>Primogems: <b>'+fm(pl*160)+'</b>, Fates: <b>'+r1(pl)+'</b>';
   {const PK=[[99.99,6480,1600,6480],[49.99,3280,600,3280],[29.99,1980,260,1980],[14.99,980,110,980],[4.99,300,30,300],[0.99,60,0,60]],rate=q('m-r')||1,sym=$('m-c').value==='OTHER'?'':$('m-c').value,usd=q('m-a')/rate,first=$('m-f').checked,cm=x=>fm(x*rate)+' '+sym;
     let rem=usd,gen=0,sp=0;PK.forEach(([pr,b,br,bf])=>{const n=Math.floor(rem/pr+1e-9);if(n>0){gen+=n*(b+br)+(first?bf-br:0);rem-=n*pr;sp+=n*pr}});
     let o=usd<0.99?'Enter an amount to see how many primogems it buys.':'<div class="cbig">'+Math.floor(gen/160)+' pulls</div><b>'+fm(gen)+'</b> Genesis Crystals = <b>'+fm(gen)+'</b> primogems<br>Spent about '+cm(sp)+', leftover '+cm(rem)+' (too small for the next pack)';
     const wp=q('m-w');if(wp>0)o+='<br>To buy <b>'+fm(wp)+'</b> pulls you need about <b>'+cm(wp*160/((6480+1600)/99.99))+'</b> with the best-value packs';
     $('m4o').innerHTML=o}
+  {const lf=Math.min(89,Math.max(1,Math.floor(q('c-lf'))||1)),lt=Math.min(90,Math.floor(q('c-lt'))||90);
+   if(lt<=lf)$('c5o').textContent='Pick a target level that is higher than the current level.';
+   else{const need=CX[lt-1]-CX[lf-1],hw=Math.floor(need/2e4),r=need-hw*2e4,ae=Math.floor(r/5e3),wa=Math.ceil((r-ae*5e3)/1e3),given=hw*2e4+ae*5e3+wa*1e3,lvM=given/5,
+    asc=[[20,2e4],[40,4e4],[50,6e4],[60,8e4],[70,1e5],[80,12e4]].filter(([c])=>c>=lf&&c<lt&&!(c===lf&&$('c-asc').checked)).reduce((a,[,m])=>a+m,0),
+    own=q('c-hw')*2e4+q('c-ae')*5e3+q('c-wa')*1e3,shX=Math.max(0,need-own),totM=lvM+asc,shM=Math.max(0,totM-q('c-mo')),wl=Math.min(9,Math.max(0,Math.floor(q('c-wl')))),ov=$('c-ov').checked?2:1,xr=(q('c-xr')||WLX[wl])*ov,mr=(q('c-mr')||WLM[wl])*ov,rX=shX/xr*20,rM=shM/mr*20,tot=Math.ceil((rX+rM)/20)*20;
+    $('c5o').innerHTML='<div class="cbig">'+fm(tot)+' resin</div>to take a character from level '+lf+' to '+lt+', about '+(tot/180).toFixed(1)+' days of natural resin ('+fm(tot/20)+' runs)<br><br><b>EXP needed:</b> '+fm(need)+'<br>Books: <b style="color:#b07cff">■ Hero’s Wit ×'+hw+'</b>, <b style="color:#4d9bff">■ Adventurer’s Experience ×'+ae+'</b>, <b style="color:#4cc08a">■ Wanderer’s Advice ×'+wa+'</b><br><b>Mora needed:</b> '+fm(totM)+' ('+fm(lvM)+' for leveling'+(asc?' + '+fm(asc)+' for ascending':'')+')'+(own||q('c-mo')?'<br><b>Still to farm:</b> '+fm(shX)+' EXP and '+fm(shM)+' Mora':'')+'<br>World Level '+wl+(ov>1?' with Ley Line Overflow':'')+': about '+fm(xr)+' EXP or '+fm(mr)+' Mora per 20 resin<br>Resin: '+fm(rX)+' for EXP, '+fm(rM)+' for Mora<div class="sub" style="margin-top:6px">Ascension gems, boss materials and local specialties are not included. Levels 91 to 100 need Masterless Stella Fortuna and are not included.</div>'}}
+  {const n=Math.max(0,q('c-rn')),t=Math.max(1,q('c-rt')||160),m=Math.max(0,t-n)*8,at=new Date(Date.now()+m*6e4);
+   $('c6o').innerHTML=m<=0?'You already have '+fm(n)+' resin.':'<div class="cbig">'+Math.floor(m/60)+'h '+(m%60)+'m</div>until you have '+t+' resin, around <b>'+at.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+'</b> ('+(at.toDateString()===new Date().toDateString()?'today':'tomorrow or later')+')'}
   try{const w={};document.querySelectorAll('[data-cc]').forEach(i=>w[i.id]=i.type==='checkbox'?i.checked:i.value);localStorage.setItem(CCK,JSON.stringify(w))}catch(e){}
 }
 try{const w=JSON.parse(localStorage.getItem(CCK)||'{}');document.querySelectorAll('[data-cc]').forEach(i=>{if(i.id in w){if(i.type==='checkbox')i.checked=!!w[i.id];else i.value=w[i.id]}})}catch(e){}
@@ -1231,10 +1256,11 @@ const MR={USD:1,INR:85,EUR:.92,GBP:.78,JPY:150,KRW:1350,PHP:57,IDR:16000,BRL:5.5
 $('m-c').addEventListener('change',()=>{$('m-r').value=MR[$('m-c').value]||1;calc()});
 $('m-r').value||($('m-r').value=MR[$('m-c').value]||1);
 $('c-dt').addEventListener('input',()=>{const n=Math.round((new Date($('c-dt').value+'T00:00:00')-new Date(new Date().toDateString()))/864e5);if(n>=0)$('c-d').value=n;calc()});
-$('c-reset').onclick=()=>{document.querySelectorAll('[data-cc]').forEach(i=>{if(i.type==='checkbox')i.checked=false;else if(i.tagName==='SELECT')i.selectedIndex=0;else i.value=''});$('m-r').value=1;calc()};
+$('c-reset').onclick=()=>{document.querySelectorAll('[data-cc]').forEach(i=>{if(i.type==='checkbox')i.checked=false;else if(i.tagName==='SELECT')i.selectedIndex=0;else i.value=''});$('m-r').value=1;$('c-wl').value='8';calc()};
+document.querySelectorAll('[data-lt]').forEach(b=>b.onclick=()=>{$('c-lt').value=b.dataset.lt;calc()});
 $('c-use').onclick=()=>{$('c-p').value=S.primos;$('c-f').value=S.fates;calc()};
 $('c-uinc').onclick=()=>{$('c-i').value=Math.round(eff());calc()};
-$('c-u').value||($('c-u').value='primos');calc();
+calc();
 function setHint(){const pv=$('ap').value,fv=$('af').value,h=$('setHint');if(!h)return;if(pv===''&&fv===''){h.textContent='You have '+fm(S.primos)+' primogems and '+S.fates+' fates in the app. Type a number, then tap a button.';return}const a=[];[[pv,S.primos,'Primogems'],[fv,S.fates,'Fates']].forEach(([v,c,n])=>{if(v==='')return;const x=num(v);a.push(n+': gained → '+fm(c+x)+', spent → '+fm(Math.max(0,c-x))+', set → '+fm(x))});h.textContent=a.join('  |  ')}
 ['ap','af'].forEach(i=>$(i).addEventListener('input',setHint));
 
@@ -1270,37 +1296,58 @@ try{const r=JSON.parse(localStorage.getItem(LKK)||'{}');if(Array.isArray(r.items
 const lkSave=()=>{try{localStorage.setItem(LKK,JSON.stringify(LK))}catch(e){}};
 function lkClean(x){const tg=[...new Set((Array.isArray(x.tags)?x.tags:String(x.tags||'').split(',')).map(t=>String(t).toLowerCase().trim().replace(/^#/,'')).filter(Boolean))].slice(0,6);return {title:String(x.title||'').slice(0,80),type:['character','weapon','banner','event','other'].includes(x.type)?x.type:'other',patch:String(x.patch||'').slice(0,10),tags:tg,confidence:CF[x.confidence]?x.confidence:'low',source:String(x.source||'').slice(0,300),note:String(x.note||'').slice(0,300)}}
 function lkMerge(arr){const r={n:0,u:0,c:0,r:0},d=today();arr.forEach(x=>{if(!x||!x.title)return;const c=lkClean(x),key=lkSlug(x.key||x.title),v=x.verdict;let it=LK.items.find(i=>i.key===key);
-  if(!it){if(v==='debunked')return;LK.items.push(Object.assign({id:uid(),key,status:'new',updated:d,history:[d+': added']},c));r.n++;return}
+  if(!it){if(v==='debunked')return;LK.items.push(Object.assign({id:uid(),key,status:'new',updated:d,srcs:c.source?[c.source]:[],history:[d+': added']},c));r.n++;return}
   if(v==='debunked'){if(it.status!=='removed'){it.status='removed';it.updated=d;it.history.push(d+': removed. '+(c.note||'no longer valid'));r.r++}return}
-  const ch=['title','patch','confidence','note','source'].filter(k=>c[k]&&c[k]!==it[k]);
+  if(c.source&&!(it.srcs=it.srcs||(it.source?[it.source]:[])).includes(c.source)){it.srcs.push(c.source);it.history.push(d+': new source')}if(c.source)it.source=c.source;
+  const ch=['title','patch','confidence','note'].filter(k=>c[k]&&c[k]!==it[k]);
   if(ch.length){const o=ch.map(k=>k+': '+(it[k]||'-')+' → '+c[k]);ch.forEach(k=>it[k]=c[k]);it.tags=[...new Set(it.tags.concat(c.tags))].slice(0,6);it.type=c.type;it.history.push(d+': '+o.join('; '));it.status=v==='confirmed'?'confirmed':'updated';it.updated=d;r.u++}
   else if(v==='confirmed'&&it.status!=='confirmed'){it.status='confirmed';it.updated=d;it.history.push(d+': confirmed');r.c++}
   else if(it.status==='removed'){it.status='updated';it.updated=d;it.history.push(d+': back on the list');r.u++}
  });LK.items=LK.items.slice(0,200);return r}
 function lkParse(t){const a=t.indexOf('['),b=t.lastIndexOf(']');if(a<0||b<a)throw new Error('no list');return JSON.parse(t.slice(a,b+1))}
-function lkPrompt(){const cur=LK.items.filter(i=>i.status!=='removed').map(i=>({key:i.key,title:i.title,type:i.type,patch:i.patch,confidence:i.confidence,note:i.note}));
- return 'You track Genshin Impact leaks. Search the web for the latest leaks about upcoming characters, weapons, banners and events, and compare them with my saved list below. Reply with ONLY a JSON array and no other text. Each item: {"key":"short-slug","title":"","type":"character|weapon|banner|event|other","patch":"","tags":[""],"confidence":"low|medium|high","source":"url","note":"one short sentence","verdict":"new|updated|confirmed|debunked"}. Reuse my key when it is the same leak. Use "updated" when details changed, "confirmed" when it became official, and "debunked" when newer information shows a saved leak is wrong or cancelled. Only include items that are new or changed. My saved list: '+JSON.stringify(cur)}
+function lkPrompt(){const cur=LK.items.filter(i=>i.status!=='removed').map(i=>({key:i.key,title:i.title,type:i.type,patch:i.patch,confidence:i.confidence,note:i.note,last_updated:i.updated}));
+ return 'You track Genshin Impact leaks. Search the web for the latest leaks about upcoming characters, weapons, banners and events, and compare them with my saved list below. Reply with ONLY a JSON array and no other text. Each item: {"key":"short-slug","title":"","type":"character|weapon|banner|event|other","patch":"","tags":[""],"confidence":"low|medium|high","source":"url","note":"one short sentence","verdict":"new|updated|confirmed|debunked"}. Reuse my key when it is the same leak. Use "updated" when details changed, "confirmed" when it became official, and "debunked" when newer information shows a saved leak is wrong or cancelled. Re-check items whose last_updated is more than 30 days ago first. Only include items that are new or changed. My saved list: '+JSON.stringify(cur)}
 function lkDone(r){lkSave();drawLeaks();$('lkRes').textContent='Added '+r.n+', changed '+r.u+', confirmed '+r.c+', removed '+r.r+'.'}
+const lkStale=i=>i.status!=='confirmed'&&i.status!=='removed'&&-off(i.updated)>=30;
 function drawLeaks(){
-  const L=$('lkL'),it=LK.items,cnt=k=>it.filter(i=>k==='all'?i.status!=='removed':i.status===k).length,F=$('lkF');F.innerHTML='';
+  const L=$('lkL'),it=LK.items,vis=(i,k)=>k==='all'?i.status!=='removed':k==='stale'?lkStale(i):i.status===k,F=$('lkF'),q=($('lkQ').value||'').trim().toLowerCase();F.innerHTML='';
   const mk=(t,on,fn)=>{const b=document.createElement('button');b.className='chip';b.textContent=t;b.setAttribute('aria-pressed',String(on));if(on){b.style.borderColor='var(--acc)';b.style.color='var(--acc)'}b.onclick=fn;F.append(b)};
-  [['all','All'],['new','New'],['updated','Updated'],['confirmed','Confirmed'],['removed','Removed']].forEach(([k,t])=>mk(t+' '+cnt(k),lkF===k,()=>{lkF=k;drawLeaks()}));
+  [['all','All'],['new','New'],['updated','Updated'],['confirmed','Confirmed'],['stale','Stale'],['removed','Removed']].forEach(([k,t])=>mk(t+' '+it.filter(i=>vis(i,k)).length,lkF===k,()=>{lkF=k;drawLeaks()}));
   [...new Set(it.filter(i=>i.status!=='removed').flatMap(i=>i.tags))].sort().forEach(t=>mk('#'+t,lkTag===t,()=>{lkTag=lkTag===t?'':t;drawLeaks()}));
-  const so=$('lkS').value,list=it.filter(i=>(lkF==='all'?i.status!=='removed':i.status===lkF)&&(!lkTag||i.tags.includes(lkTag))).sort((a,b)=>so==='conf'?CF[b.confidence]-CF[a.confidence]:so==='patch'?pn(b.patch)-pn(a.patch):a.updated<b.updated?1:a.updated>b.updated?-1:0);
+  const so=$('lkS').value,list=it.filter(i=>vis(i,lkF)&&(!lkTag||i.tags.includes(lkTag))&&(!q||(i.title+' '+i.note+' '+i.tags.join(' ')).toLowerCase().includes(q))).sort((a,b)=>so==='conf'?CF[b.confidence]-CF[a.confidence]:so==='patch'?pn(b.patch)-pn(a.patch):a.updated<b.updated?1:a.updated>b.updated?-1:0);
   L.innerHTML=list.length?'':'<div class="sub">Nothing here yet. Add a leak yourself or use the AI update above.</div>';
-  list.forEach(i=>{const c=document.createElement('section'),col={high:'#3ecf8e',medium:'#f0b429',low:'#ff7a8a'}[i.confidence];c.className='card';c.dataset.id=i.id;let host='';try{host=new URL(i.source).hostname}catch(e){}
-    c.innerHTML='<div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><b class="gn" style="font-size:17px">'+esc(i.title)+'</b><span class="badge" style="color:'+col+';border-color:'+col+'">'+i.confidence+'</span></div><div class="sub">'+esc(i.type)+(i.patch?' · patch '+esc(i.patch):'')+' · '+i.status+' · '+fmt(i.updated)+'</div>'+(i.note?'<div style="margin-top:6px">'+esc(i.note)+'</div>':'')+(i.tags.length?'<div style="margin:8px 0;display:flex;gap:6px;flex-wrap:wrap">'+i.tags.map(t=>'<span class="badge">#'+esc(t)+'</span>').join('')+'</div>':'')+(i.source?'<div class="sub">Source: '+(host?'<a href="'+esc(i.source)+'" target="_blank" rel="noopener">'+esc(host)+'</a>':esc(i.source))+'</div>':'')+'<details class="adv" style="margin-top:6px"><summary>History</summary><div class="sub" style="margin-top:4px">'+i.history.map(esc).join('<br>')+'</div></details><div class="b" style="margin-top:8px">'+(i.status==='removed'?'<button class="sm" data-act="re">Restore</button><button class="sm" data-act="del">Delete forever</button>':'<button class="sm" data-act="ok">Mark confirmed</button><button class="sm" data-act="rm">Remove</button>')+'</div>';
+  list.forEach(i=>{const c=document.createElement('section'),col={high:'#3ecf8e',medium:'#f0b429',low:'#ff7a8a'}[i.confidence],sl=i.srcs&&i.srcs.length?i.srcs:(i.source?[i.source]:[]);c.className='card';c.dataset.id=i.id;
+    const lk=u=>{let h='';try{h=new URL(u).hostname}catch(e){}return h?'<a href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(h)+'</a>':esc(u)};
+    c.innerHTML='<div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><b class="gn" style="font-size:17px">'+esc(i.title)+'</b><span class="badge" style="color:'+col+';border-color:'+col+'">'+i.confidence+'</span></div><div class="sub">'+esc(i.type)+(i.patch?' · patch '+esc(i.patch):'')+' · '+i.status+' · '+fmt(i.updated)+'</div>'+(i.note?'<div style="margin-top:6px">'+esc(i.note)+'</div>':'')
+     +'<div style="margin:8px 0;display:flex;gap:6px;flex-wrap:wrap">'+(lkStale(i)?'<span class="badge" style="color:#f0b429;border-color:#f0b429">stale, re-check</span>':'')+(sl.length>1?'<span class="badge">'+sl.length+' sources</span>':'')+i.tags.map(t=>'<span class="badge">#'+esc(t)+'</span>').join('')+'</div>'
+     +(sl.length?'<div class="sub">Source'+(sl.length>1?'s':'')+': '+sl.map(lk).join(', ')+'</div>':'')+'<details class="adv" style="margin-top:6px"><summary>History</summary><div class="sub" style="margin-top:4px">'+i.history.map(esc).join('<br>')+'</div></details><div class="b" style="margin-top:8px">'+(i.status==='removed'?'<button class="sm" data-act="re">Restore</button><button class="sm" data-act="del">Delete forever</button>':'<button class="sm" data-act="ok">Mark confirmed</button><button class="sm" data-act="edit">Edit</button>'+(i.type==='character'||i.type==='weapon'?'<button class="sm" data-act="goal">Add to goals</button>':'')+'<button class="sm" data-act="rm">Remove</button>')+'</div>';
     L.append(c)});
 }
 $('lkL').onclick=e=>{const b=e.target.closest('[data-act]');if(!b)return;const it=LK.items.find(x=>x.id===b.closest('[data-id]').dataset.id);if(!it)return;const a=b.dataset.act;
+  if(a==='goal'){const nm=it.title.split(/\s[-–—(:]\s?|[:(]/)[0].trim()||it.title,el=it.tags.find(t=>EL[t])||'';S.goals.push(newGoal({name:nm,patch:it.patch,type:it.type==='weapon'?'weapon':'char',el}));save();render();toast('Added '+nm+' to your goals');return}
+  if(a==='edit'){lkEdit=it.id;[['lk-t',it.title],['lk-p',it.patch],['lk-y',it.type],['lk-c',it.confidence],['lk-g',it.tags.join(', ')],['lk-s',it.source],['lk-n',it.note]].forEach(([i,v])=>$(i).value=v);$('lk-add').textContent='Save changes';const dt=$('lk-t').closest('details');dt.open=true;dt.scrollIntoView({behavior:'smooth'});return}
   if(a==='del')LK.items=LK.items.filter(x=>x!==it);else{it.status=a==='ok'?'confirmed':a==='rm'?'removed':'updated';it.updated=today();it.history.push(today()+': '+{ok:'confirmed by you',rm:'removed by you',re:'restored'}[a])}lkSave();drawLeaks()};
-$('lkS').onchange=drawLeaks;
+$('lkS').onchange=drawLeaks;$('lkQ').addEventListener('input',drawLeaks);
+$('lkSum').onclick=async()=>{const g=k=>LK.items.filter(i=>i.status===k);let t='Genshin leaks, '+today()+' (unofficial)\n';[['confirmed','Confirmed'],['updated','Updated'],['new','New']].forEach(([k,n])=>{if(g(k).length)t+='\n'+n+':\n'+g(k).map(i=>'- '+i.title+(i.patch?' (patch '+i.patch+')':'')+', '+i.confidence+' reliability'+(i.note?': '+i.note:'')).join('\n')+'\n'});try{await navigator.clipboard.writeText(t);toast('Summary copied')}catch(e){$('lkIn').value=t;$('lkIn').select();toast('Select all and copy the text in the box')}};
 $('lkCopy').onclick=async()=>{const t=lkPrompt();try{await navigator.clipboard.writeText(t);toast('Prompt copied. Paste it into an AI that can search the web.')}catch(e){$('lkIn').value=t;$('lkIn').select();toast('Select all and copy the text in the box')}};
-$('lkApply').onclick=()=>{try{const r=lkMerge(lkParse($('lkIn').value));$('lkIn').value='';lkDone(r)}catch(e){$('lkRes').textContent='Could not read that answer. Paste the AI’s full reply; it should contain a JSON list.'}};
+let lkPlan=[],lkEdit='';
+function lkMakePlan(arr){return arr.filter(x=>x&&x.title).map(x=>{const c=lkClean(x),it=LK.items.find(i=>i.key===lkSlug(x.key||x.title)),v=x.verdict;
+  if(!it)return v==='debunked'?null:{x,k:'New',t:c.title+(c.patch?' (patch '+c.patch+')':'')+', '+c.confidence+' reliability'};
+  if(v==='debunked')return it.status==='removed'?null:{x,k:'Remove',t:it.title+(c.note?'. '+c.note:'')};
+  const ch=['title','patch','confidence','note'].filter(k=>c[k]&&c[k]!==it[k]);
+  if(ch.length)return {x,k:'Update',t:it.title+' ('+ch.map(k=>k+' → '+c[k]).join('; ')+')'};
+  return v==='confirmed'&&it.status!=='confirmed'?{x,k:'Confirm',t:it.title}:null}).filter(Boolean)}
+function lkReview(){const R=$('lkRev');if(!lkPlan.length){R.innerHTML='';return}
+  R.innerHTML='<div class="sub" style="margin:8px 0 4px">Review the changes and untick any you do not trust:</div>'+lkPlan.map((p,i)=>'<label class="chk" style="margin:4px 0"><input type="checkbox" data-i="'+i+'" checked> <span><b>'+p.k+':</b> '+esc(p.t)+'</span></label>').join('')+'<div class="b" style="margin-top:8px"><button class="p sm" id="lkGo">Apply selected</button><button class="sm" id="lkNo">Discard</button></div>';
+  $('lkGo').onclick=()=>{const pick=[...R.querySelectorAll('input:checked')].map(i=>lkPlan[+i.dataset.i].x);lkPlan=[];R.innerHTML='';$('lkIn').value='';lkDone(lkMerge(pick))};$('lkNo').onclick=()=>{lkPlan=[];lkReview();$('lkRes').textContent='Discarded.'}}
+function lkPropose(arr){lkPlan=lkMakePlan(arr);$('lkRes').textContent=lkPlan.length?lkPlan.length+' proposed changes.':'No changes found in that answer.';lkReview()}
+$('lkApply').onclick=()=>{try{lkPropose(lkParse($('lkIn').value))}catch(e){$('lkRes').textContent='Could not read that answer. Paste the AI’s full reply; it should contain a JSON list.'}};
 try{$('lkKey').value=localStorage.getItem('primo-lkkey')||''}catch(e){}
 $('lkAuto').onclick=async()=>{const key=$('lkKey').value.trim();if(!key){toast('Add your API key first');return}try{localStorage.setItem('primo-lkkey',key)}catch(e){}$('lkRes').textContent='Searching the web…';
-  try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-5-5',max_tokens:4000,tools:[{type:'web_search_20250305',name:'web_search',max_uses:6}],messages:[{role:'user',content:lkPrompt()}]})}),j=await r.json();if(!r.ok)throw new Error(j.error&&j.error.message||r.status);lkDone(lkMerge(lkParse((j.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n'))))}catch(e){$('lkRes').textContent='Could not finish: '+e.message}};
-$('lk-add').onclick=()=>{const t=$('lk-t').value.trim();if(!t){toast('Add a title first');return}LK.items.push(Object.assign({id:uid(),key:lkSlug(t),status:'new',updated:today(),history:[today()+': added by you']},lkClean({title:t,patch:$('lk-p').value,type:$('lk-y').value,confidence:$('lk-c').value,tags:$('lk-g').value,source:$('lk-s').value,note:$('lk-n').value})));lkSave();['lk-t','lk-p','lk-g','lk-s','lk-n'].forEach(i=>$(i).value='');drawLeaks()};
+  try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-5-5',max_tokens:4000,tools:[{type:'web_search_20250305',name:'web_search',max_uses:6}],messages:[{role:'user',content:lkPrompt()}]})}),j=await r.json();if(!r.ok)throw new Error(j.error&&j.error.message||r.status);lkPropose(lkParse((j.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n')))}catch(e){$('lkRes').textContent='Could not finish: '+e.message}};
+$('lk-add').onclick=()=>{const t=$('lk-t').value.trim();if(!t){toast('Add a title first');return}const c=lkClean({title:t,patch:$('lk-p').value,type:$('lk-y').value,confidence:$('lk-c').value,tags:$('lk-g').value,source:$('lk-s').value,note:$('lk-n').value}),d=today(),ex=lkEdit&&LK.items.find(x=>x.id===lkEdit);
+  if(ex){Object.assign(ex,c);if(c.source&&!(ex.srcs=ex.srcs||(ex.source?[ex.source]:[])).includes(c.source))ex.srcs.push(c.source);ex.updated=d;ex.history.push(d+': edited by you')}else LK.items.push(Object.assign({id:uid(),key:lkSlug(t),status:'new',updated:d,srcs:c.source?[c.source]:[],history:[d+': added by you']},c));
+  lkEdit='';$('lk-add').textContent='Add leak';['lk-t','lk-p','lk-g','lk-s','lk-n'].forEach(i=>$(i).value='');lkSave();drawLeaks()};
 drawLeaks();
 
 /* ---------- v13: pull log, resets checklist, plan summary ---------- */
@@ -1362,6 +1409,46 @@ function drawBackupNudge(){
 const bkMark=()=>{try{localStorage.setItem('primo-lastbak',today())}catch(e){}};
 $('exp').addEventListener('click',bkMark);
 $('bkYes').onclick=()=>{$('exp').click();drawBackupNudge()};$('bkNo').onclick=()=>{bkMark();drawBackupNudge()};
+
+/* ---------- v12: minimize cards + jump bars ---------- */
+const cbg=id=>{const e=$(id)&&$(id).querySelector('.cbig');return e?e.textContent:''};
+const SUMS={
+ 'Update your pulls':()=>fm(S.primos)+' primogems · '+S.fates+' fates · about '+Math.floor((S.primos+S.fates*160)/160)+' pulls',
+ 'Log pulls':()=>'Character pity '+S.pt.char+(S.pt.cg?' (guaranteed)':'')+' · Weapon '+S.pt.weapon+' · '+PL.length+' logged',
+ 'Resets & checklist':()=>{const a=$('rkL').querySelectorAll('input[type=checkbox]');return a.length?[...a].filter(i=>i.checked).length+' of '+a.length+' done':''},
+ 'Banner clock':()=>{const r=$('cdL').firstElementChild;return r?r.textContent.replace(/\s+/g,' ').trim():''},
+ 'Savings forecast':()=>$('sumCard').hidden?'':$('sumTxt').textContent,
+ 'Income':()=>'About '+fm(eff())+' primogems a day',
+ 'History':()=>S.log.length+' entries',
+ 'Backup':()=>{let l='';try{l=localStorage.getItem('primo-lastbak')||''}catch(e){}return l?'Last backup: '+fmt(l):'No backup yet'},
+ 'Profiles':()=>{const a=PR.list.find(p=>p.id===PR.active);return a?'Active: '+a.name:''},
+ 'Banner roster':()=>RO.banners.length+' banners'+(RO.updated?', updated '+fmt(RO.updated):''),
+ 'Accent colour':()=>{const o=$('accSel').selectedOptions[0];return o?o.textContent:''},
+ 'Update leaks with AI':()=>{const a=LK.items.filter(i=>i.status!=='removed');return a.length+' leaks · '+a.filter(lkStale).length+' stale'},
+ 'Character leveling planner':()=>cbg('c5o')+' · level '+(num($('c-lf').value)||1)+' to '+(num($('c-lt').value)||90),
+ 'Resin timer':()=>cbg('c6o')+' to '+(num($('c-rt').value)||160)+' resin',
+ 'Wish odds':()=>cbg('c1o')+' with '+fm(num($('c-pl').value))+' pulls',
+ 'Primogem forecast':()=>cbg('c2o'),
+ 'Money to primogems':()=>cbg('m4o')
+};
+function minSum(){document.querySelectorAll('section.card[data-mn]').forEach(c=>{if(!c._sum)return;let t='';try{t=c._sum()||''}catch(e){}c.querySelector(':scope>.mns').textContent=t})}
+const MN=(()=>{try{return JSON.parse(localStorage.getItem('primo-min')||'{}')}catch(e){return {}}})();
+function setupMin(){document.querySelectorAll('section.card').forEach(c=>{if(c.dataset.mn)return;const h=[...c.children].find(e=>e.tagName==='H2');if(!h)return;c.dataset.mn='1';c._h=h;{const sf=SUMS[h.textContent.trim()];if(sf){const d=document.createElement('div');d.className='mns';h.after(d);c._sum=sf}}
+  const tab=(c.closest('[data-tab]')||c).dataset.tab||'x',k=tab+':'+h.textContent.trim().slice(0,40),b=document.createElement('button');
+  b.type='button';b.className='mnb';b.setAttribute('aria-label','Minimize or expand this section');b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';h.append(b);h.classList.add('mnh');
+  const set=m=>{c.classList.toggle('min',m);b.setAttribute('aria-expanded',String(!m));if(m)MN[k]=1;else delete MN[k];try{localStorage.setItem('primo-min',JSON.stringify(MN))}catch(e){}};c._set=set;h.onclick=()=>set(!c.classList.contains('min'));
+  c.classList.toggle('min',!!MN[k]);b.setAttribute('aria-expanded',String(!MN[k]))})}
+const tabCards=t=>[...new Set(document.querySelectorAll('[data-tab="'+t+'"] section.card, section.card[data-tab="'+t+'"]'))];
+function fillJump(t){const bar=document.querySelector('.jb[data-jb="'+t+'"]');if(!bar)return;const box=bar.querySelector('.jbc');box.innerHTML='';
+  tabCards(t).forEach(c=>{if(c.hidden||!c._h)return;const b=document.createElement('button');b.className='chip';b.textContent=c._h.textContent.trim();b.onclick=()=>{c._set&&c._set(false);c.scrollIntoView({behavior:'smooth',block:'start'})};box.append(b)})}
+function setupJump(){['home','goals','income','calc','leaks','more'].forEach(t=>{const first=document.querySelector('[data-tab="'+t+'"]');if(!first||document.querySelector('.jb[data-jb="'+t+'"]'))return;
+  const bar=document.createElement('div');bar.className='jb';bar.dataset.jb=t;bar.dataset.tab=t;bar.innerHTML='<div class="jbc"></div><div class="b"><button class="sm" data-mn="1">Minimize all</button><button class="sm" data-mn="0">Expand all</button></div>';
+  bar.onclick=e=>{const b=e.target.closest('[data-mn]');if(b)tabCards(t).forEach(c=>c._set&&c._set(b.dataset.mn==='1'))};
+  if(first.tagName==='SECTION')first.before(bar);else{const sec=first.querySelector(':scope>.sec');sec?sec.after(bar):first.prepend(bar)}
+  fillJump(t)})}
+setupMin();setupJump();minSum();setTimeout(minSum,1800);
+['click','input','change'].forEach(ev=>document.addEventListener(ev,()=>{clearTimeout(minSum._t);minSum._t=setTimeout(minSum,150)}));
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>fillJump(b.dataset.tb),0)));
 
 /* ---------- boot ---------- */
 function applyTheme(t){
