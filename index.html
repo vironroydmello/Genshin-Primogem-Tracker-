@@ -251,7 +251,7 @@ body{background-image:radial-gradient(900px 520px at 90% -8%,color-mix(in srgb,v
 .bwc.sel{border-color:var(--acc);box-shadow:0 0 0 2px color-mix(in srgb,var(--acc) 40%,transparent)}.bwc.sel::after{content:"✓";position:absolute;top:6px;right:8px;color:var(--acc);font-weight:800}
 .bwph{width:64px;height:64px;border-radius:14px;overflow:hidden;position:relative;display:grid;place-items:center;font-size:24px;font-weight:700;background:color-mix(in srgb,var(--acc) 10%,var(--card))}
 .bwph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}.bwph .ico{width:100%;height:100%}
-.bwc .st{color:#f0b429;font-size:11px}#bw[hidden]{display:none}
+.bwc .st{color:#f0b429;font-size:11px}.bwc .dt{font-size:11px;opacity:.85}.bwc .tg{font-size:10px;padding:0 6px;border-radius:99px;border:1px solid currentColor}#bw[hidden]{display:none}
 </style>
 </head>
 <body data-t="home">
@@ -275,7 +275,7 @@ body{background-image:radial-gradient(900px 520px at 90% -8%,color-mix(in srgb,v
 <div class="b" id="pfAct" hidden style="margin-top:8px"><button class="sm" id="pfApply">Use endgame progress in Income</button><button class="sm" id="pfClr">Remove</button></div>
 <div class="sub" id="pfMsg" style="margin-top:6px"></div>
 <details class="adv" style="margin-top:8px"><summary>Can’t load it? Paste the data instead</summary><div class="sub" style="margin-top:6px">Open <a id="pfLink" target="_blank" rel="noopener">your Enka data page</a> in your browser, copy everything on it and paste it here.</div><textarea id="pfPaste" rows="3" placeholder="Paste the data here" style="width:100%;margin-top:6px"></textarea><div class="b" style="margin-top:6px"><button class="sm" id="pfPasteGo">Use pasted data</button></div></details>
-<div class="sub" style="margin-top:8px">Your UID is sent to enka.network to read your public profile, and nothing else leaves your device. Your in-game profile needs to be visible to others. Enka does not provide avatar frames.</div></section>
+<div class="sub" style="margin-top:8px">Your UID is sent to enka.network to read your public profile. Character data tables come from GitHub (or jsDelivr). Nothing else leaves your device. Your in-game profile needs to be visible to others. Enka does not provide avatar frames.</div></section>
 <section class="card" id="wel" data-tab="home" hidden><h2 class="disp">Welcome! Set up in 3 steps</h2><div class="sub">One pull is one wish. This app counts the pulls you’ve saved and tells you when you can afford the character or weapon you want.</div><ol class="steps"><li id="w1"><span><b>Enter what you have now.</b> Type your primogems and fates under “Update your pulls” below, then tap <b>Set to my in-game total</b>.</span></li><li id="w2"><span><b>Set your income.</b> Pick how you play (free-to-play, Welkin…).</span><button class="sm" data-go="income">Open Income</button></li><li id="w3"><span><b>Add a goal.</b> Choose a character or weapon you’re saving for.</span><button class="sm" data-go="goals">Open Goals</button></li></ol><button class="sm" id="welHide">Hide this guide</button></section>
 <section class="card" id="bgCard" data-tab="home" hidden><div id="bgTxt"></div><div class="b" id="bgBtns"><button class="p sm" id="bgYes">Got them (+5 fates)</button><button class="sm" id="bgSkip">Skip this month</button></div></section>
 
@@ -468,7 +468,7 @@ body{background-image:radial-gradient(900px 520px at 90% -8%,color-mix(in srgb,v
 <div class="b" style="margin-top:8px"><button class="sm" data-ic="512">Save icon-512</button><button class="sm" data-ic="192">Save icon-192</button><button class="sm" data-ic="180">Save icon-180</button></div></section>
 <section class="card" data-tab="more"><h2 class="disp">App &amp; updates</h2><div class="sub" id="appV"></div><div class="b" style="margin-top:8px"><button class="p sm" id="appUp">Update &amp; refresh now</button><button class="sm" id="dbUp">Update character list</button></div><div class="sub" style="margin-top:6px">Loads the newest files. Your saved goals and balance are not touched. The same button is in the top corner of every page.</div></section>
 <section class="card" data-tab="more"><h2 class="disp">Accent colour</h2><div class="sub">Match the app to your favourite element, or follow the element of your top goal.</div><select id="accSel" style="margin-top:8px"><option value="">Default</option><option value="auto">Match my top goal</option><option value="pyro">Pyro</option><option value="hydro">Hydro</option><option value="anemo">Anemo</option><option value="electro">Electro</option><option value="dendro">Dendro</option><option value="cryo">Cryo</option><option value="geo">Geo</option></select></section>
-<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v12 · build 22 Oct (picker)</div>
+<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v13 · build 22 Oct (upcoming + reruns)</div>
 </main>
 <div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><button class="sm" id="rsBrowse" style="margin-top:8px">Browse all characters and weapons</button><input id="rsQ" type="search" placeholder="Search banners…" autocomplete="off" style="margin-top:10px"><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div><div id="rsBar" class="b" hidden style="position:sticky;bottom:0;background:var(--card);padding-top:8px"><button class="p wide" id="rsAdd"></button></div></div></div>
 <nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5 20 9l-8 12.5L4 9z"/><path d="M4 9h16M9 9l3 12.5L15 9M9 9l3-6.5L15 9"/></svg>Home</button><button data-tb="goals"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5c.7 4.8 4.2 8.3 9 9-4.8.7-8.3 4.2-9 9-.7-4.8-4.2-8.3-9-9 4.8-.7 8.3-4.2 9-9z"/></svg>Goals</button><button data-tb="income"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="12" cy="12" r="9"/><path d="M12 16.5V8M8.2 11.8 12 8l3.8 3.8"/></svg>Income</button><button data-tb="calc"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect class="f" x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7.5h7"/><g fill="currentColor" stroke="none"><circle cx="9" cy="12" r=".95"/><circle cx="12" cy="12" r=".95"/><circle cx="15" cy="12" r=".95"/><circle cx="9" cy="16" r=".95"/><circle cx="12" cy="16" r=".95"/><circle cx="15" cy="16" r=".95"/></g></svg>Calc</button><button data-tb="leaks"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="10.5" cy="10.5" r="7"/><path d="M15.6 15.6 21 21"/><path d="M10.5 7.2c.3 1.9 1.4 3 3.3 3.3-1.9.3-3 1.4-3.3 3.3-.3-1.9-1.4-3-3.3-3.3 1.9-.3 3-1.4 3.3-3.3z"/></svg>Leaks</button><button data-tb="more"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="7" cy="7" r="2.6"/><circle class="f" cx="17" cy="7" r="2.6"/><circle class="f" cx="7" cy="17" r="2.6"/><circle class="f" cx="17" cy="17" r="2.6"/></svg>More</button></nav>
@@ -560,6 +560,7 @@ const ledP=()=>S.primos+S.fates*160,lat=()=>S.genesis+Math.floor(S.glitter/5)*16
 const totP=()=>ledP()+lat();
 const have=()=>Math.floor(totP()/160),ledHave=()=>Math.floor(ledP()/160);
 const patchLen=()=>S.patchLen||42;
+const PCAL={v:'7.2',d:'2026-11-04'}; // Patch 7.2 starts about 4 Nov 2026 (estimate until the official date is out). Later patches follow the usual cadence.
 const abyssFloor=st=>st>=9?200:st>=6?100:st>=3?50:0;
 function endgameParts(){
   const g=S.endgame,abyss=g.ab.reduce((t,x)=>t+abyssFloor(x),0)*g.abN,theater=g.thMax*g.thPct/100,stygian=g.sg*150*30/patchLen();
@@ -772,8 +773,7 @@ function render(){
 
 /* edit + result panels */
 function phaseDates(){
-  if(!S.patchStart)return [];
-  const len=patchLen();let a=off(S.patchStart);
+  const len=patchLen();let a=off(S.patchStart||PCAL.d);
   if(a<0)a+=Math.ceil(-a/len)*len; // roll an old anchor forward to the next patch start
   const out=[];
   [['Next',0],['Then',1]].forEach(([w,k])=>{
@@ -787,7 +787,7 @@ function renderPhases(c,g){
   if(box.dataset.sig!==sig){
     box.dataset.sig=sig;box.innerHTML='';
     if(!ph.length){box.innerHTML='<span class="sub">Set “Next patch starts” under Income to get release-date shortcuts.</span>';return}
-    const l=document.createElement('span');l.className='sub';l.textContent='Release shortcuts';box.append(l);
+    const l=document.createElement('span');l.className='sub';l.textContent='Release shortcuts'+(S.patchStart?'':' (estimated from the patch calendar)');box.append(l);
     ph.forEach(x=>{const b=document.createElement('button');b.className='chip';b.dataset.a='phase';b.dataset.d=x.d;b.textContent=x.label+' ('+fmt(x.d)+')';box.append(b)});
   }
   box.querySelectorAll('[data-d]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.d===g.release)));
@@ -820,7 +820,7 @@ function ensureEdit(c,g){
     const inp=ev.target.closest('[data-k]');if(!inp)return;const k=inp.dataset.k;
     if(k==='guar')g.guar=inp.checked;
     else if(['name','patch','type','el','img'].includes(k)){g[k]=inp.value;if(k==='img'||k==='el')syncBanner(g,k);if(k==='name')gdbAutoEdit(g,inp)}
-    else if(k==='release'){g.release=isoRe.test(inp.value)?inp.value:'';g.rid=''}
+    else if(k==='release'){g.release=isoRe.test(inp.value)?inp.value:'';g.rid='';g.nd=!g.release}
     else g[k]=Math.max(0,num(inp.value));
     {const raw=g[k];capGoal(g);if((k==='copies'||k==='custom')&&raw>g[k])inp.value=g[k]}
     if(k==='type'||k==='pity'){const before=g.pity;clampPity(g);if(k==='pity'&&before!==g.pity)inp.value=g.pity}
@@ -1070,7 +1070,7 @@ document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
 function incIn(){
   S.income={daily:Math.max(0,num($('i-d').value)),welkin:$('i-w').checked,monthly:Math.max(0,num($('i-m').value)),bargains:$('i-b').checked,bp:$('i-bp').checked,patch:Math.max(0,num($('i-p').value)),rate:Math.min(100,Math.max(50,Number($('i-r').value)||100))};
   S.patchStart=isoRe.test($('i-ps').value)?$('i-ps').value:'';S.patchLen=Math.min(60,Math.max(28,num($('i-pl').value)||42));
-  save();render();
+  save();render();try{syncRoster()}catch(e){}
 }
 ['i-d','i-m','i-p','i-ps','i-pl'].forEach(id=>$(id).addEventListener('input',incIn));
 ['i-w','i-bp','i-b','i-r','i-ps'].forEach(id=>$(id).addEventListener('change',incIn));
@@ -1582,19 +1582,32 @@ $('refBtn').onclick=hardRefresh;$('appUp').onclick=hardRefresh;
 /* ---------- Traveler profile (Enka.Network) ---------- */
 const PFK='primo-prof',ENK='https://enka.network/ui/',STORE='https://raw.githubusercontent.com/EnkaNetwork/API-docs/master/store/';
 let PF=null,pfLast=0;try{PF=JSON.parse(localStorage.getItem(PFK)||'null')}catch(e){}
-const pfJson=u=>fetch(u).then(r=>{if(!r.ok)throw new Error('store');return r.json()});
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const tfetch=(u,ms)=>{const c=new AbortController(),t=setTimeout(()=>c.abort(),ms||15000);return fetch(u,{signal:c.signal}).finally(()=>clearTimeout(t))};
+const pfJson=u=>tfetch(u,15000).then(r=>{if(!r.ok)throw new Error('store');return r.json()});
+/* Enka's character/namecard/avatar tables: try GitHub, then jsDelivr, then the copy saved on this device */
+const STORES=[STORE,'https://cdn.jsdelivr.net/gh/EnkaNetwork/API-docs@master/store/'],SC={};
+async function pfStore(name){if(SC[name])return SC[name];
+  for(const b of STORES){try{const j=await pfJson(b+name);SC[name]=j;try{localStorage.setItem('primo-st-'+name,JSON.stringify(j))}catch(e){}return j}catch(e){}}
+  try{const c=JSON.parse(localStorage.getItem('primo-st-'+name)||'null');if(c){SC[name]=c;return c}}catch(e){}
+  throw new Error('store')}
 async function pfBuild(uid,j){const p=j.playerInfo||j;if(!p||!p.nickname)throw new Error('That data does not contain a player profile.');
-  const o={uid,at:today(),nick:String(p.nickname),sig:String(p.signature||''),ar:p.level||0,wl:p.worldLevel||0,ach:p.finishAchievementNum||0,ab:{f:p.towerFloorIndex||0,c:p.towerLevelIndex||0,s:p.towerStarIndex},th:{a:p.theaterActIndex,s:p.theaterStarIndex},sg:p.stygianIndex,nc:'',pf:'',chars:await pfChars(j)};
-  try{o.nc=((await pfJson(STORE+'namecards.json'))[p.namecardId]||{}).icon||''}catch(e){}
-  try{const pp=p.profilePicture||{};if(pp.id!==undefined)o.pf=((await pfJson(STORE+'pfps.json'))[pp.id]||{}).iconPath||'';else if(pp.avatarId)o.pf=(((await pfJson(STORE+'characters.json'))[pp.avatarId]||{}).SideIconName||'').replace('_Side','')}catch(e){}
+  const o={uid,at:today(),nick:String(p.nickname),sig:String(p.signature||''),ar:p.level||0,wl:p.worldLevel||0,ach:p.finishAchievementNum||0,ab:{f:p.towerFloorIndex||0,c:p.towerLevelIndex||0,s:p.towerStarIndex},th:{a:p.theaterActIndex,s:p.theaterStarIndex},sg:p.stygianIndex,nc:'',pf:'',chars:await pfChars(j),noch:!(Array.isArray(j.avatarInfoList)&&j.avatarInfoList.length)};
+  try{o.nc=((await pfStore('namecards.json'))[p.namecardId]||{}).icon||''}catch(e){}
+  try{const pp=p.profilePicture||{};if(pp.id!==undefined)o.pf=((await pfStore('pfps.json'))[pp.id]||{}).iconPath||'';else if(pp.avatarId)o.pf=(((await pfStore('characters.json'))[pp.avatarId]||{}).SideIconName||'').replace('_Side','')}catch(e){}
   return o}
 async function pfLoad(uid){
   if(!/^\d{9,10}$/.test(uid))throw new Error('A UID has 9 or 10 digits.');
-  const r=await fetch('https://enka.network/api/uid/'+uid).catch(()=>null);
-  if(!r)throw new Error('net');
-  const m={400:'That UID looks wrong.',404:'No player found for that UID.',424:'The game servers are under maintenance. Try again later.',429:'Too many requests. Wait a minute and try again.',500:'Enka had a problem. Try again later.',503:'Enka is down for a moment. Try again later.'};
+  const m={400:'That UID looks wrong.',403:'Enka refused the request (403). Wait a few minutes and try again, or use the paste option below.',404:'No player found for that UID.',424:'The game servers are under maintenance. Try again later.',429:'Too many requests. Wait a minute and try again.',500:'Enka had a problem. Try again later.',503:'Enka is down for a moment. Try again later.'};
+  let r=null,why='net';
+  for(let i=0;i<2&&!r;i++){
+    try{const x=await tfetch('https://enka.network/api/uid/'+uid,20000);
+      if(i===0&&[500,502,503,504].includes(x.status)){await sleep(1500);continue}
+      r=x}catch(e){why=e&&e.name==='AbortError'?'slow':'net';if(i===0)await sleep(1200)}}
+  if(!r)throw new Error(why);
   if(!r.ok)throw new Error(m[r.status]||'Could not load it (error '+r.status+').');
-  return pfBuild(uid,await r.json())}
+  let j;try{j=await r.json()}catch(e){throw new Error('Enka sent back something unreadable. Try again in a minute.')}
+  return pfBuild(uid,j)}
 function pfApply(o,silent){const a=o.ab,st=a.s!==undefined?a.s:(a.f>=9?Math.min(36,(a.f-9)*9+a.c*3):0);let rem=Math.min(36,st);const old=JSON.stringify(S.endgame);
   S.endgame.ab=[0,1,2,3].map(()=>{const v=Math.min(9,rem);rem-=v;return Math.floor(v/3)*3});
   if(o.th&&o.th.a!==undefined)S.endgame.thPct=Math.round(Math.min(10,o.th.a)/10*4)*25;
@@ -1608,7 +1621,7 @@ function drawProfile(){const v=$('pfView'),o=PF;$('pfAct').hidden=!o;$('pfGo').t
   drawChars(o);
   const mk=(u,cls,box)=>{if(!u)return;const im=document.createElement('img');im.alt='';im.referrerPolicy='no-referrer';im.className=cls;im.onerror=()=>im.remove();box.append(im);im.src=ENK+u+'.png'};
   const b=v.querySelector('.pfb');mk(o.nc,'bg',b);b.prepend(b.querySelector('img.bg')||document.createTextNode(''));mk(o.pf,'',$('pfAv'))}
-function pfShow(e){$('pfMsg').textContent=e.message==='net'?'Could not reach Enka from here (offline, or blocked by the browser). Use the paste option below.':e.message}
+function pfShow(e){const m=e.message;$('pfMsg').textContent=m==='net'?'Could not reach Enka from here. You may be offline, or this page may be blocked from calling Enka. Use the paste option below.':m==='slow'?'Enka took too long to answer. Try again in a minute.':m==='store'?'Enka answered, but its data tables could not be loaded. Try again, or use the paste option below.':m}
 async function pfRun(uid,fromEg){$('pfMsg').textContent='Loading…';try{const first=!PF;PF=await pfLoad(uid);try{localStorage.setItem(PFK,JSON.stringify(PF))}catch(e){}pfLast=Date.now();drawProfile();$('pfMsg').textContent='Loaded.';
   if(first){try{const sv=uid[0]==='6'?'-5':uid[0]==='7'?'1':'8';RK.s=sv;localStorage.setItem(RKK,JSON.stringify(RK));$('rk-s').value=sv;drawResets()}catch(e){}}
   if(fromEg||(first&&S.log.length===0&&S.endgame.ab.every(x=>!x)))pfApply(PF,false)}catch(e){pfShow(e)}}
@@ -1635,9 +1648,16 @@ function gdbMeta(name){const k=String(name||'').toLowerCase().trim();if(!k)retur
   if(c){const e=String(c[2]).toLowerCase();return {type:'char',el:EL[e]?e:'',img:iconUrl(c[5])}}
   if(w)return {type:'weapon',el:'',img:iconUrl(w[4])};return null}
 function dbPick(name,f){try{const m=gdbMeta(name);return m?m[f]:''}catch(e){return ''}}
-function gdbAutoEdit(g,inp){const m=gdbMeta(g.name);if(!m)return;if(!g.img)g.img=m.img;if(!g.el&&m.el)g.el=m.el;if(m.type==='weapon'&&g.type==='char')g.type='weapon';
-  const box=inp.closest('.edit')||document;['img','el','type'].forEach(k=>{const i=box.querySelector('[data-k="'+k+'"]');if(i&&i.value!==g[k])i.value=g[k]})}
-function autoFillGoals(){let ch=0;S.goals.forEach(g=>{const m=gdbMeta(g.name);if(!m)return;if(!g.img){g.img=m.img;ch=1}if(!g.el&&m.el){g.el=m.el;ch=1}});if(ch){save();render()}}
+function gdbAutoEdit(g,inp){const m=gdbMeta(g.name);
+  if(m){if(!g.img)g.img=m.img;if(!g.el&&m.el)g.el=m.el;if(m.type==='weapon'&&g.type==='char')g.type='weapon'}
+  if(!g.release&&!g.patch&&!g.nd){const b=nextBanner(g.name);if(b){g.patch=b.patch;g.release=b.release;g.rid=b.id;if(!g.img)g.img=fixU(imgFor(b));if(!g.el)g.el=elFor(b)||''}}
+  const box=inp.closest('.edit')||document;['img','el','type','patch','release'].forEach(k=>{const i=box.querySelector('[data-k="'+k+'"]');if(i&&i.value!==g[k])i.value=g[k]})}
+function autoFillGoals(){let ch=0,dt=0;S.goals.forEach(g=>{const m=gdbMeta(g.name);
+  if(m){if(!g.img){g.img=m.img;ch=1}if(!g.el&&m.el){g.el=m.el;ch=1}}
+  if(!g.release&&!g.nd&&g.name&&g.type!=='custom'){const b=nextBanner(g.name);
+    if(b&&(!g.patch||pOrd(b.patch)===pOrd(g.patch))){g.release=b.release;g.patch=b.patch;g.rid=g.rid||b.id;if(!g.img){const u=fixU(imgFor(b));if(u)g.img=u}if(!g.el){const e=elFor(b);if(e)g.el=e}ch=1;dt++}
+    else if(g.patch&&!isNaN(pOrd(g.patch))){const ps=patchStart(g.patch);if(ps){g.release=ps.d;g.rid=g.rid||('auto:'+String(g.patch).trim()+':1:'+slg(g.name));ch=1;dt++}}}});
+  if(ch){save();render();if(dt)toast('Release date filled in for '+plural(dt,'goal')+' from the patch calendar. Dates marked est. can still move.')}}
 gdbBuild();
 $('dbUp').onclick=async()=>{toast('Updating the character list…');let added=0;
   try{for(const [path,isC] of [['avatar',1],['weapon',0]]){const r=await fetch('https://gi.yatta.moe/api/v2/en/'+path);if(!r.ok)throw new Error('http');const j=await r.json(),items=(j.data&&j.data.items)||{};
@@ -1646,12 +1666,15 @@ $('dbUp').onclick=async()=>{toast('Updating the character list…');let added=0;
       else if((+v.rank||0)>=3&&v.name){GX.push([n,String(v.name),+v.rank,String(v.type||''),String(v.icon||'')]);added++}})}
     try{localStorage.setItem('primo-gdb-extra',JSON.stringify(GX))}catch(e){}gdbBuild();autoFillGoals();toast(added?'Added '+added+' new characters and weapons':'Your list is already up to date')}
   catch(e){toast('Could not reach the data source. Try again later.')}};
-async function pfChars(j){const list=j.avatarInfoList||[];if(!list.length)return [];let ec={};try{ec=await pfJson(STORE+'characters.json')}catch(e){}
-  return list.map(a=>{const id=a.avatarId,m=GC.get(id),so=(ec[id]||{}).SkillOrder||[],sk=a.skillLevelMap||{},pm=a.propMap||{},eq=(a.equipList||[]).find(e=>e.weapon),pv=k=>+((pm[k]||{}).val||(pm[k]||{}).ival)||0;
-    return {id,name:m?m[1]:'Character '+id,lv:pv(4001),asc:pv(1002),c:(a.talentIdList||[]).length,t:[0,1,2].map(i=>sk[so[i]]||1),w:eq?{lv:eq.weapon.level||0,asc:eq.weapon.promoteLevel||0,r:(eq.flat||{}).rankLevel||0}:null}})}
-function drawChars(o){const v=$('pfView');if(!o.chars||!o.chars.length)return;const d=document.createElement('div');d.style.marginTop='10px';d.innerHTML='<div class="sub">My characters. Tap one to fill the planners with their current levels.</div>';
+async function pfChars(j){const list=j.avatarInfoList||[];if(!list.length)return [];let ec={};try{ec=await pfStore('characters.json')}catch(e){}
+  return list.map(a=>{const id=a.avatarId,m=GC.get(id),e=ec[id]||ec[id+'-'+a.skillDepotId]||{},so=e.SkillOrder||[],sk=a.skillLevelMap||{},pm=a.propMap||{},eq=(a.equipList||[]).find(q=>q.weapon),pv=k=>+((pm[k]||{}).val||(pm[k]||{}).ival)||0;
+    let w=null;if(eq){const af=Object.values(eq.weapon.affixMap||{}).map(Number),wm=GWM.get(eq.itemId);w={lv:eq.weapon.level||0,asc:eq.weapon.promoteLevel||0,r:(eq.flat||{}).rankLevel||0,n:wm?wm[1]:'',ref:af.length?Math.max(...af)+1:1}}
+    return {id,name:m?m[1]:'Character '+id,lv:pv(4001),asc:pv(1002),c:(a.talentIdList||[]).length,t:[0,1,2].map(i=>sk[so[i]]||1),w}})}
+function drawChars(o){const v=$('pfView');
+  if(o.noch||!o.chars||!o.chars.length){const d=document.createElement('div');d.className='sub';d.style.marginTop='10px';d.textContent='No character details came back. In the game, open your Profile, tap Edit, then Character Showcase, add your characters and turn on Show Character Details. Then tap Refresh here (Enka can take a few minutes to catch up).';v.append(d);return}
+  const d=document.createElement('div');d.style.marginTop='10px';d.innerHTML='<div class="sub">My characters. Tap one to fill the planners with their current levels.</div>';
   const w=document.createElement('div');w.style.cssText='display:flex;gap:6px;flex-wrap:wrap;margin-top:6px';
-  o.chars.forEach(ch=>{const b=document.createElement('button');b.className='chip';b.textContent=ch.name+' Lv '+ch.lv+' C'+ch.c;b.onclick=()=>planPrefill(ch);w.append(b)});d.append(w);v.append(d)}
+  o.chars.forEach(ch=>{const b=document.createElement('button');b.className='chip';b.textContent=ch.name+' Lv '+ch.lv+' C'+ch.c+(ch.w&&ch.w.n?' · '+ch.w.n+' R'+ch.w.ref:'');b.onclick=()=>planPrefill(ch);w.append(b)});d.append(w);v.append(d)}
 function planPrefill(ch){const caps=[20,40,50,60,70,80],set=(id,val)=>{const e=$(id);if(e){e.value=val;e.dispatchEvent(new Event('input',{bubbles:true}))}},ci=caps.indexOf(ch.lv);
   set('c-lf',ch.lv);if($('c-asc')){$('c-asc').checked=ci>=0&&ch.asc>=ci+1;$('c-asc').dispatchEvent(new Event('input',{bubbles:true}))}
   [1,2,3].forEach((n,i)=>set('c-t'+n+'f',ch.t[i]||1));
@@ -1663,33 +1686,92 @@ drawProfile();
 
 /* ---------- Browse characters & weapons + automatic upcoming ---------- */
 const EN2={fire:'pyro',pyro:'pyro',water:'hydro',hydro:'hydro',wind:'anemo',anemo:'anemo',electric:'electro',electro:'electro',grass:'dendro',dendro:'dendro',ice:'cryo',cryo:'cryo',rock:'geo',geo:'geo'};
-let BW={mode:'char',q:'',r:0,el:'',sel:new Map(),box:null};
+/* ---------- Patch calendar, bundled schedule, automatic reruns ---------- */
+/* Leaked or official lineup that ships inside the app. roster.json (your own list) always wins over this.
+   kind: 'new' = debut, 'rerun' = returning. Update this list or just publish the same banners in roster.json. */
+const SCHED=[
+ {patch:'7.2',phase:1,name:'Mitya',type:'char',el:'electro',r:5,kind:'new',status:'leak'},
+ {patch:'7.2',phase:1,name:'Valeriy',type:'char',el:'electro',r:4,kind:'new',status:'leak',note:'4★, banner phase not confirmed'},
+ {patch:'7.2',phase:1,name:'Furina',type:'char',el:'hydro',r:5,kind:'rerun',status:'leak'},
+ {patch:'7.2',phase:2,name:'Zibai',type:'char',el:'geo',r:5,kind:'rerun',status:'leak'},
+ {patch:'7.2',phase:2,name:'Linnea',type:'char',el:'geo',r:5,kind:'rerun',status:'leak'}
+];
+/* Permanent Wanderlust Invocation 5★ pool (Diluc, Jean, Keqing, Mona, Qiqi, Tighnari, Dehya; Amos' Bow, Aquila Favonia, Lost Prayer, Primordial Jade Winged-Spear, the five Skyward weapons, Wolf's Gravestone) */
+const STD_C=new Set([10000016,10000003,10000042,10000041,10000035,10000069,10000079]);
+const STD_W=new Set([15502,11501,14502,13505,14501,11502,15501,12501,13502,12502]);
+const nmz=x=>String(x||'').toLowerCase().trim(),slg=t=>String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const pOrd=v=>{const m=/(\d+)\.(\d+)/.exec(String(v||''));return m?(+m[1])*9+(+m[2]):NaN};
+const isoAdd=(d,n)=>{const x=new Date(d+'T00:00:00');x.setDate(x.getDate()+n);return iso(x)};
+const bdt=(x,y)=>x.release<y.release?-1:x.release>y.release?1:x.name<y.name?-1:x.name>y.name?1:0;
+/* If you typed your own "Next patch starts", treat it as a correction to the built-in estimate (when it is within two weeks of it) */
+function calShift(){if(!S.patchStart)return 0;const len=patchLen();let a=off(S.patchStart);if(a<0)a+=Math.ceil(-a/len)*len;
+  const base=off(PCAL.d),est=base+Math.ceil((0-base)/len)*len,d=a-est;return Math.abs(d)<=14?d:0}
+/* Start date of patch v: from your roster when it has that patch, otherwise estimated from the calendar */
+function patchStart(v){const n=pOrd(v);if(isNaN(n))return null;
+  const rb=RO.banners.filter(b=>pOrd(b.patch)===n),half=Math.round(patchLen()/2);
+  if(rb.length){const p1=rb.filter(b=>b.phase===1).map(b=>b.release).sort()[0],p2=rb.filter(b=>b.phase===2).map(b=>b.release).sort()[0],d=p1||(p2&&isoAdd(p2,-half));if(d)return {d,est:false}}
+  return {d:isoAdd(PCAL.d,(n-pOrd(PCAL.v))*patchLen()+calShift()),est:true}}
+function relNames(){const up=new Set(UP.list.map(u=>nmz(u.name))),r=new Set();[...GCN.keys(),...GWN.keys()].forEach(k=>{if(!up.has(k))r.add(k)});return r}
+function isRel(n,set){n=nmz(n);if(!n)return false;if(set.has(n))return true;if(n.length<5)return false;for(const r of set){if(r.length>=5&&(r.includes(n)||n.includes(r)))return true}return false}
+const rarOf=n=>{const c=GCN.get(nmz(n));if(c)return c[3];const w=GWN.get(nmz(n));return w?w[2]:5};
+/* One merged list: your roster + the bundled lineup + newly datamined characters. Reruns are told apart from debuts automatically. */
+function allBanners(){
+  const rel=relNames(),L=[],has=new Set(),upM=new Map(UP.list.map(u=>[nmz(u.name),u])),half=Math.round(patchLen()/2);
+  const fill=b=>{const u=upM.get(nmz(b.name));if(u){if(!b.img)b.img=u.img||'';if(!b.el)b.el=u.el||'';if(!b.r)b.r=u.r}return b};
+  const add=b=>{const k=nmz(b.name)+'|'+pOrd(b.patch)+'|'+(b.type==='weapon'?'w':'c');if(has.has(k))return;has.add(k);L.push(fill(b))};
+  const sk=new Map(SCHED.map(x=>[nmz(x.name)+'|'+pOrd(x.patch),x]));
+  RO.banners.forEach(b=>{const x=sk.get(nmz(b.name)+'|'+pOrd(b.patch));
+    add(Object.assign({},b,{src:'roster',est:false,el:b.el||(x&&x.el)||'',r:b.r||(x&&x.r)||rarOf(b.name),kind:b.type==='chron'?'chron':(b.kind||(x&&x.kind)||(isRel(b.name,rel)?'rerun':'new'))}))});
+  SCHED.forEach(x=>{const ps=patchStart(x.patch);if(!ps)return;
+    add({id:'auto:'+x.patch+':'+x.phase+':'+slg(x.name),name:x.name,type:x.type,patch:x.patch,phase:x.phase,release:isoAdd(ps.d,x.phase===2?half:0),status:x.status,el:x.el||'',r:x.r,img:'',kind:x.kind,src:'bundled',est:ps.est,note:x.note||''})});
+  UP.list.forEach(u=>{if(L.some(x=>x.kind==='new'&&nmz(x.name)===nmz(u.name)))return;const pv=String(u.patch||'').replace(/^v/i,''),ps=patchStart(pv);if(!ps)return;
+    add({id:'auto:'+pv+':1:'+slg(u.name),name:u.name,type:u.type,patch:pv,phase:1,release:ps.d,status:'mined',el:u.el||'',r:u.r,img:u.img||'',kind:'new',src:'data',est:ps.est})});
+  return L}
+function nbMap(){const m=new Map();allBanners().filter(b=>b.type!=='chron'&&off(b.release)>=-21).sort(bdt).forEach(b=>{const k=nmz(b.name);if(!m.has(k))m.set(k,b)});return m}
+const nmEq=(a,b)=>{a=nmz(a);b=nmz(b);return !!a&&(a===b||(a.length>=5&&b.length>=5&&(a.includes(b)||b.includes(a))))};
+function nbFind(M,n){const k=nmz(n);if(!k)return null;if(M.has(k))return M.get(k);for(const [x,b] of M){if(nmEq(x,k))return b}return null}
+const nextBanner=n=>nbFind(nbMap(),n);
+const STAT={official:['Official','#3ba776'],leak:['Leak','#e0a43a'],mined:['Datamined','#7a8cff']};
+
+/* ---------- Browse characters & weapons, upcoming, reruns ---------- */
+let BW={mode:'char',q:'',r:0,el:'',std:'',sel:new Map(),box:null};
 function bwItems(){const q=BW.q.trim().toLowerCase();let L;
-  if(BW.mode==='soon')L=UP.list.map(u=>({k:'u'+u.id,name:u.name,type:u.type,el:u.el,r:u.r,img:u.img,patch:u.patch}));
-  else if(BW.mode==='char')L=[...GC.values()].sort((a,b)=>b[0]-a[0]).map(a=>({k:'c'+a[0],name:a[1],type:'char',el:EN2[String(a[2]).toLowerCase()]||'',r:a[3],img:iconUrl(a[5])}));
-  else L=[...GWM.values()].sort((a,b)=>b[2]-a[2]||b[0]-a[0]).map(a=>({k:'w'+a[0],name:a[1],type:'weapon',el:'',r:a[2],img:iconUrl(a[4])}));
-  return L.filter(i=>(!q||i.name.toLowerCase().includes(q))&&(!BW.r||i.r===BW.r)&&(!BW.el||i.el===BW.el))}
+  if(BW.mode==='soon'||BW.mode==='rerun'){const k=BW.mode==='soon'?'new':'rerun';
+    L=allBanners().filter(b=>b.kind===k&&(b.type==='char'||b.type==='weapon')&&off(b.release)>=-21).sort(bdt).map(b=>({k:'b'+b.id,name:b.name,type:b.type,el:elFor(b),r:b.r||5,img:fixU(imgFor(b)),patch:b.patch,release:b.release,phase:b.phase,status:b.status,est:b.est,rid:b.id}))}
+  else{const NB=nbMap(),nb=n=>{const b=nbFind(NB,n);return b?{patch:b.patch,release:b.release,phase:b.phase,status:b.status,est:b.est,rid:b.id,nb:1}:{}};
+    if(BW.mode==='char')L=[...GC.values()].sort((a,b)=>b[0]-a[0]).map(a=>Object.assign({k:'c'+a[0],name:a[1],type:'char',el:EN2[String(a[2]).toLowerCase()]||'',r:a[3],img:iconUrl(a[5]),std:STD_C.has(a[0])},nb(a[1])));
+    else L=[...GWM.values()].sort((a,b)=>b[2]-a[2]||b[0]-a[0]).map(a=>Object.assign({k:'w'+a[0],name:a[1],type:'weapon',el:'',r:a[2],img:iconUrl(a[4]),std:STD_W.has(a[0])},nb(a[1])))}
+  return L.filter(i=>(!q||i.name.toLowerCase().includes(q))&&(!BW.r||i.r===BW.r)&&(!BW.el||i.el===BW.el)&&(BW.std!=='only'||i.std)&&(BW.std!=='hide'||!i.std))}
 function bwBar(){const n=BW.sel.size,a=BW.box.querySelector('#bwAdd');a.hidden=!n;a.textContent='Add '+plural(n,'goal')}
 function bwDraw(){const b=BW.box,F=b.querySelector('#bwF'),F2=b.querySelector('#bwF2'),G=b.querySelector('#bwG');F.innerHTML='';F2.innerHTML='';
   const chip=(box,t,on,fn)=>{const x=document.createElement('button');x.className='chip';x.textContent=t;x.setAttribute('aria-pressed',String(on));if(on){x.style.borderColor='var(--acc)';x.style.color='var(--acc)'}x.onclick=fn;box.append(x)};
-  [['char','Characters'],['weapon','Weapons'],['soon','Coming soon'+(UP.list.length?' ('+UP.list.length+')':'')]].forEach(([k,t])=>chip(F,t,BW.mode===k,()=>{BW.mode=k;BW.r=0;BW.el='';bwDraw()}));
+  const AB=allBanners().filter(x=>x.type!=='chron'&&off(x.release)>=-21),nS=AB.filter(x=>x.kind==='new').length,nR=AB.filter(x=>x.kind==='rerun').length;
+  [['char','Characters'],['weapon','Weapons'],['soon','Upcoming'+(nS?' ('+nS+')':'')],['rerun','Reruns'+(nR?' ('+nR+')':'')]].forEach(([k,t])=>chip(F,t,BW.mode===k,()=>{BW.mode=k;BW.r=0;BW.el='';BW.std='';bwDraw()}));
+  if(BW.mode==='char'||BW.mode==='weapon')[['only','Standard'],['hide','Not standard']].forEach(([k,t])=>chip(F2,t,BW.std===k,()=>{BW.std=BW.std===k?'':k;bwDraw()}));
   (BW.mode==='weapon'?[5,4,3]:[5,4]).forEach(r=>chip(F2,r+'★',BW.r===r,()=>{BW.r=BW.r===r?0:r;bwDraw()}));
   if(BW.mode!=='weapon')Object.keys(EL).forEach(e=>chip(F2,EL[e].n,BW.el===e,()=>{BW.el=BW.el===e?'':e;bwDraw()}));
   if(BW.mode==='soon')chip(F2,'Check again',false,()=>{G.innerHTML='<div class="sub" style="grid-column:1/4">Checking…</div>';hkCheck(true)});
+  b.querySelector('#bwInfo').textContent=BW.mode==='soon'?'New characters and weapons that are not out yet, with the patch they arrive in. Dates follow the patch calendar and correct themselves when the official lineup is out. “est.” means estimated.':BW.mode==='rerun'?'Returning characters and weapons with their banner date. Anything you add keeps its date up to date by itself.':'Tap to select one or several, then add them together. If a banner is coming up for them, the patch and release date are filled in for you. Standard is the permanent wish pool (5★ only).';
   const items=bwItems();G.innerHTML='';
-  if(!items.length)G.innerHTML='<div class="sub" style="grid-column:1/4">'+(BW.mode==='soon'?(UP.err?'Could not reach the data source (offline, or blocked by the browser). Tap Check again later.':UP.at?'No unreleased characters or weapons were found right now'+(UP.latest?' (live '+UP.live+', latest '+UP.latest+').':'.'):'Checking…'):'Nothing matches.')+'</div>';
+  if(!items.length)G.innerHTML='<div class="sub" style="grid-column:1/4">'+(BW.mode==='soon'?(UP.err&&!nS?'Could not reach the data source (offline, or blocked by the browser). Tap Check again later.':'Nothing new is listed yet. New characters show up here as soon as they are datamined or added to the schedule.'):BW.mode==='rerun'?'No reruns are scheduled yet. They appear here once they are in the schedule or your roster.':'Nothing matches.')+'</div>';
   items.forEach(i=>{const c=document.createElement('button'),have=S.goals.some(g=>String(g.name).toLowerCase().trim()===i.name.toLowerCase());c.type='button';c.className='bwc'+(BW.sel.has(i.k)?' sel':'');
-    c.innerHTML='<span class="bwph"></span><b></b><span class="st"></span>';c.querySelector('b').textContent=i.name;c.querySelector('.st').textContent='★'.repeat(i.r)+(have?' · on list':'');
+    c.innerHTML='<span class="bwph"></span><b></b><span class="st"></span><span class="dt"></span><span class="tg" hidden></span>';c.querySelector('b').textContent=i.name;c.querySelector('.st').textContent='★'.repeat(i.r)+(i.std?' · Standard':'')+(have?' · on list':'');
+    const dt=c.querySelector('.dt'),tg=c.querySelector('.tg');
+    if(i.release){dt.textContent=(i.nb?'Next banner ':'')+(i.patch?i.patch+' · ':'')+fmt(i.release)+(i.est?' (est.)':'')+(i.phase===2?' · P2':'');const st=STAT[i.status];if(st){tg.hidden=false;tg.textContent=st[0];tg.style.color=st[1]}}else dt.hidden=true;
     const ph=c.querySelector('.bwph');if(i.el)ph.innerHTML=elIco(i.el);else ph.textContent=i.name.charAt(0);
     if(i.img){const im=document.createElement('img');im.alt='';im.loading='lazy';im.referrerPolicy='no-referrer';im.onerror=()=>im.remove();ph.append(im);im.src=i.img}
     c.onclick=()=>{if(BW.sel.has(i.k))BW.sel.delete(i.k);else BW.sel.set(i.k,i);c.classList.toggle('sel');bwBar()};G.append(c)});
   bwBar()}
-function openBrowse(mode){BW.mode=mode;BW.q='';BW.r=0;BW.el='';BW.sel.clear();
+function openBrowse(mode){BW.mode=mode;BW.q='';BW.r=0;BW.el='';BW.std='';BW.sel.clear();
   if(!BW.box){const o=document.createElement('div');o.className='sheet';o.id='bw';o.style.zIndex=60;o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');
-    o.innerHTML='<div class="sheetbox" style="max-height:92vh"><div class="gh"><h2 class="disp" style="flex:1;margin:0">Pick characters and weapons</h2><button class="sm" id="bwX">Close</button></div><input id="bwQ" type="search" placeholder="Search by name…" autocomplete="off" style="width:100%;margin-top:10px"><div class="chips" id="bwF" style="margin:10px 0 0"></div><div class="chips" id="bwF2" style="margin:8px 0 0"></div><div class="sub" style="margin:8px 0">Tap to select one or several, then add them together.</div><div class="bwg" id="bwG"></div><div style="position:sticky;bottom:0;background:var(--card);padding-top:10px"><button class="p wide" id="bwAdd" hidden></button><button class="sm wide" id="bwHand" style="margin-top:8px">Add one by hand instead</button></div></div>';
+    o.innerHTML='<div class="sheetbox" style="max-height:92vh"><div class="gh"><h2 class="disp" style="flex:1;margin:0">Pick characters and weapons</h2><button class="sm" id="bwX">Close</button></div><input id="bwQ" type="search" placeholder="Search by name…" autocomplete="off" style="width:100%;margin-top:10px"><div class="chips" id="bwF" style="margin:10px 0 0"></div><div class="chips" id="bwF2" style="margin:8px 0 0"></div><div class="sub" id="bwInfo" style="margin:8px 0"></div><div class="bwg" id="bwG"></div><div style="position:sticky;bottom:0;background:var(--card);padding-top:10px"><button class="p wide" id="bwAdd" hidden></button><button class="sm wide" id="bwHand" style="margin-top:8px">Add one by hand instead</button></div></div>';
     document.body.append(o);BW.box=o;o.querySelector('#bwX').onclick=()=>{o.hidden=true};o.onclick=e=>{if(e.target===o)o.hidden=true};
     o.querySelector('#bwQ').addEventListener('input',e=>{BW.q=e.target.value;bwDraw()});
-    o.querySelector('#bwAdd').onclick=()=>{const L=[...BW.sel.values()];L.forEach(i=>S.goals.push(newGoal({name:i.name,type:i.type,el:i.el||'',img:i.img||'',patch:i.patch||''})));BW.sel.clear();save();render();o.hidden=true;toast('Added '+plural(L.length,'goal'))};
+    o.querySelector('#bwAdd').onclick=()=>{const L=[...BW.sel.values()];let dated=0;
+      L.forEach(i=>{const g=newGoal({name:i.name,type:i.type,el:i.el||'',img:i.img||'',patch:i.patch||'',release:i.release||'',rid:i.rid||''});
+        if(!g.release){const nb=nextBanner(i.name);if(nb){g.patch=nb.patch;g.release=nb.release;g.rid=nb.id;if(!g.el)g.el=elFor(nb)||'';if(!g.img)g.img=fixU(imgFor(nb))||''}}
+        if(g.release)dated++;S.goals.push(g)});
+      BW.sel.clear();save();render();o.hidden=true;toast('Added '+plural(L.length,'goal')+(dated?'. Release date filled in for '+dated+'.':''))};
     o.querySelector('#bwHand').onclick=()=>{o.hidden=true;addGoal(BW.mode==='weapon'?'weapon':'char')}}
   BW.box.hidden=false;BW.box.querySelector('#bwQ').value='';bwDraw();hkCheck(false)}
 async function hkCheck(force){const now=Date.now();if(!force&&UP.ts&&now-UP.ts<432e5)return;
@@ -1698,7 +1780,7 @@ async function hkCheck(force){const now=Date.now();if(!force&&UP.ts&&now-UP.ts<4
       Object.keys(A).filter(id=>!(id in B)).forEach(id=>{const v=A[id],nm=v.en||v.EN||'';if(!nm)return;list.push({id,name:String(nm),type:'char',el:EN2[String(v.element||'').toLowerCase()]||'',r:typeof v.rank==='number'?v.rank:(/ORANGE/.test(v.rank)?5:4),img:img(v),patch:lt})});
       try{const [WA,WB]=await Promise.all([pfJson(NK+lt+'/weapon.json'),pfJson(NK+lv+'/weapon.json')]);Object.keys(WA).filter(id=>!(id in WB)).forEach(id=>{const v=WA[id],nm=v.en||v.EN||'',rk=+v.rank||0;if(nm&&rk>=4)list.push({id:'w'+id,name:String(nm),type:'weapon',el:'',r:rk,img:img(v),patch:lt})})}catch(e){}}
     const had=new Set(UP.list.map(x=>x.id)),fresh=list.filter(x=>!had.has(x.id));UP={list,latest:lt,live:lv,at:today(),ts:now,err:0};
-    try{localStorage.setItem(UPK,JSON.stringify(UP))}catch(e){}gdbBuild();if(fresh.length&&had.size)toast(plural(fresh.length,'new upcoming item')+' found. See Coming soon in Goals.');autoFillGoals()}
+    try{localStorage.setItem(UPK,JSON.stringify(UP))}catch(e){}gdbBuild();if(fresh.length&&had.size)toast(plural(fresh.length,'new upcoming item')+' found. See Upcoming when you add a goal.');try{syncRoster()}catch(e){}autoFillGoals()}
   catch(e){UP.err=1;UP.ts=now}if(BW.box&&!BW.box.hidden)bwDraw()}
 $('addc').onclick=()=>openBrowse('char');$('addw').onclick=()=>openBrowse('weapon');$('rsBrowse').onclick=()=>{closeRoster();openBrowse('char')};
 setTimeout(()=>hkCheck(false),2500);
@@ -1760,7 +1842,7 @@ let RO={banners:[],updated:''},rsGoal=null,rsF='all';
 function cleanRoster(j){
   const o={banners:[],updated:''};if(!j||typeof j!=='object')return o;
   o.updated=isoRe.test(j.updated||'')?j.updated:'';
-  o.banners=(Array.isArray(j.banners)?j.banners:[]).filter(b=>b&&b.name&&isoRe.test(b.release||'')).map(b=>({id:String(b.id||b.name+b.release),name:String(b.name).slice(0,40),type:['char','weapon','chron'].includes(b.type)?b.type:'char',patch:String(b.patch||'').slice(0,8),phase:b.phase==2?2:1,release:b.release,status:b.status==='official'?'official':'leak',img:typeof b.img==='string'?b.img:'',el:EL[b.el]?b.el:''}));
+  o.banners=(Array.isArray(j.banners)?j.banners:[]).filter(b=>b&&b.name&&isoRe.test(b.release||'')).map(b=>({id:String(b.id||b.name+b.release),name:String(b.name).slice(0,40),type:['char','weapon','chron'].includes(b.type)?b.type:'char',patch:String(b.patch||'').slice(0,8),phase:b.phase==2?2:1,release:b.release,status:b.status==='official'?'official':'leak',img:typeof b.img==='string'?b.img:'',el:EL[b.el]?b.el:'',kind:b.kind==='new'||b.kind==='rerun'?b.kind:''}));
   return o;
 }
 const lsGet=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}};
@@ -1780,9 +1862,16 @@ function drawRoStat(m){
   $('roStat').textContent=(RO.banners.length?plural(RO.banners.length,'banner')+' in the roster, up to '+fmt(last)+'.':'No banners in the roster yet.')+(at?' Last checked '+new Date(at).toLocaleDateString()+'.':'')+(m==='fail'?' Offline, or the link isn’t reachable, so the saved copy is used.':'');
 }
 function syncRoster(){
-  let n=0;S.goals.forEach(g=>{if(!g.rid)return;const b=RO.banners.find(x=>x.id===g.rid);if(b&&((b.img&&b.img!==g.img)||(b.el&&b.el!==g.el))){g.img=b.img||g.img;g.el=b.el||g.el;save();render()}
+  let n=0;const AB=allBanners();
+  S.goals.forEach(g=>{if(!g.rid)return;
+    let b=AB.find(x=>x.id===g.rid);
+    if(!b&&g.rid.startsWith('auto:')){
+      b=AB.filter(x=>x.type!=='chron'&&nmEq(x.name,g.name)&&off(x.release)>=-21).sort(bdt)[0];
+      if(!b){const m=/^auto:([^:]+):(\d):/.exec(g.rid),ps=m&&patchStart(m[1]);if(ps)b={release:isoAdd(ps.d,m[2]==='2'?Math.round(patchLen()/2):0),patch:m[1]}}
+      else g.rid=b.id}
+    if(b&&b.src==='roster'&&((b.img&&b.img!==g.img)||(b.el&&b.el!==g.el))){g.img=b.img||g.img;g.el=b.el||g.el;save();render()}
     if(b&&(b.release!==g.release||b.patch!==g.patch)){g.release=b.release;g.patch=b.patch;n++}});
-  if(n){save();render();toast('Release dates updated for '+plural(n,'goal')+' from the roster')}
+  if(n){save();render();toast('Release dates updated for '+plural(n,'goal'))}
 }
 function openRoster(g){rsGoal=g||null;rsSel.clear();$('rsQ').value='';$('rs').hidden=false;drawRoster();$('rsX').focus()}
 function closeRoster(){$('rs').hidden=true}
@@ -1874,7 +1963,7 @@ $('adSave').onclick=()=>{
   else{const base=(v.patch||'x')+'-p'+v.phase+'-'+slug(n);let k=base,i=2;while(list.some(x=>x.id===k))k=base+'-'+i++;list.push(Object.assign({id:k},v))}
   adDirty=true;adReset();drawAdmin();toast('Saved here. Tap Publish to send it to everyone.');
 };
-const rosterJson=()=>JSON.stringify({updated:today(),banners:adAll().slice().sort(byDate).map(b=>({id:b.id,name:b.name,type:b.type,patch:b.patch,phase:b.phase,release:b.release,status:b.status,img:b.img||undefined,el:b.el||undefined}))},null,2);
+const rosterJson=()=>JSON.stringify({updated:today(),banners:adAll().slice().sort(byDate).map(b=>({id:b.id,name:b.name,type:b.type,patch:b.patch,phase:b.phase,release:b.release,status:b.status,img:b.img||undefined,el:b.el||undefined,kind:b.kind||undefined}))},null,2);
 $('adExp').onclick=()=>saveFile('roster.json',rosterJson(),'application/json','roster.json');
 $('adCopy').onclick=async()=>{const t=rosterJson();try{await navigator.clipboard.writeText(t);toast('Copied. Now paste it into roster.json on GitHub.')}catch(e){saveFile('roster.json',t,'application/json','roster.json')}};
 $('adPub').onclick=async()=>{
