@@ -1,4 +1,4 @@
-const CACHE='primogem-tracker-v17'; // bump this number whenever you change the files
+const CACHE='primogem-tracker-v19'; // bump this number whenever you change the files
 const ASSETS=['./','./index.html','./manifest.json','./roster.json','./icon-180.png','./icon-192.png','./icon-512.png'];
 const FONT_HOSTS=['fonts.googleapis.com','fonts.gstatic.com'];
 // Cache each file on its own, so one missing file (or a renamed index.html) can't break the whole install.
@@ -18,7 +18,7 @@ self.addEventListener('fetch',e=>{
   if(u.pathname.endsWith('/roster.json')){e.respondWith(fetch(r,{cache:'no-cache'}).then(res=>{if(res.ok){const c=res.clone();caches.open(CACHE).then(x=>x.put(r,c))}return res}).catch(()=>caches.match(r,{ignoreSearch:true})));return}
   // Same-origin: serve from cache instantly, refresh the cache in the background (updates arrive on the next open).
   e.respondWith(caches.match(r,{ignoreSearch:true}).then(hit=>{
-    const net=fetch(r).then(res=>{if(res.ok)caches.open(CACHE).then(c=>c.put(r,res.clone()));return res}).catch(()=>hit||(r.mode==='navigate'?caches.match('./'):Response.error()));
+    const net=fetch(r,{cache:'no-cache'}).then(res=>{if(res.ok)caches.open(CACHE).then(c=>c.put(r,res.clone()));return res}).catch(()=>hit||(r.mode==='navigate'?caches.match('./'):Response.error()));
     return hit||net;
   }));
 });
