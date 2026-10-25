@@ -290,6 +290,12 @@ body.nav-hide .tabs{transform:translateY(calc(100% + 30px))}
 .jb{margin:6px 0}
 @media (hover:hover){button:not(:disabled):hover{border-color:var(--acc)}button.p:not(:disabled):hover{filter:brightness(1.07)}.tabs button:not([aria-current=page]):hover{background:color-mix(in srgb,var(--acc) 10%,transparent)}}
 @media (min-width:760px){main{max-width:700px}.tabs,.mini{max-width:700px}}
+
+.mini{position:fixed;top:0;left:0;right:0;z-index:9;max-width:580px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:calc(8px + env(safe-area-inset-top,0px)) 14px 8px;border-radius:0 0 18px 18px;color:#fff;background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 40%,#14102c),color-mix(in srgb,var(--acc) 70%,#241a52));box-shadow:0 8px 22px rgba(20,10,60,.35);transform:translateY(-120%);transition:transform .25s ease;cursor:pointer;border:0;font:inherit;width:100%;text-align:left}
+.mini.on{transform:none}.mini b{font-size:20px}.mini span{font-size:13px;opacity:.88}.mini .mg{margin-left:auto;font-size:12px;opacity:.8}
+body:not([data-t=home]) .hero{padding-top:14px;padding-bottom:12px}body:not([data-t=home]) .hero .nx:empty{display:none}
+.jb[hidden]{display:none!important}
+.tabs button:active{transform:scale(.94)}
 </style>
 </head>
 <body data-t="home">
@@ -510,7 +516,7 @@ body.nav-hide .tabs{transform:translateY(calc(100% + 30px))}
 <div class="b" style="margin-top:8px"><button class="sm" data-ic="512">Save icon-512</button><button class="sm" data-ic="192">Save icon-192</button><button class="sm" data-ic="180">Save icon-180</button></div></section>
 <section class="card" data-tab="more"><h2 class="disp">App &amp; updates</h2><div class="sub" id="appV"></div><div class="b" style="margin-top:8px"><button class="p sm" id="appUp">Update &amp; refresh now</button><button class="sm" id="dbUp">Update character list</button></div><div class="sub" style="margin-top:6px">Loads the newest files. Your saved goals and balance are not touched. The same button is in the top corner of every page.</div></section>
 <section class="card" data-tab="more"><h2 class="disp">Accent colour</h2><div class="sub">Match the app to your favourite element, or follow the element of your top goal.</div><select id="accSel" aria-label="Account" style="margin-top:8px"><option value="">Default</option><option value="auto">Match my top goal</option><option value="pyro">Pyro</option><option value="hydro">Hydro</option><option value="anemo">Anemo</option><option value="electro">Electro</option><option value="dendro">Dendro</option><option value="cryo">Cryo</option><option value="geo">Geo</option></select></section>
-<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v17.0 · build 25 Oct (navigation and design pass)</div>
+<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v17.3 · build 25 Oct (mini header, swipe tabs)</div>
 </main>
 <div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><button class="sm" id="rsBrowse" style="margin-top:8px">Browse all characters and weapons</button><input id="rsQ" type="search" placeholder="Search banners…" autocomplete="off" style="margin-top:10px"><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div><div id="rsBar" class="b" hidden style="position:sticky;bottom:0;background:var(--card);padding-top:8px"><button class="p wide" id="rsAdd"></button></div></div></div>
 <nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5 20 9l-8 12.5L4 9z"/><path d="M4 9h16M9 9l3 12.5L15 9M9 9l3-6.5L15 9"/></svg>Home</button><button data-tb="goals"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5c.7 4.8 4.2 8.3 9 9-4.8.7-8.3 4.2-9 9-.7-4.8-4.2-8.3-9-9 4.8-.7 8.3-4.2 9-9z"/></svg>Goals</button><button data-tb="income"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="12" cy="12" r="9"/><path d="M12 16.5V8M8.2 11.8 12 8l3.8 3.8"/></svg>Income</button><button data-tb="calc"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect class="f" x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7.5h7"/><g fill="currentColor" stroke="none"><circle cx="9" cy="12" r=".95"/><circle cx="12" cy="12" r=".95"/><circle cx="15" cy="12" r=".95"/><circle cx="9" cy="16" r=".95"/><circle cx="12" cy="16" r=".95"/><circle cx="15" cy="16" r=".95"/></g></svg>Calc</button><button data-tb="leaks"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="10.5" cy="10.5" r="7"/><path d="M15.6 15.6 21 21"/><path d="M10.5 7.2c.3 1.9 1.4 3 3.3 3.3-1.9.3-3 1.4-3.3 3.3-.3-1.9-1.4-3-3.3-3.3 1.9-.3 3-1.4 3.3-3.3z"/></svg>Leaks</button><button data-tb="more"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="7" cy="7" r="2.6"/><circle class="f" cx="17" cy="7" r="2.6"/><circle class="f" cx="7" cy="17" r="2.6"/><circle class="f" cx="17" cy="17" r="2.6"/></svg>More</button></nav>
@@ -586,8 +592,9 @@ function norm(raw){ // accepts v1, v2 and v3 data
   return o;
 }
 let S=defState(),dbDoc=null,dbCol=null,tmr=null,DL=null,pending=null;
+let CORRUPT_RAW=null,SAVE_WARN=false;
 function loadLocal(){
-  for(const k of [LS,...(PR.active==='main'?OLD:[])]){try{const r=localStorage.getItem(k);if(r){S=norm(JSON.parse(r));return}}catch(e){}}
+  for(const k of [LS,...(PR.active==='main'?OLD:[])]){try{const r=localStorage.getItem(k);if(r){try{S=norm(JSON.parse(r));return}catch(e){CORRUPT_RAW=CORRUPT_RAW||r;try{localStorage.setItem(k+'-unreadable',r)}catch(x){}}}}catch(e){}}
   S=norm(null);
 }
 function status(t){$('st').textContent=t}
@@ -595,7 +602,7 @@ let LOADED=false;
 function save(){
   if(!LOADED)return;
   S.updated=Date.now();
-  try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}
+  try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){if(!SAVE_WARN){SAVE_WARN=true;setTimeout(()=>{try{toast('Couldn’t save on this device. Storage may be full or blocked. Use Export backup in More.')}catch(x){}},1200)}}
   if(dbDoc){clearTimeout(tmr);tmr=setTimeout(()=>{dbDoc.set(JSON.parse(JSON.stringify(S))).then(()=>status('Saved ✓'),()=>status('Saved on this device only'))},400)}
 }
 
@@ -1580,7 +1587,7 @@ function setupMin(){document.querySelectorAll('section.card').forEach(c=>{if(c.d
   c.classList.toggle('min',!!MN[k]);b.setAttribute('aria-expanded',String(!MN[k]))})}
 const tabCards=t=>[...new Set(document.querySelectorAll('[data-tab="'+t+'"] section.card, section.card[data-tab="'+t+'"]'))];
 function fillJump(t){const bar=document.querySelector('.jb[data-jb="'+t+'"]');if(!bar)return;const box=bar.querySelector('.jbc');box.innerHTML='';
-  tabCards(t).forEach(c=>{if(c.hidden||!c._h||(c.dataset.cg&&c.dataset.cg!==CG))return;const b=document.createElement('button');b.className='chip';b.textContent=c._h.textContent.trim();b.onclick=()=>{c._set&&c._set(false);c.scrollIntoView({behavior:'smooth',block:'start'})};box.append(b)})}
+  tabCards(t).forEach(c=>{if(c.hidden||!c._h||(c.dataset.cg&&c.dataset.cg!==CG))return;const b=document.createElement('button');b.className='chip';b.textContent=c._h.textContent.trim();b.onclick=()=>{c._set&&c._set(false);c.scrollIntoView({behavior:'smooth',block:'start'})};box.append(b)});bar.hidden=box.children.length<2}
 function setupJump(){['home','goals','income','calc','leaks','more'].forEach(t=>{const first=[...document.querySelectorAll('[data-tab="'+t+'"]')].find(e=>!e.classList.contains('tb')&&!e.classList.contains('jb'));if(!first||document.querySelector('.jb[data-jb="'+t+'"]'))return;
   const bar=document.createElement('div');bar.className='jb';bar.dataset.jb=t;bar.dataset.tab=t;bar.innerHTML='<div class="jbc"></div><div class="b"><button class="sm" data-mn="1">Minimize all</button><button class="sm" data-mn="0">Expand all</button></div>';
   bar.onclick=e=>{const b=e.target.closest('[data-mn]');if(b)tabCards(t).forEach(c=>c._set&&c._set(b.dataset.mn==='1'))};
@@ -2253,6 +2260,33 @@ window.addEventListener('scroll',()=>{if(tk)return;tk=true;requestAnimationFrame
   acc=d*acc<0?d:acc+d;const end=window.innerHeight+y>=document.documentElement.scrollHeight-80;
   if(acc>40&&y>160&&!end)B.classList.add('nav-hide');else if(acc<-18||y<100||end)B.classList.remove('nav-hide')})},{passive:true});
 document.addEventListener('focusin',e=>{if(e.target.matches('input,select,textarea'))B.classList.remove('nav-hide')});
+// Radio groups: only the selected option is a Tab stop (arrow keys move between options)
+const rove=()=>document.querySelectorAll('[role=radiogroup]').forEach(g=>{const r=[...g.querySelectorAll('[role=radio]')];if(!r.length)return;const on=r.find(x=>x.getAttribute('aria-checked')==='true')||r[0];r.forEach(x=>{x.tabIndex=x===on?0:-1})});
+let rq=0;new MutationObserver(()=>{if(rq)return;rq=requestAnimationFrame(()=>{rq=0;rove()})}).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['aria-checked']});rove();
+// If saved data could not be read, say so and offer a copy instead of silently starting fresh
+if(CORRUPT_RAW)setTimeout(()=>toast('Some saved data couldn’t be read, so the app started with defaults. The unreadable data was kept on this device.',()=>saveFile('primogem-unreadable-data.json',CORRUPT_RAW,'application/json','unreadable data'),'Save copy',true),700);
+// Keyboard support for the segmented radio buttons: arrow keys move and select, Home/End jump to the ends
+document.addEventListener('keydown',e=>{
+  if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key))return;
+  const r=e.target.closest&&e.target.closest('[role=radio]');if(!r)return;
+  const g=r.closest('[role=radiogroup]');if(!g)return;
+  const it=[...g.querySelectorAll('[role=radio]')].filter(x=>!x.disabled&&x.offsetParent!==null),n=it.length;let i=it.indexOf(r);if(i<0||n<2)return;
+  i=e.key==='Home'?0:e.key==='End'?n-1:(e.key==='ArrowRight'||e.key==='ArrowDown')?(i+1)%n:(i-1+n)%n;
+  e.preventDefault();it[i].focus();it[i].click();
+});
+})();
+
+/* v17.3: sticky mini header, swipe between tabs, remember last tab */
+(function(){const mb=document.createElement('button');mb.type='button';mb.className='mini';mb.setAttribute('aria-label','Back to top');mb.innerHTML='<b id="mnT">0</b><span>pulls ready</span><span id="mnP"></span><span class="mg">Tap for top</span>';document.body.append(mb);
+  const hero=document.querySelector('.hero'),up=()=>{try{$('mnT').textContent=$('tt').textContent;$('mnP').textContent='· '+$('tp').textContent+' primos · '+$('tf').textContent+' fates'}catch(e){}};
+  mb.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+  if(hero&&'IntersectionObserver' in window){new IntersectionObserver(([e])=>{up();mb.classList.toggle('on',!e.isIntersecting)}).observe(hero)}
+  const T=['home','goals','income','calc','leaks','more'];let sx=0,sy=0,st=0,ok=false;
+  const bad=el=>{for(;el&&el!==document.body;el=el.parentElement){if(/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)||el.classList.contains('sheet')||el.classList.contains('tabs'))return true;const cs=getComputedStyle(el);if(/(auto|scroll)/.test(cs.overflowX)&&el.scrollWidth>el.clientWidth+4)return true}return false};
+  document.addEventListener('touchstart',e=>{if(e.touches.length!==1||document.querySelector('.sheet:not([hidden])')){ok=false;return}const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();ok=!bad(e.target)&&sx>24&&sx<innerWidth-24},{passive:true});
+  document.addEventListener('touchend',e=>{if(!ok)return;ok=false;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)<80||Math.abs(dy)>50||Math.abs(dx)<Math.abs(dy)*2||Date.now()-st>600)return;const i=T.indexOf(document.body.dataset.t),n=i+(dx<0?1:-1);if(i<0||n<0||n>=T.length)return;const b=document.querySelector('[data-tb='+T[n]+']');if(b){b.click();try{navigator.vibrate&&navigator.vibrate(8)}catch(x){}}},{passive:true});
+  document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{try{localStorage.setItem('primo-lasttab',b.dataset.tb)}catch(e){}}));
+  try{const lt=localStorage.getItem('primo-lasttab');if(lt&&T.includes(lt)&&lt!=='home'&&!location.hash&&document.body.dataset.t==='home')document.querySelector('[data-tb='+lt+']').click()}catch(e){}
 })();
 </script>
 </body>
