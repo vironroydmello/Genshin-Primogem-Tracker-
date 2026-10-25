@@ -266,9 +266,34 @@ body{background-image:radial-gradient(900px 520px at 90% -8%,color-mix(in srgb,v
 .chs{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 10px;margin:10px 0}.chs div{display:flex;justify-content:space-between;font-size:13.5px;padding:5px 0;border-bottom:1px solid var(--line)}.chs b{font-variant-numeric:tabular-nums}
 .arts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}.art{border:1px solid var(--line);border-radius:12px;padding:8px;background:var(--bg);font-size:12.5px;line-height:1.35}.art .h{display:flex;gap:8px;align-items:center;margin-bottom:4px}.art img{width:38px;height:38px;object-fit:contain}.art .m{font-weight:700}.art .s{opacity:.9}.art .s .hi{color:#e0a43a;font-weight:700}
 .tal{display:flex;gap:8px;margin:8px 0}.tal div{flex:1;text-align:center;border:1px solid var(--line);border-radius:12px;padding:6px 2px;font-size:12px}.tal b{display:block;font-size:18px}#bwF .chip{white-space:nowrap}.bwc .tg{font-size:10px;padding:0 6px;border-radius:99px;border:1px solid currentColor}#bw[hidden]{display:none}
+
+/* v17 UI pass: nav, hero, quick actions, motion */
+:root{color-scheme:light dark}:root[data-theme="light"]{color-scheme:light}:root[data-theme="dark"]{color-scheme:dark}
+.hero h1{font-size:clamp(15px,4.7vw,21px);line-height:1.25;padding-right:128px;white-space:nowrap}
+.hq{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.hq button{min-height:40px;padding:4px 4px;font-size:12.5px;white-space:nowrap;font-weight:650;border-radius:99px;background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.35)}
+.hq button.go{background:#fff;color:#2a1f5e;border-color:#fff}
+body:not([data-t=home]) .hq{display:none}
+.theme{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.mini{position:fixed;top:0;left:0;right:0;z-index:7;display:flex;align-items:center;gap:8px;max-width:580px;margin:0 auto;padding:calc(6px + env(safe-area-inset-top,0px)) 10px 6px 14px;background:color-mix(in srgb,var(--card) 84%,transparent);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);border:1px solid var(--line);border-top:0;border-radius:0 0 18px 18px;box-shadow:0 10px 26px rgba(8,4,28,.28);transform:translateY(-110%);visibility:hidden;transition:transform .25s ease,visibility 0s .25s}
+.mini.on{transform:none;visibility:visible;transition:transform .25s ease}
+.mini .mt{flex:1;min-width:0;display:block;text-align:left;background:none;border:0;padding:0;min-height:40px;font-size:13px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini .mt b{font-size:21px;color:var(--ink);margin-right:3px}
+.mini .go{min-height:38px;padding:4px 14px;border-radius:99px;background:var(--acc);border-color:var(--acc);color:var(--on);font-weight:700;flex:none}
+#h-log{scroll-margin-top:76px}
+.tabs{transition:transform .28s cubic-bezier(.2,.8,.2,1),background .25s}
+body.nav-hide .tabs{transform:translateY(calc(100% + 30px))}
+#toast{transition:bottom .28s ease}body.nav-hide #toast{bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+@keyframes tabin{from{opacity:0;transform:translateY(10px)}}
+[data-tab]{animation:tabin .26s ease-out backwards}
+.sec{flex-wrap:wrap;gap:6px 10px}
+.jb{margin:6px 0}
+@media (hover:hover){button:not(:disabled):hover{border-color:var(--acc)}button.p:not(:disabled):hover{filter:brightness(1.07)}.tabs button:not([aria-current=page]):hover{background:color-mix(in srgb,var(--acc) 10%,transparent)}}
+@media (min-width:760px){main{max-width:700px}.tabs,.mini{max-width:700px}}
 </style>
 </head>
 <body data-t="home">
+<div class="mini" id="mini" role="region" aria-label="Pull totals"><button type="button" class="mt" id="mTop" aria-label="Scroll to top"><b id="mn-t">0</b>pulls ready<span> · <span id="mn-p">0</span> primos · <span id="mn-f">0</span> fates</span></button><button type="button" class="go" id="mLog">＋ Log</button></div>
 <main>
 <header class="hero">
   <svg class="sky" viewBox="0 0 400 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -282,6 +307,7 @@ body{background-image:radial-gradient(900px 520px at 90% -8%,color-mix(in srgb,v
   <select class="pq" id="profQuick" aria-label="Profile" hidden></select>
   <div class="tot disp"><div class="big"><b id="tt">0</b>pulls ready</div><div><b id="tp">0</b>primogems</div><div><b id="tf">0</b>fates</div></div>
   <div class="nx" id="nx"></div>
+  <div class="hq" role="group" aria-label="Quick log"><button type="button" data-q="p60">+60 daily</button><button type="button" data-q="p90">+90 Welkin</button><button type="button" data-q="f1">+1 fate</button><button type="button" class="go" id="hqLog">Log…</button></div>
 </header>
 
 <section class="card" id="pfCard" data-tab="home"><h2 class="disp">Traveler profile</h2><div id="pfView"></div>
@@ -289,7 +315,7 @@ body{background-image:radial-gradient(900px 520px at 90% -8%,color-mix(in srgb,v
 <div class="b" id="pfAct" hidden style="margin-top:8px"><button class="sm" id="pfApply">Use endgame progress in Income</button><button class="sm" id="pfClr">Remove</button></div>
 <div class="sub" id="pfMsg" style="margin-top:6px"></div>
 <div class="b" id="pfFix" hidden style="margin-top:8px"><button class="sm p" id="pfOpen">1. Open my Enka data</button><button class="sm p" id="pfClip">2. Paste from clipboard</button></div>
-<details class="adv" style="margin-top:8px"><summary>Can’t load it? Proxy and paste options</summary><div class="sub" style="margin-top:6px"><b>Your own proxy (best fix, free).</b> Deploy the small <code>enka-proxy.js</code> file on Cloudflare Workers, then paste its address here.</div><input id="pf-proxy" type="url" autocomplete="off" placeholder="https://your-worker.workers.dev/?uid={uid}" style="width:100%;margin-top:6px"><div class="sub" style="margin-top:6px">Open <a id="pfLink" target="_blank" rel="noopener">your Enka data page</a>, press Select All, Copy, and paste everything here. Saving it as a file and choosing it also works. Use Check connections to see which route is failing.</div><textarea id="pfPaste" rows="3" placeholder="Paste the data here (or a UID, or the whole Enka page)" style="width:100%;margin-top:6px"></textarea><div class="b" style="margin-top:6px"><button class="sm p" id="pfPasteGo">Use pasted data</button><label class="sm" style="cursor:pointer">Choose a file<input id="pfFile" type="file" accept=".json,.txt,application/json,text/plain" hidden></label><button class="sm" id="pfTest">Check connections</button><button class="sm" id="pfCopy">Copy report</button></div><pre id="pfRep" style="white-space:pre-wrap;font-size:12px;margin:8px 0 0;opacity:.9"></pre></details>
+<details class="adv" style="margin-top:8px"><summary>Can’t load it? Proxy and paste options</summary><div class="sub" style="margin-top:6px"><b>Your own proxy (best fix, free).</b> Deploy the small <code>enka-proxy.js</code> file on Cloudflare Workers, then paste its address here.</div><input id="pf-proxy" aria-label="Your Enka proxy address" type="url" autocomplete="off" placeholder="https://your-worker.workers.dev/?uid={uid}" style="width:100%;margin-top:6px"><div class="sub" style="margin-top:6px">Open <a id="pfLink" target="_blank" rel="noopener">your Enka data page</a>, press Select All, Copy, and paste everything here. Saving it as a file and choosing it also works. Use Check connections to see which route is failing.</div><textarea id="pfPaste" aria-label="Pasted Enka data or UID" rows="3" placeholder="Paste the data here (or a UID, or the whole Enka page)" style="width:100%;margin-top:6px"></textarea><div class="b" style="margin-top:6px"><button class="sm p" id="pfPasteGo">Use pasted data</button><label class="sm" style="cursor:pointer">Choose a file<input id="pfFile" type="file" accept=".json,.txt,application/json,text/plain" hidden></label><button class="sm" id="pfTest">Check connections</button><button class="sm" id="pfCopy">Copy report</button></div><pre id="pfRep" style="white-space:pre-wrap;font-size:12px;margin:8px 0 0;opacity:.9"></pre></details>
 <div class="sub" style="margin-top:8px">Your UID is sent to enka.network to read your public profile. If Enka blocks direct calls, it goes through a relay (or your own proxy) first. A UID is public in-game, but nothing else is ever sent. Character data tables come from GitHub (or jsDelivr). Your in-game profile needs to be visible to others. Enka does not provide avatar frames.</div></section>
 <section class="card" id="evCard" data-tab="home" hidden><h2 class="disp">Free primogems right now</h2><div class="sub" id="evSub"></div><div id="evList" style="margin-top:8px"></div></section>
 <section class="card" id="wel" data-tab="home" hidden><h2 class="disp">Welcome! Set up in 3 steps</h2><div class="sub">One pull is one wish. This app counts the pulls you’ve saved and tells you when you can afford the character or weapon you want.</div><ol class="steps"><li id="w1"><span><b>Enter what you have now.</b> Type your primogems and fates under “Update your pulls” below, then tap <b>Set to my in-game total</b>.</span></li><li id="w2"><span><b>Set your income.</b> Pick how you play (free-to-play, Welkin…).</span><button class="sm" data-go="income">Open Income</button></li><li id="w3"><span><b>Add a goal.</b> Choose a character or weapon you’re saving for.</span><button class="sm" data-go="goals">Open Goals</button></li></ol><button class="sm" id="welHide">Hide this guide</button></section>
@@ -436,10 +462,10 @@ body{background-image:radial-gradient(900px 520px at 90% -8%,color-mix(in srgb,v
 <div class="sub" style="margin:0 0 10px">Leaks are unofficial and can change. Each one is tagged and rated, kept up to date, and removed when it turns out to be wrong. They are saved on this device.</div>
 <section class="card"><h2 class="disp">Update leaks with AI</h2><div class="sub">No API key needed: copy the prompt, paste it into an AI that can search the web (like Claude), then paste its answer back here.</div>
 <div class="b" style="margin-top:8px"><button class="p sm" id="lkCopy">1. Copy AI prompt</button></div>
-<textarea id="lkIn" rows="4" placeholder="2. Paste the AI’s answer here" style="width:100%;margin-top:8px"></textarea>
+<textarea id="lkIn" aria-label="Paste the AI’s answer" rows="4" placeholder="2. Paste the AI’s answer here" style="width:100%;margin-top:8px"></textarea>
 <div class="b" style="margin-top:8px"><button class="p sm" id="lkApply">3. Apply update</button></div><div class="sub" id="lkRes" style="margin-top:6px"></div><div id="lkRev"></div>
-<details class="adv" style="margin-top:8px"><summary>Automatic check (needs an Anthropic API key)</summary><input id="lkKey" type="password" autocomplete="off" placeholder="sk-ant-…" style="width:100%;margin-top:8px"><div class="sub" style="margin-top:6px">Stored only on this device. Each check costs a few cents of your API credit.</div><div class="b" style="margin-top:8px"><button class="sm" id="lkAuto">Check for leaks now</button></div></details></section>
-<input id="lkQ" type="search" placeholder="Search leaks…" autocomplete="off" style="width:100%;margin-top:10px"><div class="chips" id="lkF" style="margin:10px 0"></div><div id="lkL"></div>
+<details class="adv" style="margin-top:8px"><summary>Automatic check (needs an Anthropic API key)</summary><input id="lkKey" aria-label="Anthropic API key" type="password" autocomplete="off" placeholder="sk-ant-…" style="width:100%;margin-top:8px"><div class="sub" style="margin-top:6px">Stored only on this device. Each check costs a few cents of your API credit.</div><div class="b" style="margin-top:8px"><button class="sm" id="lkAuto">Check for leaks now</button></div></details></section>
+<input id="lkQ" aria-label="Search leaks" type="search" placeholder="Search leaks…" autocomplete="off" style="width:100%;margin-top:10px"><div class="chips" id="lkF" style="margin:10px 0"></div><div id="lkL"></div>
 <details class="adv" style="margin-top:10px"><summary>Add a leak yourself</summary><div class="row" style="margin-top:8px"><label class="f">Title<input id="lk-t" placeholder="Name and what was leaked"></label><label class="f">Patch<input id="lk-p" placeholder="e.g. 7.3"></label></div><div class="row"><label class="f">Type<select id="lk-y"><option value="character">Character</option><option value="weapon">Weapon</option><option value="banner">Banner</option><option value="event">Event</option><option value="other">Other</option></select></label><label class="f">Reliability<select id="lk-c"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label></div><div class="row"><label class="f">Tags (comma separated)<input id="lk-g" placeholder="dendro, 5-star"></label><label class="f">Source<input id="lk-s" placeholder="link or name"></label></div><label class="f" style="display:block;margin-top:8px">Note<input id="lk-n" placeholder="One short sentence"></label><div class="b" style="margin-top:8px"><button class="p sm" id="lk-add">Add leak</button></div></details></div>
 <div data-tab="calc"><div class="sec"><h2 class="disp">Calculator</h2></div>
 <div class="sub" style="margin:0 0 10px">A private scratchpad for planning. Nothing here changes your primogems, fates or goals.</div><div class="b" style="margin-bottom:10px"><button class="sm" id="c-reset">Reset all fields</button></div>
@@ -477,14 +503,14 @@ body{background-image:radial-gradient(900px 520px at 90% -8%,color-mix(in srgb,v
 </div>
 <section class="card" data-tab="more"><h2 class="disp">Appearance</h2><div class="sub">Customise the bottom navigation bar.</div>
 <div class="row" style="margin-top:8px"><label class="f">Navigation colours<select id="nv-c"><option value="">Colourful</option><option value="accent">Match my accent</option><option value="mono">Simple</option></select></label><label class="f">Icon style<select id="nv-s"><option value="">Outline</option><option value="fill">Filled</option></select></label></div>
-<div class="row"><label class="f">Labels<select id="nv-l"><option value="">Show</option><option value="hide">Hide</option></select></label><label class="f">Bar style<select id="nv-b"><option value="">Floating</option><option value="flat">Full width</option></select></label></div></section>
+<div class="row"><label class="f">Labels<select id="nv-l"><option value="">Show</option><option value="hide">Hide</option></select></label><label class="f">Bar style<select id="nv-b"><option value="">Floating</option><option value="flat">Full width</option></select></label><label class="f">While scrolling<select id="nv-a"><option value="">Hide the bar</option><option value="off">Always show</option></select></label></div></section>
 <section class="card" data-tab="more"><h2 class="disp">App icon maker</h2><div class="sub">Design a new home-screen icon, then save the three files over your old icons on your site. Phones that already installed the app must reinstall it to show the new icon.</div>
 <div class="row" style="margin-top:8px"><label class="f">Colour<select id="ic-c"><option value="">Violet (default)</option><option value="pyro">Pyro</option><option value="hydro">Hydro</option><option value="anemo">Anemo</option><option value="electro">Electro</option><option value="dendro">Dendro</option><option value="cryo">Cryo</option><option value="geo">Geo</option></select></label><label class="f">Symbol<select id="ic-g"><option value="gem">Gem</option><option value="star">Wish star</option><option value="both">Gem and star</option></select></label></div>
 <canvas id="icP" width="512" height="512" style="width:120px;height:120px;border-radius:27px;margin-top:10px;display:block"></canvas>
 <div class="b" style="margin-top:8px"><button class="sm" data-ic="512">Save icon-512</button><button class="sm" data-ic="192">Save icon-192</button><button class="sm" data-ic="180">Save icon-180</button></div></section>
 <section class="card" data-tab="more"><h2 class="disp">App &amp; updates</h2><div class="sub" id="appV"></div><div class="b" style="margin-top:8px"><button class="p sm" id="appUp">Update &amp; refresh now</button><button class="sm" id="dbUp">Update character list</button></div><div class="sub" style="margin-top:6px">Loads the newest files. Your saved goals and balance are not touched. The same button is in the top corner of every page.</div></section>
-<section class="card" data-tab="more"><h2 class="disp">Accent colour</h2><div class="sub">Match the app to your favourite element, or follow the element of your top goal.</div><select id="accSel" style="margin-top:8px"><option value="">Default</option><option value="auto">Match my top goal</option><option value="pyro">Pyro</option><option value="hydro">Hydro</option><option value="anemo">Anemo</option><option value="electro">Electro</option><option value="dendro">Dendro</option><option value="cryo">Cryo</option><option value="geo">Geo</option></select></section>
-<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v16.5 · build 25 Oct (CV colours, namecards)</div>
+<section class="card" data-tab="more"><h2 class="disp">Accent colour</h2><div class="sub">Match the app to your favourite element, or follow the element of your top goal.</div><select id="accSel" aria-label="Account" style="margin-top:8px"><option value="">Default</option><option value="auto">Match my top goal</option><option value="pyro">Pyro</option><option value="hydro">Hydro</option><option value="anemo">Anemo</option><option value="electro">Electro</option><option value="dendro">Dendro</option><option value="cryo">Cryo</option><option value="geo">Geo</option></select></section>
+<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v17.0 · build 25 Oct (navigation and design pass)</div>
 </main>
 <div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><button class="sm" id="rsBrowse" style="margin-top:8px">Browse all characters and weapons</button><input id="rsQ" type="search" placeholder="Search banners…" autocomplete="off" style="margin-top:10px"><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div><div id="rsBar" class="b" hidden style="position:sticky;bottom:0;background:var(--card);padding-top:8px"><button class="p wide" id="rsAdd"></button></div></div></div>
 <nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5 20 9l-8 12.5L4 9z"/><path d="M4 9h16M9 9l3 12.5L15 9M9 9l3-6.5L15 9"/></svg>Home</button><button data-tb="goals"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5c.7 4.8 4.2 8.3 9 9-4.8.7-8.3 4.2-9 9-.7-4.8-4.2-8.3-9-9 4.8-.7 8.3-4.2 9-9z"/></svg>Goals</button><button data-tb="income"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="12" cy="12" r="9"/><path d="M12 16.5V8M8.2 11.8 12 8l3.8 3.8"/></svg>Income</button><button data-tb="calc"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect class="f" x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7.5h7"/><g fill="currentColor" stroke="none"><circle cx="9" cy="12" r=".95"/><circle cx="12" cy="12" r=".95"/><circle cx="15" cy="12" r=".95"/><circle cx="9" cy="16" r=".95"/><circle cx="12" cy="16" r=".95"/><circle cx="15" cy="16" r=".95"/></g></svg>Calc</button><button data-tb="leaks"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="10.5" cy="10.5" r="7"/><path d="M15.6 15.6 21 21"/><path d="M10.5 7.2c.3 1.9 1.4 3 3.3 3.3-1.9.3-3 1.4-3.3 3.3-.3-1.9-1.4-3-3.3-3.3 1.9-.3 3-1.4 3.3-3.3z"/></svg>Leaks</button><button data-tb="more"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="7" cy="7" r="2.6"/><circle class="f" cx="17" cy="7" r="2.6"/><circle class="f" cx="7" cy="17" r="2.6"/><circle class="f" cx="17" cy="17" r="2.6"/></svg>More</button></nav>
@@ -1509,9 +1535,9 @@ $('bkYes').onclick=()=>{$('exp').click();drawBackupNudge()};$('bkNo').onclick=()
 /* ---------- v12: minimize cards + jump bars ---------- */
 /* ---------- v12: tab banners, nav customisation, icon maker ---------- */
 let NV={};try{NV=JSON.parse(localStorage.getItem('primo-nav')||'{}')}catch(e){}
-function applyNav(){const B=document.body.classList;B.toggle('nv-accent',NV.c==='accent');B.toggle('nv-mono',NV.c==='mono');B.toggle('nv-fill',NV.s==='fill');B.toggle('nv-hide',NV.l==='hide');B.toggle('nv-flat',NV.b==='flat');
-  [['nv-c','c'],['nv-s','s'],['nv-l','l'],['nv-b','b']].forEach(([id,k])=>{$(id).value=NV[k]||''})}
-[['nv-c','c'],['nv-s','s'],['nv-l','l'],['nv-b','b']].forEach(([id,k])=>$(id).addEventListener('change',()=>{NV[k]=$(id).value;try{localStorage.setItem('primo-nav',JSON.stringify(NV))}catch(e){}applyNav()}));
+function applyNav(){const B=document.body.classList;B.toggle('nv-accent',NV.c==='accent');B.toggle('nv-mono',NV.c==='mono');B.toggle('nv-fill',NV.s==='fill');B.toggle('nv-hide',NV.l==='hide');B.toggle('nv-flat',NV.b==='flat');B.toggle('nv-noauto',NV.a==='off');
+  [['nv-c','c'],['nv-s','s'],['nv-l','l'],['nv-b','b'],['nv-a','a']].forEach(([id,k])=>{$(id).value=NV[k]||''})}
+[['nv-c','c'],['nv-s','s'],['nv-l','l'],['nv-b','b'],['nv-a','a']].forEach(([id,k])=>$(id).addEventListener('change',()=>{NV[k]=$(id).value;try{localStorage.setItem('primo-nav',JSON.stringify(NV))}catch(e){}applyNav()}));
 applyNav();
 const ICG={gem:['M12 2.5 20 9l-8 12.5L4 9z','M4 9h16M9 9l3 12.5L15 9M9 9l3-6.5L15 9'],star:['M12 2.5c.7 4.8 4.2 8.3 9 9-4.8.7-8.3 4.2-9 9-.7-4.8-4.2-8.3-9-9 4.8-.7 8.3-4.2 9-9z','']};
 function drawIcon(cv,n){const x=cv.getContext&&cv.getContext('2d');if(!x||typeof Path2D==='undefined')return;cv.width=cv.height=n;const k=$('ic-c').value,cols=ACC[k]?[ACC[k][0],ACC[k][1]]:['#8b7bff','#2a1f6b'],g=x.createLinearGradient(0,0,n,n);g.addColorStop(0,cols[0]);g.addColorStop(1,cols[1]);x.fillStyle=g;x.fillRect(0,0,n,n);
@@ -2029,12 +2055,17 @@ $('inst').onclick=async()=>{if(!ip)return;ip.prompt();try{await ip.userChoice}ca
 window.addEventListener('appinstalled',()=>{$('inst').hidden=true});
 
 const TABS=['home','goals','income','leaks','calc','more'];
-function tab(t,fromNav){document.body.dataset.t=t;document.querySelectorAll('[data-tb]').forEach(b=>b.dataset.tb===t?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));window.scrollTo(0,0);
+const SCR={};
+function tab(t,fromNav,restore){const B=document.body,prev=B.dataset.t;
+  if(prev===t&&restore){if(restore==='nav')window.scrollTo({top:0,behavior:'smooth'});return}
+  SCR[prev]=window.scrollY;B.dataset.t=t;B.classList.remove('nav-hide');window.navLock=performance.now()+700;
+  document.querySelectorAll('[data-tb]').forEach(b=>b.dataset.tb===t?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
+  window.scrollTo(0,restore?(SCR[t]||0):0);
   if(!fromNav&&location.hash!=='#'+t){try{window.history.pushState(null,'','#'+t)}catch(e){}}}
 // Back button / deep links: #goals, #income, ... so Android Back goes to the previous tab instead of closing the app
-window.addEventListener('popstate',()=>{const h=location.hash.slice(1);tab(TABS.includes(h)?h:'home',true)});
+window.addEventListener('popstate',()=>{const h=location.hash.slice(1);tab(TABS.includes(h)?h:'home',true,'pop')});
 {const h=location.hash.slice(1);if(TABS.includes(h)&&h!=='home')tab(h,true)}
-document.querySelectorAll('[data-tb],[data-go]').forEach(b=>b.addEventListener('click',()=>tab(b.dataset.tb||b.dataset.go)));
+document.querySelectorAll('[data-tb],[data-go]').forEach(b=>b.addEventListener('click',()=>b.dataset.tb?tab(b.dataset.tb,false,'nav'):tab(b.dataset.go)));
 document.querySelectorAll('[data-pre]').forEach(b=>b.onclick=()=>{const p=b.dataset.pre;$('i-w').checked=p!=='f2p';$('i-bp').checked=p==='wb';if(!$('i-p').value)$('i-p').value=3000;incIn();toast('Income updated. Check the numbers below.')});
 function drawWelcome(){
   const i=S.income,d=[S.log.length>0,!!(i.welkin||i.bp||i.bargains||i.patch||i.monthly||S.patchStart),S.goals.length>0];
@@ -2203,6 +2234,26 @@ $('roGo').onclick=()=>{
 };
 $('roReset').onclick=()=>{$('roUrl').value='';try{localStorage.removeItem('primo-roster-url')}catch(e){}loadRoster(true)};
 loadRoster();
+</script>
+<script>
+/* v17: sticky totals bar, quick log, auto-hiding nav */
+(()=>{
+const B=document.body,mini=$('mini'),hero=document.querySelector('.hero');
+const sync=()=>{$('mn-t').textContent=$('tt').textContent;$('mn-p').textContent=$('tp').textContent;$('mn-f').textContent=$('tf').textContent};
+sync();const mo=new MutationObserver(sync);['tt','tp','tf'].forEach(i=>mo.observe($(i),{childList:true,characterData:true,subtree:true}));
+if('IntersectionObserver' in window)new IntersectionObserver(([e])=>mini.classList.toggle('on',!e.isIntersecting&&e.boundingClientRect.bottom<0)).observe(hero);
+function goLog(){B.classList.remove('nav-hide');window.navLock=performance.now()+1600;const go=()=>{const h=$('h-log'),c=h.closest('.card');if(c&&c._set&&c.classList.contains('min'))c._set(false);h.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{try{$('ap').focus({preventScroll:true})}catch(e){}},400)};
+  if(B.dataset.t!=='home'){tab('home');setTimeout(go,80)}else go()}
+$('mLog').onclick=$('hqLog').onclick=goLog;
+$('mTop').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+let ly=window.scrollY,acc=0,tk=false;
+window.addEventListener('scroll',()=>{if(tk)return;tk=true;requestAnimationFrame(()=>{tk=false;const y=window.scrollY,d=y-ly;ly=y;
+  if(performance.now()<(window.navLock||0)){acc=0;return}
+  if(B.classList.contains('nv-noauto')){B.classList.remove('nav-hide');return}
+  acc=d*acc<0?d:acc+d;const end=window.innerHeight+y>=document.documentElement.scrollHeight-80;
+  if(acc>40&&y>160&&!end)B.classList.add('nav-hide');else if(acc<-18||y<100||end)B.classList.remove('nav-hide')})},{passive:true});
+document.addEventListener('focusin',e=>{if(e.target.matches('input,select,textarea'))B.classList.remove('nav-hide')});
+})();
 </script>
 </body>
 </html>
