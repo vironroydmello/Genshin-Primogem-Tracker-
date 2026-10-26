@@ -138,7 +138,7 @@ button:disabled{opacity:.4;cursor:default}
 
 [hidden]{display:none!important}
 [data-tab]{display:none}
-body[data-t=home] [data-tab=home],body[data-t=goals] [data-tab=goals],body[data-t=income] [data-tab=income],body[data-t=leaks] [data-tab=leaks],body[data-t=calc] [data-tab=calc],body[data-t=more] [data-tab=more]{display:block}
+body[data-t=home] [data-tab=home],body[data-t=goals] [data-tab=goals],body[data-t=income] [data-tab=income],body[data-t=me] [data-tab=me],body[data-t=leaks] [data-tab=leaks],body[data-t=calc] [data-tab=calc],body[data-t=more] [data-tab=more]{display:block}
 body{padding-bottom:116px}
 .card,.g{border-radius:18px}
 .card{box-shadow:0 1px 2px rgba(40,25,90,.06),0 8px 20px rgba(40,25,90,.05)}
@@ -213,7 +213,7 @@ button{transition:transform .08s,box-shadow .15s}button:active{transform:scale(.
 .tabs{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:6px;gap:2px;border-radius:28px;border:1px solid color-mix(in srgb,var(--line) 70%,#fff 8%);background:color-mix(in srgb,var(--card) 78%,transparent);backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);box-shadow:0 14px 36px rgba(8,4,28,.42),inset 0 1px 0 rgba(255,255,255,.07)}
 .tabs button{--tc:#8b7bff;--tc2:#5ad1ff;border-radius:22px;min-height:56px;gap:2px;font-size:11.5px;letter-spacing:.01em;transition:background .25s,box-shadow .25s,color .25s,transform .12s}
 .tabs button[data-tb=home]{--tc:#8b7bff;--tc2:#5ad1ff}.tabs button[data-tb=goals]{--tc:#ffb52e;--tc2:#ff7a45}.tabs button[data-tb=income]{--tc:#2fd68c;--tc2:#b4f05a}
-.tabs button[data-tb=calc]{--tc:#3cc6f2;--tc2:#7b8cff}.tabs button[data-tb=leaks]{--tc:#ff5f98;--tc2:#ffa042}.tabs button[data-tb=more]{--tc:#a9a4ff;--tc2:#e29bff}
+.tabs button[data-tb=calc]{--tc:#3cc6f2;--tc2:#7b8cff}.tabs button[data-tb=leaks]{--tc:#ff5f98;--tc2:#ffa042}.tabs button[data-tb=more]{--tc:#a9a4ff;--tc2:#e29bff}.tabs button[data-tb=me]{--tc:#4fd1c5;--tc2:#63b3ed}
 .tabs .ti{color:var(--tc);opacity:.85;stroke-width:1.9;transition:opacity .2s,transform .2s}
 .tabs .ti .f{fill:var(--tc2);fill-opacity:.2}
 .tabs button[aria-current=page]{color:var(--tc);background:linear-gradient(160deg,color-mix(in srgb,var(--tc) 28%,transparent),color-mix(in srgb,var(--tc2) 10%,transparent));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tc) 45%,transparent),0 6px 18px color-mix(in srgb,var(--tc) 28%,transparent)}
@@ -273,6 +273,16 @@ body{background-image:radial-gradient(900px 520px at 90% -8%,color-mix(in srgb,v
 .hq{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
 .hq button{min-height:40px;padding:4px 4px;font-size:12.5px;white-space:nowrap;font-weight:650;border-radius:99px;background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.35)}
 .hq button.go{background:#fff;color:#2a1f5e;border-color:#fff}
+.rcp{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--acc) 9%,transparent)}
+.rcp .rcm{font-size:14px;margin-bottom:8px}.rcp .b{display:flex;flex-wrap:wrap;gap:6px}
+/* v18: Traveler tab + Home UID strip, seven-tab nav */
+.us-top{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.us-av{width:48px;height:48px;border-radius:50%;overflow:hidden;flex:none;border:2px solid var(--line);background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.us-av img{width:100%;height:100%;object-fit:cover;display:block}
+.us-t{min-width:0}.us-t b{display:block;font-size:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.us-row{align-items:end}
+#pfCard,#uidStrip{scroll-margin-top:76px}
+@media (max-width:430px){.tabs{gap:2px;padding-left:5px;padding-right:5px}.tabs button{font-size:10.5px;padding:4px 1px}}
 body:not([data-t=home]) .hq{display:none}
 .theme{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .mini{position:fixed;top:0;left:0;right:0;z-index:7;display:flex;align-items:center;gap:8px;max-width:580px;margin:0 auto;padding:calc(6px + env(safe-area-inset-top,0px)) 10px 6px 14px;background:color-mix(in srgb,var(--card) 84%,transparent);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);border:1px solid var(--line);border-top:0;border-radius:0 0 18px 18px;box-shadow:0 10px 26px rgba(8,4,28,.28);transform:translateY(-110%);visibility:hidden;transition:transform .25s ease,visibility 0s .25s}
@@ -290,12 +300,6 @@ body.nav-hide .tabs{transform:translateY(calc(100% + 30px))}
 .jb{margin:6px 0}
 @media (hover:hover){button:not(:disabled):hover{border-color:var(--acc)}button.p:not(:disabled):hover{filter:brightness(1.07)}.tabs button:not([aria-current=page]):hover{background:color-mix(in srgb,var(--acc) 10%,transparent)}}
 @media (min-width:760px){main{max-width:700px}.tabs,.mini{max-width:700px}}
-
-.mini{position:fixed;top:0;left:0;right:0;z-index:9;max-width:580px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:calc(8px + env(safe-area-inset-top,0px)) 14px 8px;border-radius:0 0 18px 18px;color:#fff;background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 40%,#14102c),color-mix(in srgb,var(--acc) 70%,#241a52));box-shadow:0 8px 22px rgba(20,10,60,.35);transform:translateY(-120%);transition:transform .25s ease;cursor:pointer;border:0;font:inherit;width:100%;text-align:left}
-.mini.on{transform:none}.mini b{font-size:20px}.mini span{font-size:13px;opacity:.88}.mini .mg{margin-left:auto;font-size:12px;opacity:.8}
-body:not([data-t=home]) .hero{padding-top:14px;padding-bottom:12px}body:not([data-t=home]) .hero .nx:empty{display:none}
-.jb[hidden]{display:none!important}
-.tabs button:active{transform:scale(.94)}
 </style>
 </head>
 <body data-t="home">
@@ -316,7 +320,13 @@ body:not([data-t=home]) .hero{padding-top:14px;padding-bottom:12px}body:not([dat
   <div class="hq" role="group" aria-label="Quick log"><button type="button" data-q="p60">+60 daily</button><button type="button" data-q="p90">+90 Welkin</button><button type="button" data-q="f1">+1 fate</button><button type="button" class="go" id="hqLog">Log…</button></div>
 </header>
 
-<section class="card" id="pfCard" data-tab="home"><h2 class="disp">Traveler profile</h2><div id="pfView"></div>
+<section class="card" id="uidStrip" data-tab="home" aria-label="Your UID">
+  <div class="us-top" id="usTop" hidden><span class="us-av" id="usAv"></span><div class="us-t"><b class="disp" id="usNick"></b><div class="sub" id="usSub"></div></div></div>
+  <div class="row us-row"><label class="f">Your UID<input id="h-uid" inputmode="numeric" maxlength="10" placeholder="9-digit UID" autocomplete="off"></label><button class="p sm" id="hGo">Load profile</button></div>
+  <div class="sub" id="hMsg" style="margin-top:6px"></div>
+  <div class="b" style="margin-top:8px"><button class="sm" id="hView" hidden>Open showcase ›</button></div>
+</section>
+<section class="card" id="pfCard" data-tab="me"><h2 class="disp">Traveler profile</h2><div id="pfView"></div>
 <div class="row" style="margin-top:10px"><label class="f">Your UID<input id="pf-uid" inputmode="numeric" maxlength="10" placeholder="9-digit UID" autocomplete="off"></label><button class="p sm" id="pfGo" style="align-self:end">Load profile</button></div>
 <div class="b" id="pfAct" hidden style="margin-top:8px"><button class="sm" id="pfApply">Use endgame progress in Income</button><button class="sm" id="pfClr">Remove</button></div>
 <div class="sub" id="pfMsg" style="margin-top:6px"></div>
@@ -331,6 +341,7 @@ body:not([data-t=home]) .hero{padding-top:14px;padding-bottom:12px}body:not([dat
 <section class="card" id="bkCard" data-tab="home" hidden><div id="bkTxt"></div><div class="b" style="margin-top:8px"><button class="p sm" id="bkYes">Back up now</button><button class="sm" id="bkNo">Remind me later</button></div></section>
 <section class="card" id="cdCard" data-tab="home" hidden><h2 class="disp">Banner clock</h2><div id="cdL"></div><div class="sub" style="margin-top:6px">Assumes an 11:00 start and half-patch phases. Check in game for exact times.</div></section>
 <section class="card" id="cuCard" data-tab="home" hidden><div id="cuTxt"></div><div class="b"><button class="p sm" id="cuYes"></button><button class="sm" id="cuNo">Not now</button></div></section>
+<section class="card" id="auCard" data-tab="home" hidden><div id="auTodayBox" hidden><div id="auTodayTxt"></div><div class="b" style="margin-top:8px"><button class="sm" id="auMiss">Missed today</button></div></div><div id="auEndBox" hidden><div id="auEndTxt"></div><div class="b" style="margin-top:8px"><button class="p sm" id="auRenew">Renew for 30 days</button><button class="sm" id="auOver">It’s over</button></div></div></section>
 <section class="card" aria-labelledby="h-log" data-tab="home">
   <h2 id="h-log" class="disp">Update your pulls</h2>
   <div class="chips">
@@ -344,9 +355,10 @@ body:not([data-t=home]) .hero{padding-top:14px;padding-bottom:12px}body:not([dat
   </div>
   <details class="adv"><summary>Add a note or change the date</summary><label class="f" style="display:block;margin-top:8px">Note (optional)<input id="an" maxlength="60" list="cats" autocomplete="off" placeholder="Events, Abyss 36★, Codes, Top-up…"></label>
   <datalist id="cats"><option value="Events"><option value="Abyss"><option value="Imaginarium Theater"><option value="Livestream codes"><option value="Genesis top-up"><option value="Maintenance"><option value="Quest / Exploration"></datalist>
-  <div class="row" style="margin-top:8px"><label class="f">Date<input id="ad" type="date"></label></div></details><div class="sub" id="setHint" style="margin-top:10px"></div>
+  <div class="row" style="margin-top:8px"><label class="f">Source<select id="asrc"><option value="">Not set</option><option value="daily">Daily income</option><option value="event">Event</option><option value="other">Other</option></select></label><label class="f">Date<input id="ad" type="date"></label></div></details><div class="sub" id="setHint" style="margin-top:10px"></div>
   <div class="ubt" style="margin-top:8px"><button id="gainBtn" class="gainb">➕ I gained</button><button id="spendBtn" class="spendb">➖ I spent</button></div>
   <button class="p wide" id="set" style="margin-top:8px">🎯 Set to my in-game total</button>
+  <div class="rcp" id="rcPrompt" role="status" aria-live="polite" hidden></div>
   <div class="sub" style="margin-top:8px">Type a number above, then tap one button. <b>I gained / I spent</b>: type only the amount you got or used. <b>Set to my in-game total</b>: type what your game shows now and the app does the maths. 160 primogems = 1 pull.</div>
   <details class="panel adv"><summary>Genesis Crystals &amp; Starglitter (optional)</summary>
     <div class="sub" id="latOut"></div>
@@ -356,12 +368,12 @@ body:not([data-t=home]) .hero{padding-top:14px;padding-bottom:12px}body:not([dat
     <div class="sub" style="margin-top:6px">Leave the convert boxes empty to convert everything. Genesis becomes primogems 1:1 and 5 Starglitter become 1 fate. Every change here is logged in History and can be undone.</div></details>
 </section>
 
-<section class="card" id="plCard" data-tab="home"><h2 class="disp">Log pulls</h2><div class="sub">Just pulled? Log it and your balance and pity update themselves.</div>
+<section class="card" id="plCard" data-tab="me"><h2 class="disp">Log pulls</h2><div class="sub">Just pulled? Log it and your balance and pity update themselves.</div>
 <div class="row" style="margin-top:8px"><label class="f">Banner<select id="pl-t"><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled</option></select></label><label class="f">Pulls done<input id="pl-n" type="number" inputmode="numeric" min="1" placeholder="10"></label></div>
 <div class="row"><label class="f">Result<select id="pl-r"><option value="none">No 5★</option><option value="won">5★ (the one I wanted)</option><option value="lost">5★ (not the featured one)</option></select></label><label class="f" id="pl-lw" hidden>Which pull was it?<input id="pl-l" type="number" inputmode="numeric" min="1" placeholder="e.g. 8"></label></div>
 <div class="b" style="margin-top:10px"><button class="p wide" id="pl-go">Log these pulls</button></div>
 <details class="adv" style="margin-top:8px"><summary>Luck stats</summary><div id="plS" class="sub" style="margin-top:6px;line-height:1.6"></div></details></section>
-<section class="card" id="whCard" data-tab="home"><h2 class="disp">Wish history</h2><div class="sub">Import your wish history to fill in your pity and see your stats. Use a tracker that exports UIGF JSON, for example paimon.moe or Genshin Wish Export.</div><div class="b" style="margin-top:8px"><button class="p sm" id="whBtn">Import wish history</button></div><input id="whF" type="file" accept=".json,application/json" hidden><div id="whO"></div><div class="b" id="whAct" hidden style="margin-top:8px"><button class="sm" id="whUse">Use this pity in my tracker</button><button class="sm" id="whClr">Clear stats</button></div><div class="sub" style="margin-top:6px">The 50/50 record needs English character names. Only your stats are kept on this device, not the whole file.</div></section>
+<section class="card" id="whCard" data-tab="me"><h2 class="disp">Wish history</h2><div class="sub">Import your wish history to fill in your pity and see your stats. Use a tracker that exports UIGF JSON, for example paimon.moe or Genshin Wish Export.</div><div class="b" style="margin-top:8px"><button class="p sm" id="whBtn">Import wish history</button></div><input id="whF" type="file" accept=".json,application/json" hidden><div id="whO"></div><div class="b" id="whAct" hidden style="margin-top:8px"><button class="sm" id="whUse">Use this pity in my tracker</button><button class="sm" id="whClr">Clear stats</button></div><div class="sub" style="margin-top:6px">The 50/50 record needs English character names. Only your stats are kept on this device, not the whole file.</div></section>
 <section class="card" id="rsCard" data-tab="home"><h2 class="disp">Resets &amp; checklist</h2><label class="f">Server<select id="rk-s"><option value="8">Asia / TW-HK-MO (UTC+8)</option><option value="1">Europe (UTC+1)</option><option value="-5">America (UTC-5)</option></select></label><div id="rkL" style="margin-top:8px"></div><div class="sub" style="margin-top:6px">Everything resets at 04:00 server time, and ticks clear themselves.</div></section>
 <div data-tab="goals"><div class="sec"><h2 class="disp">Goals</h2><span style="display:flex;gap:6px"><select class="sm" id="isz" aria-label="Icon size"><option value="48">Small icons</option><option value="76">Medium icons</option><option value="112">Large icons</option></select><button class="sm" id="sortG">Sort by release</button></span></div>
 <p class="sub" style="margin:-4px 2px 10px">Pulls fund goals from the top: Must have first, then Want, then If spare. Change a tier or pause a goal when plans change and everything re-plans.</p>
@@ -405,6 +417,15 @@ body:not([data-t=home]) .hero{padding-top:14px;padding-bottom:12px}body:not([dat
   <div class="sub" id="modeNote" style="margin-bottom:6px"></div>
   <details class="adv"><summary>How are the odds worked out?</summary><div class="sub">Odds on each goal use the standard pity curves (soft pity from pull 74 for characters and Chronicled, 63 for weapons) with a 55% win rate for characters, 37.5% for a chosen weapon and 50% for Chronicled. The weapon curve is a model estimate.</div></details>
   <div class="sub" style="margin-top:8px" id="incOut"></div>
+</section>
+
+<section class="card" aria-labelledby="h-au" data-tab="income">
+  <h2 id="h-au" class="disp">Add daily income automatically</h2>
+  <label class="chk"><input type="checkbox" id="au-c"><span>Add my daily commissions (<b id="au-ca">60</b> a day)</span></label>
+  <div class="row" style="margin-top:12px;align-items:end"><label class="f">Add Welkin’s 90 a day until<input type="date" id="au-wd"></label></div>
+  <div class="chips" style="margin:8px 0 0"><button class="chip" id="au-w30">Bought today: 30 days</button><button class="chip" id="au-w10">10 days</button><button class="chip" id="au-wx">Stop adding Welkin</button></div>
+  <div class="sub" id="auSt" style="margin-top:10px"></div>
+  <details class="adv"><summary>How this works</summary><div class="sub" style="margin-top:4px">The app can only add income when you open it, so it fills in the days you missed. These entries are marked <b>Auto estimate</b> in History and use your income setting (everything, most days or casual). Days you already logged by hand with the +60 or +90 buttons are skipped. If a day went wrong, tap <b>Missed today</b> on Home, or use <b>Set to my in-game total</b> at any time to correct the balance. Event rewards and the monthly extras are not added.</div></details>
 </section>
 
 <section class="card" aria-labelledby="h-eg" data-tab="income">
@@ -516,10 +537,10 @@ body:not([data-t=home]) .hero{padding-top:14px;padding-bottom:12px}body:not([dat
 <div class="b" style="margin-top:8px"><button class="sm" data-ic="512">Save icon-512</button><button class="sm" data-ic="192">Save icon-192</button><button class="sm" data-ic="180">Save icon-180</button></div></section>
 <section class="card" data-tab="more"><h2 class="disp">App &amp; updates</h2><div class="sub" id="appV"></div><div class="b" style="margin-top:8px"><button class="p sm" id="appUp">Update &amp; refresh now</button><button class="sm" id="dbUp">Update character list</button></div><div class="sub" style="margin-top:6px">Loads the newest files. Your saved goals and balance are not touched. The same button is in the top corner of every page.</div></section>
 <section class="card" data-tab="more"><h2 class="disp">Accent colour</h2><div class="sub">Match the app to your favourite element, or follow the element of your top goal.</div><select id="accSel" aria-label="Account" style="margin-top:8px"><option value="">Default</option><option value="auto">Match my top goal</option><option value="pyro">Pyro</option><option value="hydro">Hydro</option><option value="anemo">Anemo</option><option value="electro">Electro</option><option value="dendro">Dendro</option><option value="cryo">Cryo</option><option value="geo">Geo</option></select></section>
-<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v17.3 · build 25 Oct (mini header, swipe tabs)</div>
+<div class="sub" id="ver" data-tab="more" style="text-align:center;margin-bottom:18px">Primogem Tracker v18.2 · build 26 Oct (auto-add income)</div>
 </main>
 <div id="rs" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rs-t"><div class="sheetbox"><div class="gh"><h2 id="rs-t" class="disp" style="flex:1;margin:0">Upcoming banners</h2><button class="sm" id="rsX">Close</button></div><div class="sub" id="rsInfo" style="margin-top:6px"></div><button class="sm" id="rsBrowse" style="margin-top:8px">Browse all characters and weapons</button><input id="rsQ" type="search" placeholder="Search banners…" autocomplete="off" style="margin-top:10px"><div class="chips" id="rsF" style="margin:10px 0 0"></div><div id="rsL"></div><div id="rsBar" class="b" hidden style="position:sticky;bottom:0;background:var(--card);padding-top:8px"><button class="p wide" id="rsAdd"></button></div></div></div>
-<nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5 20 9l-8 12.5L4 9z"/><path d="M4 9h16M9 9l3 12.5L15 9M9 9l3-6.5L15 9"/></svg>Home</button><button data-tb="goals"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5c.7 4.8 4.2 8.3 9 9-4.8.7-8.3 4.2-9 9-.7-4.8-4.2-8.3-9-9 4.8-.7 8.3-4.2 9-9z"/></svg>Goals</button><button data-tb="income"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="12" cy="12" r="9"/><path d="M12 16.5V8M8.2 11.8 12 8l3.8 3.8"/></svg>Income</button><button data-tb="calc"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect class="f" x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7.5h7"/><g fill="currentColor" stroke="none"><circle cx="9" cy="12" r=".95"/><circle cx="12" cy="12" r=".95"/><circle cx="15" cy="12" r=".95"/><circle cx="9" cy="16" r=".95"/><circle cx="12" cy="16" r=".95"/><circle cx="15" cy="16" r=".95"/></g></svg>Calc</button><button data-tb="leaks"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="10.5" cy="10.5" r="7"/><path d="M15.6 15.6 21 21"/><path d="M10.5 7.2c.3 1.9 1.4 3 3.3 3.3-1.9.3-3 1.4-3.3 3.3-.3-1.9-1.4-3-3.3-3.3 1.9-.3 3-1.4 3.3-3.3z"/></svg>Leaks</button><button data-tb="more"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="7" cy="7" r="2.6"/><circle class="f" cx="17" cy="7" r="2.6"/><circle class="f" cx="7" cy="17" r="2.6"/><circle class="f" cx="17" cy="17" r="2.6"/></svg>More</button></nav>
+<nav class="tabs" aria-label="Sections"><button data-tb="home" aria-current="page"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5 20 9l-8 12.5L4 9z"/><path d="M4 9h16M9 9l3 12.5L15 9M9 9l3-6.5L15 9"/></svg>Home</button><button data-tb="goals"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 2.5c.7 4.8 4.2 8.3 9 9-4.8.7-8.3 4.2-9 9-.7-4.8-4.2-8.3-9-9 4.8-.7 8.3-4.2 9-9z"/></svg>Goals</button><button data-tb="income"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="12" cy="12" r="9"/><path d="M12 16.5V8M8.2 11.8 12 8l3.8 3.8"/></svg>Income</button><button data-tb="me"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="12" cy="8" r="4"/><path d="M4.5 20.5c.8-4 3.8-6 7.5-6s6.7 2 7.5 6"/></svg>Traveler</button><button data-tb="calc"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect class="f" x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7.5h7"/><g fill="currentColor" stroke="none"><circle cx="9" cy="12" r=".95"/><circle cx="12" cy="12" r=".95"/><circle cx="15" cy="12" r=".95"/><circle cx="9" cy="16" r=".95"/><circle cx="12" cy="16" r=".95"/><circle cx="15" cy="16" r=".95"/></g></svg>Calc</button><button data-tb="leaks"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="10.5" cy="10.5" r="7"/><path d="M15.6 15.6 21 21"/><path d="M10.5 7.2c.3 1.9 1.4 3 3.3 3.3-1.9.3-3 1.4-3.3 3.3-.3-1.9-1.4-3-3.3-3.3 1.9-.3 3-1.4 3.3-3.3z"/></svg>Leaks</button><button data-tb="more"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="7" cy="7" r="2.6"/><circle class="f" cx="17" cy="7" r="2.6"/><circle class="f" cx="7" cy="17" r="2.6"/><circle class="f" cx="17" cy="17" r="2.6"/></svg>More</button></nav>
 <div id="toast" role="status" aria-live="polite" hidden><span id="tmsg"></span><button id="tund">Undo</button></div>
 
 <datalist id="dlNames"></datalist>
@@ -564,7 +585,10 @@ function cleanGoal(raw){
   g.guar=!!g.guar;g.paused=!!g.paused;g.prio=[1,2,3].includes(num(g.prio))?num(g.prio):2;g.release=isoRe.test(g.release||'')?g.release:'';
   capGoal(g);clampPity(g);return g;
 }
-const defState=()=>({v:4,pt:{char:0,weapon:0,chron:0,cg:false},cu:'',primos:0,fates:0,income:{daily:60,welkin:false,monthly:0,bargains:false,bp:false,patch:0,rate:100},patchLen:42,patchStart:'',bargain:'',endgame:{ab:[0,0,0,0],abN:1,thMax:1000,thPct:0,sg:0},bonus:[],mode:'worst',glitter:0,genesis:0,log:[],goals:[],done:[],updated:0});
+const defState=()=>({v:4,pt:{char:0,weapon:0,chron:0,cg:false},cu:'',primos:0,fates:0,income:{daily:60,welkin:false,monthly:0,bargains:false,bp:false,patch:0,rate:100},patchLen:42,patchStart:'',bargain:'',endgame:{ab:[0,0,0,0],abN:1,thMax:1000,thPct:0,sg:0},bonus:[],mode:'worst',glitter:0,genesis:0,log:[],goals:[],done:[],auto:{c:false,wu:'',lc:'',lw:''},updated:0});
+const SRC=['daily','event','other','pull','reconcile'],RKIND=['pull','missed','event','exploration','mail','topup','other'];
+// Older entries have no tag: work one out from what they already say, never invent one
+function inferSrc(x){return x.goal?'pull':x.mode==='set'?'reconcile':/^Catch-up/.test(x.note||'')||x.note==='Dailies'||x.note==='Welkin'?'daily':''}
 function norm(raw){ // accepts v1, v2 and v3 data
   const o=defState();
   if(!raw||typeof raw!=='object')return o;
@@ -581,6 +605,10 @@ function norm(raw){ // accepts v1, v2 and v3 data
     if(e.eid)x.eid=String(e.eid);if(e.note)x.note=String(e.note).slice(0,60);if(e.lg)x.lg=num(e.lg);if(e.ls)x.ls=num(e.ls);
     if(e.goal&&typeof e.goal==='object'){x.goal=cleanGoal(e.goal);x.idx=num(e.idx)}
     if(e.pt&&typeof e.pt==='object')x.pt=cleanPt(e.pt);
+    if(SRC.includes(e.src))x.src=e.src;else{const g=inferSrc(x);if(g)x.src=g}
+    if(e.auto||/^Catch-up/.test(x.note||''))x.auto=true;
+    if(e.days!==undefined&&e.days!==null)x.days=Math.min(1000,Math.max(0,num(e.days)));
+    if(RKIND.includes(e.rk))x.rk=e.rk;
     return x;
   });
   if(Array.isArray(raw.goals)&&(raw.goals.length||raw.v>=3))o.goals=raw.goals.filter(g=>g&&typeof g==='object').map(cleanGoal);
@@ -589,6 +617,7 @@ function norm(raw){ // accepts v1, v2 and v3 data
   if(raw.pt&&typeof raw.pt==='object')o.pt=cleanPt(raw.pt);
   else{const seen={};o.goals.map((g,i)=>({g,i})).sort((a,b)=>a.g.prio-b.g.prio||a.i-b.i).forEach(({g})=>{if(g.paused||g.type==='custom'||seen[g.type])return;seen[g.type]=1;o.pt[g.type]=g.pity;if(g.type==='char')o.pt.cg=g.guar});o.pt=cleanPt(o.pt)}
   o.cu=isoRe.test(raw.cu||'')?raw.cu:(raw.cu===undefined?today():'');
+  {const a=raw.auto&&typeof raw.auto==='object'?raw.auto:{},d=v=>isoRe.test(v||'')?v:'';o.auto={c:!!a.c,wu:d(a.wu),lc:d(a.lc),lw:d(a.lw)}}
   return o;
 }
 let S=defState(),dbDoc=null,dbCol=null,tmr=null,DL=null,pending=null;
@@ -687,6 +716,8 @@ function applyCore(q){ // q: {mode,p,f,date,goal,idx}
   const e={date:q.date&&isoRe.test(q.date)?q.date:today(),p:q.p,f:q.f,dp:nP-S.primos,df:nF-S.fates,mode:q.mode};
   if(q.goal){e.goal=q.goal;e.idx=q.idx}
   if(q.note)e.note=String(q.note).slice(0,60);
+  if(q.src)e.src=q.src;else if(q.goal)e.src='pull';
+  if(q.auto)e.auto=true;if(q.days!==undefined&&q.days!==null)e.days=q.days;
   if(q.lg||q.ls){e.lg=q.lg||0;e.ls=q.ls||0;S.genesis=Math.max(0,S.genesis-e.lg);S.glitter=Math.max(0,S.glitter-e.ls)}
   S.primos=nP;S.fates=nF;S.log.push(e);
   return {e};
@@ -820,7 +851,7 @@ function render(){
   const d=m.e;$('incOut').textContent='≈ '+Math.round(d)+' primos/day, about '+(d*30/160).toFixed(1)+' pulls every 30 days'+(m.eMax>d?' (up to '+Math.round(m.eMax)+'/day if you collect everything).':'. Events arrive in lumps, so the chart smooths them out.');
   $('latOut').textContent=(S.genesis||S.glitter)?'In inventory: '+S.genesis+' Genesis, '+S.glitter+' Starglitter (about '+(lat()/160).toFixed(1)+' pulls once converted). Your balance above only counts what you’ve converted.':'Nothing waiting to be converted.';
   const eg=endgameParts();$('egOut').textContent='Endgame ≈ '+Math.round(eg.total)+' primos a month (Abyss '+Math.round(eg.abyss)+', Theater '+Math.round(eg.theater)+', Stygian '+Math.round(eg.stygian)+').';
-  drawChart(m);drawMilestones(m);drawBargain();drawBonus();drawWelcome();drawCatchup();fillPity();setHint();drawCountdown();applyAccent();drawSummary(m);drawBackupNudge();drawSummary(m);
+  drawChart(m);drawMilestones(m);drawBargain();drawBonus();drawWelcome();drawCatchup();drawAuto();fillPity();setHint();drawCountdown();applyAccent();drawSummary(m);drawBackupNudge();drawSummary(m);
 }
 
 /* edit + result panels */
@@ -1075,11 +1106,14 @@ function drawHistory(){
       if(e.goal){
         const n=e.pulls||(-e.df+(-e.dp/160)),nm=e.goal.name||'goal';
         t.textContent=fmt(e.date)+' — '+(e.res==='won'?'won '+nm+' in '+plural(n,'pull'):e.res==='lost'?(e.goal.type==='weapon'?'missed '+nm:'lost the 50/50 on '+nm)+' after '+plural(n,'pull'):'spent '+plural(n,'pull')+' on '+nm);
-      }else{t.textContent=fmt(e.date)+' — '+(e.mode==='inv'?invText(e):e.mode==='set'?'set to '+e.p+' primos, '+e.f+' fates':sg(e.p)+' primos, '+sg(e.f)+' fates');if(e.note)t.textContent+=' · '+e.note}
+      }else{t.textContent=fmt(e.date)+' — '+(e.mode==='inv'?invText(e):e.mode==='set'?recText(e):sg(e.p)+' primos, '+sg(e.f)+' fates');if(e.note)t.textContent+=' · '+e.note}
+      {const lab={daily:'Daily',event:'Event',other:'Other',pull:'Pull'},rl={pull:'Pulls',missed:'Missed dailies',event:'Event',exploration:'Exploration',mail:'Mail or code',topup:'Top-up',other:'Other'},add=(x,c)=>{const bd=document.createElement('span');bd.className='badge'+(c?' '+c:'');bd.textContent=x;t.append(' ',bd)};
+       if(e.mode==='set'){if(e.rk)add(rl[e.rk])}else if(e.src&&lab[e.src]&&!e.goal)add(lab[e.src]);if(e.auto)add('Auto estimate','off')}
       const b=document.createElement('button');b.className='sm';b.textContent='Undo';b.onclick=()=>undoEntry(e);
       d.append(t,b);h.append(d);
     });
   }
+  try{if(RC_E&&!S.log.includes(RC_E))hideReconcile()}catch(x){}
   const dl=$('doneList');dl.innerHTML='';$('doneWrap').hidden=!S.done.length;
   S.done.slice(-10).reverse().forEach(x=>{const d=document.createElement('div');d.className='log';d.textContent=fmt(x.date)+' — '+(x.res==='lost'?(x.type==='weapon'?'Missed':'Lost 50/50'):'Won')+': '+(x.name||'Goal')+(x.patch?' (patch '+x.patch+')':'')+', '+plural(x.pulls,'pull');dl.append(d)});
   const wins=S.done.filter(x=>x.res!=='lost'),w=S.done.filter(x=>x.res!=='lost'&&x.fifty).length,l=S.done.filter(x=>x.res==='lost'&&x.type!=='weapon').length;
@@ -1091,6 +1125,29 @@ function drawHistory(){
 /* ---------- log form ---------- */
 let sign=1;
 document.querySelectorAll('[data-sign]').forEach(b=>b.onclick=()=>{sign=Number(b.dataset.sign);document.querySelectorAll('[data-sign]').forEach(x=>x.setAttribute('aria-checked',String(x===b)))});
+/* ---------- reconcile: what changed since the app and the game last agreed ---------- */
+function recDays(){let d=null;for(const e of S.log)if(e.mode==='set'&&(d===null||e.date>d))d=e.date;if(d===null)for(const e of S.log)if(d===null||e.date<d)d=e.date;return d===null?null:Math.max(0,-off(d))}
+const nf=n=>Number(n).toLocaleString('en-US'),sgn=v=>(v>0?'+':v<0?'−':'')+nf(Math.abs(v));
+function recText(e){const parts=[];
+  if(e.dp)parts.push('app '+nf(e.p-e.dp)+' → you '+nf(e.p)+', '+sgn(e.dp)+(e.df?' primos':''));
+  if(e.df)parts.push('fates: app '+nf(e.f-e.df)+' → you '+nf(e.f)+', '+sgn(e.df));
+  return 'Reconciled: '+(parts.length?parts.join('; '):'the app already matched your total')+(e.days?' over '+plural(e.days,'day'):'')}
+let RC_E=null;
+function hideReconcile(){RC_E=null;const b=$('rcPrompt');if(b){b.hidden=true;b.textContent=''}}
+function showReconcile(e){hideReconcile();if(!e||(!e.dp&&!e.df)||e.days===undefined)return; // the first total has nothing to compare with
+  const box=$('rcPrompt'),msg=document.createElement('div'),row=document.createElement('div');msg.className='rcm';row.className='b';
+  const btn=(label,fn,cls)=>{const b=document.createElement('button');b.type='button';b.className='sm'+(cls?' '+cls:'');b.textContent=label;b.onclick=()=>{fn&&fn();hideReconcile();save();refresh()};row.append(b)};
+  const pulls=(e.df<0?-e.df:0)+(e.dp<0&&(-e.dp)%160===0?(-e.dp)/160:0);
+  if(pulls>0){msg.textContent='That is '+plural(pulls,'pull')+' less than the app expected. Did you pull?';
+    btn('Yes, '+plural(pulls,'pull'),()=>{e.rk='pull';e.src='pull'},'p');
+    btn('Undo and log them',()=>{undoEntry(e);tab('me');setTimeout(()=>$('plCard').scrollIntoView({behavior:'smooth',block:'start'}),80)});
+    btn('Just adjust')}
+  else if(e.dp<0&&!e.df&&(-e.dp)%60===0){const n=-e.dp/60;msg.textContent='That is '+plural(n,'daily commission')+' less than the app expected. Did you miss '+(n===1?'a day':n+' days')+'?';
+    btn('Yes, missed '+(n===1?'a day':n+' days'),()=>{e.rk='missed';e.src='daily'},'p');btn('Just adjust')}
+  else if(e.dp>0||e.df>0){msg.textContent='You have '+[e.dp>0?nf(e.dp)+' more primogems':'',e.df>0?plural(e.df,'more fate'):''].filter(Boolean).join(' and ')+' than the app expected. Where did it come from?';
+    [['Event','event'],['Exploration','exploration'],['Mail or code','mail'],['Top-up','topup'],['Other','other']].forEach(([l,k])=>btn(l,()=>{e.rk=k;e.src=k==='event'?'event':'other'}));btn('Skip')}
+  else return;
+  box.append(msg,row);box.hidden=false;RC_E=e}
 function entry(mode){
   const pv=$('ap').value,fv=$('af').value;
   if(pv===''&&fv==='')return;
@@ -1106,15 +1163,18 @@ function entry(mode){
   else{p=num(pv);f=num(fv);if(sign<0){p=-Math.abs(p);f=-Math.abs(f)}}
   {const tP=mode==='set'?p:S.primos+p,tF=mode==='set'?f:S.fates+f;if(tP>1e6||tF>1e4){toast('That’s more than the app can track (max 1,000,000 primogems and 10,000 fates).');return}}
   const date=$('ad').value&&$('ad').value<=today()?$('ad').value:today();
-  const r=commit({mode,p,f,date,note:$('an').value.trim()});
-  if(!r.err){$('an').value='';$('ap').value='';$('af').value='';$('ad').value=today();toast(mode==='set'?'Balance updated':'Entry logged',()=>undoEntry(r.e))}
+  const q={mode,p,f,date,note:$('an').value.trim()};
+  if(mode==='set'){q.src='reconcile';const dd=recDays();if(dd!==null)q.days=dd}
+  else q.src=sign<0?'pull':($('asrc').value||'');
+  const r=commit(q);
+  if(!r.err){$('an').value='';$('ap').value='';$('af').value='';$('asrc').value='';$('ad').value=today();toast(mode==='set'?'Balance updated':'Entry logged',()=>undoEntry(r.e));if(mode==='set')showReconcile(r.e);else hideReconcile()}
 }
 $('gainBtn').onclick=()=>{sign=1;entry('add')};$('spendBtn').onclick=()=>{sign=-1;entry('add')};$('set').onclick=()=>entry('set');
 [$('ap'),$('af')].forEach(i=>i.addEventListener('input',()=>{const b=$('set');if(b.dataset.armed){delete b.dataset.armed;b.textContent='🎯 Set to my in-game total'}}));
 [$('ap'),$('af')].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur()}));
 document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
   const q=b.dataset.q,p=q==='p60'?60:q==='p90'?90:0,f=q==='f1'?1:0;
-  const r=commit({mode:'add',p,f,date:today(),note:q==='p60'?'Dailies':q==='p90'?'Welkin':''});
+  const r=commit({mode:'add',p,f,date:today(),note:q==='p60'?'Dailies':q==='p90'?'Welkin':'',src:p?'daily':''});
   if(!r.err)toast('Logged '+(p?'+'+p+' primos':'+1 fate'),()=>undoEntry(r.e));
 });
 
@@ -1317,9 +1377,37 @@ $('isz').onchange=()=>{try{localStorage.setItem('primo-isz',$('isz').value)}catc
 $('sortG').onclick=()=>{const before=S.goals.slice(),k=g=>g.release||'9999';S.goals.sort((a,b)=>a.prio-b.prio||(k(a)<k(b)?-1:k(a)>k(b)?1:0));save();render();toast('Sorted by release date within each tier',()=>{S.goals=before;save();render()})};
 $('rsAdd').onclick=()=>{const pk=RO.banners.filter(b=>rsSel.has(b.id)).sort((a,b)=>a.release<b.release?-1:a.release>b.release?1:0);pk.forEach(b=>S.goals.push(newGoal({name:b.name,patch:b.patch,release:b.release,type:b.type,rid:b.id,img:imgFor(b),el:elFor(b)})));rsSel.clear();save();render();closeRoster();toast('Added '+plural(pk.length,'goal'))};
 $('rsQ').addEventListener('input',()=>drawRoster());
-function cuInfo(){if(!S.cu||!S.log.length)return null;const n=Math.min(60,-off(S.cu)),per=Math.round((S.income.daily+(S.income.welkin?WELKIN:0))*S.income.rate/100);return n<2||per<=0?null:{n,tot:per*n}}
+/* ---------- auto-add daily income: fills in the days since the app was last opened ---------- */
+const auAdd=(s,n)=>{const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const auOn=()=>!!(S.auto&&(S.auto.c||(S.auto.wu&&S.auto.wu>=today())));
+function auAmt(iso){const A=S.auto,man=n=>S.log.some(e=>e.date===iso&&!e.auto&&e.note===n); // days you logged by hand are skipped
+  const c=A.c&&iso>A.lc&&!man('Dailies')?S.income.daily:0,w=A.wu&&iso<=A.wu&&iso>A.lw&&S.income.welkin&&!man('Welkin')?WELKIN:0;
+  return Math.round((c+w)*S.income.rate/100)}
+function autoRun(){
+  const A=S.auto;if(!A||!(A.c||A.wu))return;const t=today();
+  if(A.c&&!A.lc)A.lc=auAdd(t,-1);if(A.wu&&!A.lw)A.lw=auAdd(t,-1);
+  const lows=[A.c?A.lc:null,A.wu?A.lw:null].filter(Boolean);if(!lows.length)return;
+  const first=lows.reduce((a,b)=>a<b?a:b);if(first>=t)return;
+  let from=auAdd(first,1);const cap=auAdd(t,-60);if(from<cap)from=cap;
+  let past=0,n=0,tod=0;for(let d=from;d<=t;d=auAdd(d,1)){const v=auAmt(d);if(d<t){past+=v;n++}else tod=v}
+  const prev={lc:A.lc,lw:A.lw,cu:S.cu},made=[];
+  if(past>0){const r=applyCore({mode:'add',p:past,f:0,date:auAdd(t,-1),note:'Auto: '+plural(n,'day')+' of income (est.)',src:'daily',auto:true,days:n});if(r.e)made.push(r.e)}
+  if(tod>0){const r=applyCore({mode:'add',p:tod,f:0,date:t,note:'Auto: today (est.)',src:'daily',auto:true});if(r.e)made.push(r.e)}
+  A.lc=A.c?t:'';A.lw=A.wu?t:'';if(made.length)S.cu=t;save();refresh();
+  if(made.length)toast('Auto-added '+nf(past+tod)+' primogems'+(past?' ('+plural(n,'missed day')+' and today)':' for today')+'. Estimate.',()=>{made.slice().reverse().forEach(undoEntry);Object.assign(S.auto,{lc:prev.lc,lw:prev.lw});S.cu=prev.cu;save();render()})}
+function setWu(iso){S.auto.wu=iso;if(iso){S.income.welkin=true;$('i-w').checked=true}else S.auto.lw='';save();autoRun();render()}
+function todayAuto(){const t=today();return S.log.find(e=>e.auto&&e.date===t&&/^Auto: today/.test(e.note||''))}
+function drawAuto(){const A=S.auto,t=today();if(!$('au-c'))return;
+  $('au-c').checked=!!A.c;$('au-ca').textContent=S.income.daily;if(document.activeElement!==$('au-wd'))$('au-wd').value=A.wu||'';
+  const last=[A.lc,A.lw].filter(Boolean).sort().pop();
+  $('auSt').textContent=(A.c||A.wu)?('Added through '+fmt(last||t)+'.'+(A.wu?(A.wu>=t?' Welkin runs until '+fmt(A.wu)+'.':' Welkin ended on '+fmt(A.wu)+'.'):'')):'Off. The app only adds income when you open it, so it fills in the days you missed.';
+  const te=todayAuto(),ended=!!(A.wu&&A.wu<t&&S.income.welkin);
+  $('auCard').hidden=!(te||ended);$('auTodayBox').hidden=!te;$('auEndBox').hidden=!ended;
+  if(te)$('auTodayTxt').textContent='Auto-added today: +'+nf(te.dp)+' primogems (estimate).';
+  if(ended)$('auEndTxt').textContent='Your Welkin Moon ended on '+fmt(A.wu)+'.'}
+function cuInfo(){if(!S.cu||!S.log.length||auOn())return null;const n=Math.min(60,-off(S.cu)),per=Math.round((S.income.daily+(S.income.welkin?WELKIN:0))*S.income.rate/100);return n<2||per<=0?null:{n,tot:per*n}}
 function drawCatchup(){const c=cuInfo();$('cuCard').hidden=!c;if(!c)return;$('cuTxt').textContent='It has been '+c.n+' days since your last check-in. Add your usual dailies'+(S.income.welkin?' and Welkin':'')+' (about '+c.tot+' primogems)?';$('cuYes').textContent='Add '+c.tot+' primos'}
-$('cuYes').onclick=()=>{const c=cuInfo();if(!c)return;const old=S.cu,r=commit({mode:'add',p:c.tot,f:0,date:today(),note:'Catch-up, '+c.n+' days (est.)'});if(!r.err)toast('Catch-up added',()=>{undoEntry(r.e);S.cu=old;save();render()})};
+$('cuYes').onclick=()=>{const c=cuInfo();if(!c)return;const old=S.cu,r=commit({mode:'add',p:c.tot,f:0,date:today(),note:'Catch-up, '+c.n+' days (est.)',src:'daily',auto:true});if(!r.err)toast('Catch-up added',()=>{undoEntry(r.e);S.cu=old;save();render()})};
 $('cuNo').onclick=()=>{S.cu=today();save();render()};
 const bakRaw=()=>{try{const b=JSON.parse(localStorage.getItem('primo-bak-v10'));return b&&b.data&&Object.keys(b.data).length?b:null}catch(e){return null}};
 $('bakRes').hidden=!bakRaw();
@@ -1587,8 +1675,8 @@ function setupMin(){document.querySelectorAll('section.card').forEach(c=>{if(c.d
   c.classList.toggle('min',!!MN[k]);b.setAttribute('aria-expanded',String(!MN[k]))})}
 const tabCards=t=>[...new Set(document.querySelectorAll('[data-tab="'+t+'"] section.card, section.card[data-tab="'+t+'"]'))];
 function fillJump(t){const bar=document.querySelector('.jb[data-jb="'+t+'"]');if(!bar)return;const box=bar.querySelector('.jbc');box.innerHTML='';
-  tabCards(t).forEach(c=>{if(c.hidden||!c._h||(c.dataset.cg&&c.dataset.cg!==CG))return;const b=document.createElement('button');b.className='chip';b.textContent=c._h.textContent.trim();b.onclick=()=>{c._set&&c._set(false);c.scrollIntoView({behavior:'smooth',block:'start'})};box.append(b)});bar.hidden=box.children.length<2}
-function setupJump(){['home','goals','income','calc','leaks','more'].forEach(t=>{const first=[...document.querySelectorAll('[data-tab="'+t+'"]')].find(e=>!e.classList.contains('tb')&&!e.classList.contains('jb'));if(!first||document.querySelector('.jb[data-jb="'+t+'"]'))return;
+  tabCards(t).forEach(c=>{if(c.hidden||!c._h||(c.dataset.cg&&c.dataset.cg!==CG))return;const b=document.createElement('button');b.className='chip';b.textContent=c._h.textContent.trim();b.onclick=()=>{c._set&&c._set(false);c.scrollIntoView({behavior:'smooth',block:'start'})};box.append(b)})}
+function setupJump(){['home','goals','income','me','calc','leaks','more'].forEach(t=>{const first=[...document.querySelectorAll('[data-tab="'+t+'"]')].find(e=>!e.classList.contains('tb')&&!e.classList.contains('jb'));if(!first||document.querySelector('.jb[data-jb="'+t+'"]'))return;
   const bar=document.createElement('div');bar.className='jb';bar.dataset.jb=t;bar.dataset.tab=t;bar.innerHTML='<div class="jbc"></div><div class="b"><button class="sm" data-mn="1">Minimize all</button><button class="sm" data-mn="0">Expand all</button></div>';
   bar.onclick=e=>{const b=e.target.closest('[data-mn]');if(b)tabCards(t).forEach(c=>c._set&&c._set(b.dataset.mn==='1'))};
   if(first.tagName==='SECTION')first.before(bar);else{const sec=first.querySelector(':scope>.sec');sec?sec.after(bar):first.prepend(bar)}
@@ -2061,7 +2149,7 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;$('ins
 $('inst').onclick=async()=>{if(!ip)return;ip.prompt();try{await ip.userChoice}catch(e){}ip=null;$('inst').hidden=true};
 window.addEventListener('appinstalled',()=>{$('inst').hidden=true});
 
-const TABS=['home','goals','income','leaks','calc','more'];
+const TABS=['home','goals','income','me','leaks','calc','more'];
 const SCR={};
 function tab(t,fromNav,restore){const B=document.body,prev=B.dataset.t;
   if(prev===t&&restore){if(restore==='nav')window.scrollTo({top:0,behavior:'smooth'});return}
@@ -2260,6 +2348,35 @@ window.addEventListener('scroll',()=>{if(tk)return;tk=true;requestAnimationFrame
   acc=d*acc<0?d:acc+d;const end=window.innerHeight+y>=document.documentElement.scrollHeight-80;
   if(acc>40&&y>160&&!end)B.classList.add('nav-hide');else if(acc<-18||y<100||end)B.classList.remove('nav-hide')})},{passive:true});
 document.addEventListener('focusin',e=>{if(e.target.matches('input,select,textarea'))B.classList.remove('nav-hide')});
+// Home UID strip: loads through the same code as the Traveler tab, so nothing is duplicated
+{const hUid=$('h-uid'),hMsg=$('hMsg'),hGo=$('hGo'),pu=$('pf-uid'),IDLE='Loads your name, level and endgame progress, so you type less.';
+ const ping=()=>pu.dispatchEvent(new Event('input',{bubbles:true}));
+ function drawStrip(){let o=null;try{o=PF}catch(e){}
+  const fix=!$('pfFix').hidden;$('usTop').hidden=!o;hGo.textContent=o?'Refresh':'Load profile';
+  $('hView').hidden=!(o||fix);$('hView').textContent=(fix&&!o)?'Help loading it ›':'Open showcase ›';
+  if(document.activeElement!==hUid)hUid.value=pu.value;
+  if(o){$('usNick').textContent=o.nick||'Traveler';$('usSub').textContent='AR '+o.ar+' · World Level '+o.wl+' · UID '+o.uid;
+   const im=document.querySelector('#pfAv img'),av=$('usAv'),src=$('pfAv');av.textContent='';if(im){const c=im.cloneNode();c.removeAttribute('id');av.append(c)}if(src&&src.style.borderColor)av.style.borderColor=src.style.borderColor}
+  hMsg.textContent=$('pfMsg').textContent.trim()||(o?'':IDLE);hMsg.hidden=!hMsg.textContent}
+ let dq=0;const later=()=>{if(dq)return;dq=requestAnimationFrame(()=>{dq=0;drawStrip()})};
+ new MutationObserver(later).observe($('pfView'),{childList:true,subtree:true});
+ new MutationObserver(later).observe($('pfMsg'),{childList:true,characterData:true,subtree:true});
+ new MutationObserver(later).observe($('pfFix'),{attributes:true,attributeFilter:['hidden']});
+ hUid.addEventListener('input',()=>{pu.value=hUid.value;ping()});
+ hUid.addEventListener('keydown',e=>{if(e.key==='Enter')hGo.click()});
+ pu.addEventListener('input',()=>{if(document.activeElement!==hUid)hUid.value=pu.value});
+ hGo.onclick=()=>{const u=hUid.value.replace(/\D/g,'');if(u.length<9){hMsg.textContent='Enter your 9-digit UID first.';hUid.focus();return}pu.value=u;ping();$('pfGo').click()};
+ $('hView').onclick=()=>{tab('me');setTimeout(()=>$('pfCard').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+ drawStrip()}
+// Auto-add daily income: settings, Home buttons, and the run on open
+$('au-c').onchange=()=>{S.auto.c=$('au-c').checked;if(!S.auto.c)S.auto.lc='';save();autoRun();render()};
+$('au-w30').onclick=()=>setWu(auAdd(today(),29));$('au-w10').onclick=()=>setWu(auAdd(today(),9));$('au-wx').onclick=()=>setWu('');
+$('au-wd').onchange=()=>{const v=$('au-wd').value;setWu(isoRe.test(v)?v:'')};
+$('auMiss').onclick=()=>{const e=todayAuto();if(!e)return;undoEntry(e);if(!S.log.includes(e))toast('Removed today’s auto income.')};
+$('auRenew').onclick=()=>setWu(auAdd(today(),29));
+$('auOver').onclick=()=>{S.income.welkin=false;$('i-w').checked=false;S.auto.wu='';S.auto.lw='';save();render()};
+setTimeout(()=>{try{autoRun()}catch(e){}},250);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)try{autoRun()}catch(e){}});
 // Radio groups: only the selected option is a Tab stop (arrow keys move between options)
 const rove=()=>document.querySelectorAll('[role=radiogroup]').forEach(g=>{const r=[...g.querySelectorAll('[role=radio]')];if(!r.length)return;const on=r.find(x=>x.getAttribute('aria-checked')==='true')||r[0];r.forEach(x=>{x.tabIndex=x===on?0:-1})});
 let rq=0;new MutationObserver(()=>{if(rq)return;rq=requestAnimationFrame(()=>{rq=0;rove()})}).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['aria-checked']});rove();
@@ -2274,19 +2391,6 @@ document.addEventListener('keydown',e=>{
   i=e.key==='Home'?0:e.key==='End'?n-1:(e.key==='ArrowRight'||e.key==='ArrowDown')?(i+1)%n:(i-1+n)%n;
   e.preventDefault();it[i].focus();it[i].click();
 });
-})();
-
-/* v17.3: sticky mini header, swipe between tabs, remember last tab */
-(function(){const mb=document.createElement('button');mb.type='button';mb.className='mini';mb.setAttribute('aria-label','Back to top');mb.innerHTML='<b id="mnT">0</b><span>pulls ready</span><span id="mnP"></span><span class="mg">Tap for top</span>';document.body.append(mb);
-  const hero=document.querySelector('.hero'),up=()=>{try{$('mnT').textContent=$('tt').textContent;$('mnP').textContent='· '+$('tp').textContent+' primos · '+$('tf').textContent+' fates'}catch(e){}};
-  mb.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
-  if(hero&&'IntersectionObserver' in window){new IntersectionObserver(([e])=>{up();mb.classList.toggle('on',!e.isIntersecting)}).observe(hero)}
-  const T=['home','goals','income','calc','leaks','more'];let sx=0,sy=0,st=0,ok=false;
-  const bad=el=>{for(;el&&el!==document.body;el=el.parentElement){if(/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)||el.classList.contains('sheet')||el.classList.contains('tabs'))return true;const cs=getComputedStyle(el);if(/(auto|scroll)/.test(cs.overflowX)&&el.scrollWidth>el.clientWidth+4)return true}return false};
-  document.addEventListener('touchstart',e=>{if(e.touches.length!==1||document.querySelector('.sheet:not([hidden])')){ok=false;return}const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();ok=!bad(e.target)&&sx>24&&sx<innerWidth-24},{passive:true});
-  document.addEventListener('touchend',e=>{if(!ok)return;ok=false;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)<80||Math.abs(dy)>50||Math.abs(dx)<Math.abs(dy)*2||Date.now()-st>600)return;const i=T.indexOf(document.body.dataset.t),n=i+(dx<0?1:-1);if(i<0||n<0||n>=T.length)return;const b=document.querySelector('[data-tb='+T[n]+']');if(b){b.click();try{navigator.vibrate&&navigator.vibrate(8)}catch(x){}}},{passive:true});
-  document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{try{localStorage.setItem('primo-lasttab',b.dataset.tb)}catch(e){}}));
-  try{const lt=localStorage.getItem('primo-lasttab');if(lt&&T.includes(lt)&&lt!=='home'&&!location.hash&&document.body.dataset.t==='home')document.querySelector('[data-tb='+lt+']').click()}catch(e){}
 })();
 </script>
 </body>
