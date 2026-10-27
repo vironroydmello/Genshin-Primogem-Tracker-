@@ -1,50 +1,6 @@
 {
-  "updated": "2026-10-23",
+  "updated": "2026-10-27",
   "banners": [
-    {
-      "id": "7.1-p2-escoffier",
-      "name": "escoffier",
-      "type": "char",
-      "patch": "7.1",
-      "phase": 2,
-      "release": "2026-10-13",
-      "status": "official",
-      "img": "https://imgs.search.brave.com/yK-NKylrFx5Y0DPPcyVYAsWl92kBMVbMj2xIESb6Qak/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/YXNvd29ybGQuY29t/L2ltZy8zNDE2MTVl/OTFjYmM0NTdkYjFk/NGZkYTVjY2FkMTQ0/Zi5qcGc",
-      "el": "cryo"
-    },
-    {
-      "id": "7.1-p2-skirk",
-      "name": "Skirk",
-      "type": "char",
-      "patch": "7.1",
-      "phase": 2,
-      "release": "2026-10-13",
-      "status": "official",
-      "img": "https://imgs.search.brave.com/AqbhlgJYqt5VtejzWKtNjGHL5mCZgXlSApMve_SVvbU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/c2hvcGlmeS5jb20v/cy9maWxlcy8xLzA3/NDcvNTMxNy85OTQ0/L2ZpbGVzL0dlbnNo/aW5fSW1wYWN0X1Nr/aXJrX1Bvc3Rlci5w/bmc_dj0xNzQ3Mjky/MDgw",
-      "el": "cryo"
-    },
-    {
-      "id": "7.2-p1-mitya",
-      "name": "Mitya",
-      "type": "char",
-      "patch": "7.2",
-      "phase": 1,
-      "release": "2026-11-04",
-      "status": "official",
-      "img": "https://www.u7buy.com/blog/wp-content/uploads/genshin-mitya-build-1.webp",
-      "el": "electro"
-    },
-    {
-      "id": "7.1-p1-furina",
-      "name": "Furina",
-      "type": "char",
-      "patch": "7.2",
-      "phase": 1,
-      "release": "2026-11-04",
-      "status": "official",
-      "img": "https://imgs.search.brave.com/8BiUfmzPH10XCC0EvKDqC3JtzCsaK543DtutFvADYrQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHNpby5nbndjZG4u/Y29tL0dlbnNoaW4t/SW1wYWN0LU5leHQt/QmFubmVyLTQuMi1G/dXJpbmEuanBnP3dp/ZHRoPTIwNDgmaGVp/Z2h0PTIwNDgmZml0/PWJvdW5kcyZxdWFs/aXR5PTg1JmZvcm1h/dD1qcGcmYXV0bz13/ZWJw",
-      "el": "hydro"
-    },
     {
       "id": "7.2-p1-zibai",
       "name": "Zibai",
