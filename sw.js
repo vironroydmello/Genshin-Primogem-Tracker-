@@ -1,4 +1,4 @@
-const CACHE='primogem-tracker-v35'; // bump this number whenever you change the files
+const CACHE='primogem-tracker-v22'; // bump this number whenever you change the files
 const ASSETS=['./','./index.html','./manifest.json','./roster.json','./icon-180.png','./icon-192.png','./icon-512.png'];
 const FONT_HOSTS=['fonts.googleapis.com','fonts.gstatic.com'];
 // Cache each file on its own, so one missing file (or a renamed index.html) can't break the whole install.
@@ -15,11 +15,7 @@ self.addEventListener('fetch',e=>{
   }
   if(u.origin!==location.origin)return;
   // Banner roster: always try the network first so new leaks show up straight away, fall back to the saved copy offline.
-  // On a slow or flaky connection we wait at most 4 seconds, then use the saved copy (if there is one) instead of hanging.
-  if(u.pathname.endsWith('/roster.json')){
-    const net=fetch(r,{cache:'no-cache'}).then(res=>{if(res.ok){const c=res.clone();caches.open(CACHE).then(x=>x.put(r,c))}return res});
-    const slow=new Promise((_,no)=>setTimeout(no,4000));
-    e.respondWith(Promise.race([net,slow]).catch(()=>caches.match(r,{ignoreSearch:true}).then(hit=>hit||net)));return}
+  if(u.pathname.endsWith('/roster.json')){e.respondWith(fetch(r,{cache:'no-cache'}).then(res=>{if(res.ok){const c=res.clone();caches.open(CACHE).then(x=>x.put(r,c))}return res}).catch(()=>caches.match(r,{ignoreSearch:true})));return}
   // Same-origin: serve from cache instantly, refresh the cache in the background (updates arrive on the next open).
   e.respondWith(caches.match(r,{ignoreSearch:true}).then(hit=>{
     const net=fetch(r,{cache:'no-cache'}).then(res=>{if(res.ok)caches.open(CACHE).then(c=>c.put(r,res.clone()));return res}).catch(()=>hit||(r.mode==='navigate'?caches.match('./'):Response.error()));
