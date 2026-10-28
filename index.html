@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="18.1"><meta name="app-build" content="07c87596"><meta name="app-built" content="2026-10-28"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="app-version" content="18.2"><meta name="app-build" content="ba55e948"><meta name="app-built" content="2026-10-28"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Primogem Tracker</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2a1f5e">
@@ -314,6 +314,22 @@ body:not([data-is=farm]) [data-sub=farm]{display:none!important}
 #isSeg[data-sub=both]{display:none}body[data-t=income] #isSeg{display:block!important}
 body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
 @media (max-width:430px){.tabs{gap:1px;padding-left:4px;padding-right:4px}.tabs button{font-size:10.5px;padding:4px 0;letter-spacing:0}}
+/* v18.2: automated income made visible */
+.stl{margin:8px 0 0;font-size:13px;opacity:.95}.stl button{border:0;background:transparent;color:inherit;text-decoration:underline;font:inherit;padding:2px 4px;min-height:0}
+.estc{display:inline-block;margin-left:6px;font-size:12px;font-weight:400;white-space:nowrap}.estc .estv{font-size:12px;padding:1px 8px;min-height:26px;border-radius:12px}
+.rkr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0;padding:6px 8px;border:1px solid var(--line);border-left-width:4px;border-radius:12px}
+.rkb{flex:1 1 150px;display:flex;align-items:center;gap:8px;min-height:36px;border:0;background:transparent;color:var(--ink);text-align:left;padding:0}
+.rkb .ic{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:2px solid currentColor;font-size:13px;flex:none}
+.rkb .rt{flex:1}.rkb .rl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+.rk-none{border-left-color:#8b90a8}.rk-none .ic,.rk-none .rl{color:#8b90a8}
+.rk-me{border-left-color:var(--ok)}.rk-me .ic,.rk-me .rl{color:var(--ok)}.rk-me .ic{background:var(--ok);color:#fff}
+.rk-auto{border-left-color:#4a90ff}.rk-auto .ic,.rk-auto .rl{color:#4a90ff}
+.rk-uid{border-left-color:#b48cff}.rk-uid .ic,.rk-uid .rl{color:#b48cff}
+.rkb[aria-disabled=true]{cursor:default}
+#tdTicks .cdn{display:none}.rks{flex-basis:100%;font-size:12px;color:var(--mut)}
+.rkleg{font-size:12px;color:var(--mut);margin:8px 0 0;line-height:1.5}
+.xpc{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--acc) 9%,transparent)}
+.chart .gb.g{fill:#b48cff}.legend i.sq.g{background:#b48cff}
 </style>
 </head>
 <body data-t="home">
@@ -329,20 +345,22 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
   <button class="theme rf" id="refBtn" aria-label="Refresh and update the app" title="Refresh and update"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <button class="theme" id="themeBtn">Auto</button>
   <select class="pq" id="profQuick" aria-label="Profile" hidden></select>
-  <div class="tot disp"><div class="big"><b id="tt">0</b>pulls ready</div><div><b id="tp">0</b>primogems</div><div><b id="tf">0</b>fates</div></div>
+  <div class="tot disp"><div class="big"><b id="tt">0</b>pulls ready</div><div><b id="tp">0</b>primogems<span class="estc" id="estC" hidden>≈ <span id="estN">0</span> est. <button type="button" class="estv" id="estV">Verify</button></span></div><div><b id="tf">0</b>fates</div></div>
+  <div class="stl" id="stl" role="status"></div>
   <div class="nx" id="nx"></div>
-  <div class="hq" role="group" aria-label="Quick log"><button type="button" class="go" id="hqCi">✓ Check in</button><button type="button" data-q="f1">+1 fate</button><button type="button" id="hqLog">Log…</button></div>
+  <div class="hq" role="group" aria-label="Quick log"><button type="button" data-q="f1">+1 fate</button><button type="button" id="hqLog">Log…</button></div>
 </header>
 <section class="card" id="uidStrip" data-tab="home" aria-label="Your UID">
-  <div class="us-top" id="usTop" hidden><span class="us-av" id="usAv"></span><div class="us-t"><b class="disp" id="usNick"></b><div class="sub" id="usSub"></div></div><div class="us-act"><button class="sm" id="hRef">Refresh</button><button class="sm" id="hView2">Open showcase ›</button></div></div>
+  <div class="us-top" id="usTop" hidden><span class="us-av" id="usAv"></span><div class="us-t"><b class="disp" id="usNick"></b><div class="sub" id="usSub"></div><div class="sub" id="usAge"></div></div><div class="us-act"><button class="sm" id="hRef">Refresh</button><button class="sm" id="hView2">Open showcase ›</button></div></div>
   <div id="usForm"><div class="row us-row"><label class="f">Your UID<input id="h-uid" inputmode="numeric" maxlength="10" placeholder="9-digit UID" autocomplete="off"></label><button class="p sm" id="hGo">Load profile</button></div>
   <div class="b" style="margin-top:8px"><button class="sm" id="hView" hidden>Help loading it ›</button></div></div>
   <div class="sub" id="hMsg" style="margin-top:6px"></div>
 </section>
 <div data-tab="home" id="uidChipW" hidden><button class="chip" id="uidChip">+ Add UID (optional)</button></div>
+<section class="card" id="frCard" data-tab="home" hidden><h2 class="disp">Do you play daily?</h2><div class="sub">Pick how you play and the app will add your daily income for you (as an estimate you can correct any time).</div><div class="b" style="margin-top:8px"><button class="p sm" data-fr="free">Free-to-play</button><button class="sm" data-fr="w">Welkin</button><button class="sm" data-fr="wbp">Welkin + Battle Pass</button><button class="sm" data-fr="no">Not daily</button></div></section>
 <section class="card" id="tdCard" data-tab="home"><h2 class="disp">Today</h2>
 <div class="sub" id="tdSub"></div>
-<div class="b" style="margin-top:8px"><button class="p" id="tdCi" type="button">✓ Commissions &amp; Welkin done</button><button class="sm" id="tdMiss" type="button" hidden>Missed today</button></div>
+<div id="tdTicks" style="margin-top:6px"></div>
 <div class="sub" id="tdStat" style="margin-top:8px"></div>
 <button type="button" class="plain" id="tdChart" aria-label="Open the earnings chart in History"></button>
 </section>
@@ -357,8 +375,9 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
 <section class="card" aria-labelledby="h-log" data-tab="home">
   <h2 id="h-log" class="disp">Update your pulls</h2>
   <div class="chips">
-    <button class="chip" data-q="f1">+1 fate</button>
+    <button class="chip" data-q="f1">+1 fate</button><button class="chip" id="chP60">+60 primogems</button><button class="chip" id="chP20">+20 primogems</button>
       </div>
+  <div class="xpc" id="xpC" role="alertdialog" aria-live="polite" hidden><div id="xpT"></div><div class="b" style="margin-top:8px"><button class="p sm" id="xpYes">Add extra</button><button class="sm" id="xpNo">Cancel</button></div></div>
   <div class="row">
     <label class="f">Primogems<input id="ap" type="number" inputmode="numeric" placeholder="0"></label>
     <label class="f">Fates<input id="af" type="number" inputmode="numeric" placeholder="0"></label>
@@ -366,9 +385,9 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
   <details class="adv"><summary>Add a note or change the date</summary><label class="f" style="display:block;margin-top:8px">Note (optional)<input id="an" maxlength="60" list="cats" autocomplete="off" placeholder="Events, Abyss 36★, Codes, Top-up…"></label>
   <datalist id="cats"><option value="Events"><option value="Abyss"><option value="Imaginarium Theater"><option value="Livestream codes"><option value="Genesis top-up"><option value="Maintenance"><option value="Quest / Exploration"></datalist>
   <div class="row" style="margin-top:8px"><label class="f">Date<input id="ad" type="date"></label><label class="f">Where it came from<select id="as"><option value="">Other</option><option value="Event">Event</option><option value="Exploration">Exploration or quest</option><option value="Mail/code">Mail or code</option><option value="Top-up">Top-up</option></select></label></div></details><div class="sub" id="setHint" style="margin-top:10px"></div>
-  <div class="ubt" style="margin-top:8px"><button id="gainBtn" class="gainb">➕ I gained</button><button id="spendBtn" class="spendb">➖ I spent</button></div>
   <button class="p wide" id="set" style="margin-top:8px">🎯 Set to my in-game total</button>
-  <div class="sub" style="margin-top:8px">Type a number above, then tap one button. <b>I gained / I spent</b>: type only the amount you got or used. <b>Set to my in-game total</b> (reconcile): type what your game shows now. The app compares it with its own estimate, records the difference in History and asks what it was. 160 primogems = 1 pull.</div>
+  <details class="adv" style="margin-top:8px"><summary>I gained / I spent</summary><div class="ubt" style="margin-top:8px"><button id="gainBtn" class="gainb">➕ I gained</button><button id="spendBtn" class="spendb">➖ I spent</button></div></details>
+  <details class="adv" style="margin-top:8px"><summary>How these buttons work</summary><div class="sub" style="margin-top:6px">Type a number above, then tap one button. <b>I gained / I spent</b>: type only the amount you got or used. <b>Set to my in-game total</b> (reconcile): type what your game shows now. The app compares it with its own estimate, records the difference in History and asks what it was. 160 primogems = 1 pull.</div></details>
   <details class="panel adv"><summary>Genesis Crystals &amp; Starglitter (optional)</summary>
     <div class="sub" id="latOut"></div>
     <div class="row" style="margin-top:8px"><label class="f">Genesis Crystals<input id="inv-g" type="number" inputmode="numeric" min="0" placeholder="amount"></label><label class="f">Masterless Starglitter<input id="inv-s" type="number" inputmode="numeric" min="0" placeholder="amount"></label></div>
@@ -377,7 +396,8 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
     <div class="sub" style="margin-top:6px">Leave the convert boxes empty to convert everything. Genesis becomes primogems 1:1 and 5 Starglitter become 1 fate. Every change here is logged in History and can be undone.</div></details>
 </section>
 
-<section class="card" id="rsCard" data-tab="home"><h2 class="disp">Resets &amp; checklist</h2><label class="f">Server<select id="rk-s"><option value="8">Asia / TW-HK-MO (UTC+8)</option><option value="1">Europe (UTC+1)</option><option value="-5">America (UTC-5)</option></select></label><div id="rkL" style="margin-top:8px"></div><div class="sub" style="margin-top:6px">Everything resets at 04:00 server time, and ticks clear themselves.</div></section>
+<section class="card" id="rsCard" data-tab="home"><h2 class="disp">Resets &amp; checklist</h2><label class="f">Server<select id="rk-s"><option value="8">Asia / TW-HK-MO (UTC+8)</option><option value="1">Europe (UTC+1)</option><option value="-5">America (UTC-5)</option></select></label><div id="rkL" style="margin-top:8px"></div><div class="xpc" id="rkAsk" hidden></div><div class="rkleg">○ to do (tap to tick) · ✓ done by you (tap to undo) · 🔒 <b style="color:#4a90ff">auto</b>: added by Auto income · 🔒 <b style="color:#b48cff">from UID</b>. Locked items have a Fix button.</div><div class="sub" style="margin-top:6px">Everything resets at 04:00 server time, and ticks clear themselves.</div></section>
+<section class="card" id="chCard" data-tab="home"><details><summary class="disp h2s">How it’s calculated</summary><div class="sub" id="chTxt" style="margin-top:8px;line-height:1.5"></div></details></section>
 <div data-tab="pulls"><div class="sec"><h2 class="disp">Pulls</h2></div><p class="sub" style="margin:-4px 2px 10px">Log pulls, edit pity and import your wish history here. This is the only place pity is edited.</p></div>
 <section class="card" id="plCard" data-tab="pulls"><h2 class="disp">Log pulls</h2><div class="sub">Just pulled? Log it and your balance and pity update themselves. Pity lives in this tab only.</div>
 <div class="row" style="margin-top:8px"><label class="f">Banner<select id="pl-t"><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled</option></select></label><label class="f">Pulls done<input id="pl-n" type="number" inputmode="numeric" min="1" placeholder="10"></label></div>
@@ -460,10 +480,10 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
 <label class="chk" style="margin-top:8px"><input type="checkbox" id="au-c"> Include daily commissions (<span id="au-cv">60</span> a day)</label>
 <div class="sub" style="margin-top:8px" id="au-out"></div>
 <div class="sub" style="margin-top:6px">A web app can only do the maths when you open it, so it fills in the days you missed. Every automatic entry is marked <b>auto (est.)</b> in History and has an Undo. Welkin is added each day until the end date above. Use <b>Set to my in-game total</b> now and then to correct any drift.</div></section>
-<section class="card" id="evCard" data-tab="income"><h2 class="disp">Events &amp; free primogems</h2><div class="sub" id="evSub"></div><div id="evList" style="margin-top:8px"></div>
+<section class="card" id="evCard" data-tab="income"><h2 class="disp">Events &amp; free primogems</h2><div class="b" style="margin:4px 0 8px"><button class="p sm" id="evAddTop" type="button">+ Add custom event</button></div><div class="sub" id="evSub"></div><div id="evList" style="margin-top:8px"></div>
 <label class="chk" style="margin-top:10px"><input type="checkbox" id="i-ev"> Use these events in my forecast</label>
 <details class="adv" style="margin-top:8px"><summary id="evDoneSum">Done and skipped</summary><div id="evDone" style="margin-top:6px"></div></details>
-<details class="adv" style="margin-top:8px"><summary>Add an event or quest reward by hand</summary>
+<details class="adv" id="evForm" style="margin-top:8px"><summary>Add an event or quest reward by hand</summary>
 <label class="f" style="display:block;margin-top:8px">Name<input id="ev-n" maxlength="40" autocomplete="off" placeholder="e.g. Anniversary quest"></label>
 <div class="row" style="margin-top:8px"><label class="f">Primogems<input id="ev-p" type="number" inputmode="numeric" min="1"></label><label class="f">Ends on (optional)<input id="ev-d" type="date"></label></div>
 <div class="row" style="margin-top:8px"><label class="f">Type<select id="ev-k"><option value="event">Limited-time event</option><option value="quest">One-time quest reward</option></select></label><label class="f">Stages (optional)<input id="ev-s" type="number" inputmode="numeric" min="0" max="50" placeholder="e.g. 5"></label></div>
@@ -529,7 +549,7 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
   <h2 id="h-hi" class="disp">History</h2>
   <div id="gcWrap"><div class="seg inl" role="radiogroup" aria-label="Chart range" id="gcSeg"><button role="radio" aria-checked="false" data-gr="7" type="button">7 days</button><button role="radio" aria-checked="true" data-gr="14" type="button">14 days</button><button role="radio" aria-checked="false" data-gr="30" type="button">30 days</button></div>
   <svg class="chart" id="gc" viewBox="0 0 360 170" role="img" aria-label="Primogems gained per day"></svg>
-  <div class="legend" id="gcLg"><span><i class="sq" style="background:var(--acc)"></i>Daily income</span><span><i class="sq" style="background:var(--gold-f)"></i>Events</span><span><i class="sq" style="background:var(--ok)"></i>Other</span><span><i class="sq est"></i>Paler = estimate</span><span><i class="av"></i>7-day average</span></div>
+  <div class="legend" id="gcLg"><span><i class="sq" style="background:var(--acc)"></i>Daily income</span><span><i class="sq" style="background:var(--gold-f)"></i>Events</span><span><i class="sq g"></i>Endgame</span><span><i class="sq" style="background:var(--ok)"></i>Other</span><span><i class="sq est"></i>Paler = estimate</span><span><i class="av"></i>7-day average</span></div>
   <div class="sub" id="gcCap" style="margin:6px 0 12px"></div></div>
   <div id="hist" class="sub">No entries yet.</div>
   <div id="doneWrap" hidden><div class="sec-s">Pull results</div><div class="sub" id="rec" style="margin-bottom:4px"></div><div id="doneList" class="sub"></div></div>
@@ -616,7 +636,7 @@ function cleanGoal(raw){
   capGoal(g);clampPity(g);return g;
 }
 const defState=()=>({v:5,pt:{char:0,weapon:0,chron:0,cg:false},cu:'',primos:0,fates:0,income:{daily:60,welkin:false,monthly:0,bargains:false,bp:false,patch:0,rate:100,evTrack:true},auto:{on:false,comm:true,welkinEnd:'',last:''},ev:{},myEv:[],bargainStd:'',diary:{},patchLen:42,patchStart:'',bargain:'',endgame:{ab:[0,0,0,0],abN:1,thMax:1000,thPct:0,sg:0},bonus:[],mode:'worst',glitter:0,genesis:0,log:[],goals:[],done:[],updated:0});
-const SRCS=['manual','daily','auto','event','recon','pull','inv'];
+const SRCS=['manual','daily','auto','event','recon','pull','inv','endgame'];
 function norm(raw){ // accepts v1 to v5 data
   const o=defState();
   if(!raw||typeof raw!=='object')return o;
@@ -635,7 +655,7 @@ function norm(raw){ // accepts v1 to v5 data
   o.log=(Array.isArray(raw.log)?raw.log:[]).filter(e=>e&&typeof e==='object').map(e=>{
     const x={date:isoRe.test(e.date||'')?e.date:today(),p:num(e.p),f:num(e.f),dp:num(e.dp),df:num(e.df),mode:e.mode||'add'};
     if(e.res==='won'||e.res==='lost'){x.res=e.res;x.pulls=num(e.pulls)}
-    if(SRCS.includes(e.src))x.src=e.src;if(e.auto)x.auto=true;if(e.tag)x.tag=String(e.tag).slice(0,24);if(e.span)x.span=Math.min(366,Math.max(1,num(e.span)));if(e.bid)x.bid=String(e.bid).slice(0,12);if(e.evid)x.evid=String(e.evid).slice(0,60);
+    if(SRCS.includes(e.src))x.src=e.src;if(e.auto)x.auto=true;if(e.tag)x.tag=String(e.tag).slice(0,24);if(e.span)x.span=Math.min(366,Math.max(1,num(e.span)));if(e.bid)x.bid=String(e.bid).slice(0,12);if(e.evid)x.evid=String(e.evid).slice(0,60);if(e.tk)x.tk=String(e.tk).slice(0,3);if(e.eg)x.eg=String(e.eg).slice(0,3);if(e.ck)x.ck=String(e.ck).slice(0,20);
     if(e.app&&typeof e.app==='object')x.app={p:num(e.app.p),f:num(e.app.f)};
     if(e.eid)x.eid=String(e.eid);if(e.note)x.note=String(e.note).slice(0,60);if(e.lg)x.lg=num(e.lg);if(e.ls)x.ls=num(e.ls);
     if(e.goal&&typeof e.goal==='object'){x.goal=cleanGoal(e.goal);x.idx=num(e.idx)}
@@ -749,7 +769,7 @@ function applyCore(q){ // q: {mode,p,f,date,goal,idx}
   const e={date:q.date&&isoRe.test(q.date)?q.date:today(),p:q.p,f:q.f,dp:nP-S.primos,df:nF-S.fates,mode:q.mode};
   if(q.goal){e.goal=q.goal;e.idx=q.idx}
   if(q.note)e.note=String(q.note).slice(0,60);
-  ['src','auto','tag','span','app','bid','evid'].forEach(k=>{if(q[k]!==undefined&&q[k]!==''&&q[k]!==false)e[k]=q[k]});
+  ['src','auto','tag','span','app','bid','evid','tk','eg','ck'].forEach(k=>{if(q[k]!==undefined&&q[k]!==''&&q[k]!==false)e[k]=q[k]});
   if(q.lg||q.ls){e.lg=q.lg||0;e.ls=q.ls||0;S.genesis=Math.max(0,S.genesis-e.lg);S.glitter=Math.max(0,S.glitter-e.ls)}
   S.primos=nP;S.fates=nF;S.log.push(e);
   return {e};
@@ -1591,16 +1611,12 @@ function drawPulls(){
   el.innerHTML='Pulls logged: <b>'+fm(tot)+'</b> · 5★ found: <b>'+f5.length+'</b>'+(f5.length?' ('+(f5.length/tot*100).toFixed(1)+'% rate)':'')+(f5.length?'<br>Average pity at a 5★: <b>'+avg.toFixed(1)+'</b> '+(avg<62?'(luckier than the typical ~62)':'(about or above the typical ~62)'):'')+(ch.length?'<br>50/50 record: <b>'+w+' won, '+(ch.length-w)+' lost</b> (about 55% wins is typical)':'')+(f5.length?'<br>Latest 5★: '+f5.slice(-4).reverse().map(x=>fmt(x.d)+' '+tn[x.t].toLowerCase()+' at '+x.pa).join(', '):'');
 }
 const RKK='primo-reset';let RK={s:'8',done:{}};try{Object.assign(RK,JSON.parse(localStorage.getItem(RKK)||'{}'))}catch(e){}
-const RKI=[['dc','Daily commissions','d'],['wm','Claim Welkin','d'],['wb','Weekly bosses (3 discounted)','w'],['ab','Spiral Abyss','a'],['it','Imaginarium Theater','m'],['pb','Paimon’s Bargain','m']];
+const RKI=[['dc','Daily commissions','d'],['wm','Claim Welkin','d'],['wb','Weekly bosses (3 discounted)','w'],['ab','Spiral Abyss','a'],['it','Imaginarium Theater','m'],['sg','Stygian Onslaught','m'],['pb','Paimon’s Bargain','m']];
+const rkSave=()=>{try{localStorage.setItem(RKK,JSON.stringify(RK))}catch(e){}};
 function rkInfo(p){const sv=Date.now()+(+RK.s-4)*36e5,D=new Date(sv),di=Math.floor(sv/864e5),y=D.getUTCFullYear(),mo=D.getUTCMonth(),dd=D.getUTCDate(),dow=D.getUTCDay();let key,nx;
   if(p==='d'){key=di;nx=(di+1)*864e5}else if(p==='w'){const mon=di-((dow+6)%7);key=mon;nx=(mon+7)*864e5}
   else if(p==='a'){key=y+'-'+mo+(dd>=16?'b':'a');nx=dd>=16?Date.UTC(y,mo+1,1):Date.UTC(y,mo,16)}else{key=y+'-'+mo;nx=Date.UTC(y,mo+1,1)}
   return {key:String(key),ms:nx-sv}}
-function drawResets(){
-  const L=$('rkL');$('rk-s').value=RK.s;
-  L.innerHTML=RKI.filter(x=>x[0]!=='wm'||welkinOn()).map(([id,t,p])=>{const i=rkInfo(p),on=RK.done[id]===i.key;return '<div class="pr"><label class="chk" style="margin:0"><input type="checkbox" data-i="'+id+'"'+(on?' checked':'')+'> '+esc(t)+'</label><span class="cdn">'+cdText(i.ms)+'</span></div>'}).join('');
-}
-$('rkL').onchange=e=>{const c=e.target.closest('[data-i]');if(!c)return;const id=c.dataset.i,p=RKI.find(x=>x[0]===id)[2];if(c.checked)RK.done[id]=rkInfo(p).key;else delete RK.done[id];try{localStorage.setItem(RKK,JSON.stringify(RK))}catch(e){}};
 $('rk-s').onchange=()=>{RK.s=$('rk-s').value;try{localStorage.setItem(RKK,JSON.stringify(RK))}catch(e){}drawResets()};
 setInterval(drawResets,30000);
 function drawSummary(m){
@@ -1611,7 +1627,7 @@ function drawSummary(m){
   c.hidden=false;$('sumTxt').innerHTML=t;
 }
 $('sumShare').onclick=async()=>{const m=model(),L=m.rows.filter(r=>!r.paused).slice(0,8).map((r,i)=>(i+1)+'. '+(r.g.name||'Goal')+': '+(r.done?'ready':r.ready===null?'no date yet':r.ready>365?'over a year away':'ready in '+r.ready+' days')+(r.g.release?' (releases '+r.g.release+')':'')),t='My Genshin plan\n'+fm(Math.floor((S.primos+S.fates*160)/160))+' pulls saved\n'+L.join('\n');try{if(navigator.share)await navigator.share({text:t});else{await navigator.clipboard.writeText(t);toast('Plan copied')}}catch(e){}};
-drawPulls();drawResets();
+drawPulls();
 
 /* ---------- v12: summary + backup reminder ---------- */
 function drawSummary(m){
@@ -1636,7 +1652,7 @@ const cbg=id=>{const e=$(id)&&$(id).querySelector('.cbig');return e?e.textConten
 const SUMS={
  'Update your pulls':()=>fm(S.primos)+' primogems · '+S.fates+' fates · about '+Math.floor((S.primos+S.fates*160)/160)+' pulls',
  'Log pulls':()=>'Character pity '+S.pt.char+(S.pt.cg?' (guaranteed)':'')+' · Weapon '+S.pt.weapon+' · '+PL.length+' logged',
- 'Resets & checklist':()=>{const a=$('rkL').querySelectorAll('input[type=checkbox]');return a.length?[...a].filter(i=>i.checked).length+' of '+a.length+' done':''},
+ 'Resets & checklist':()=>{const a=$('rkL').querySelectorAll('.rkr');return a.length?[...a].filter(r=>!r.classList.contains('rk-none')).length+' of '+a.length+' done':''},
  'Banner clock':()=>{const r=$('cdL').firstElementChild;return r?r.textContent.replace(/\s+/g,' ').trim():''},
  'Savings forecast':()=>$('sumCard').hidden?'':$('sumTxt').textContent,
  'Income':()=>'About '+fm(eff())+' primogems a day',
@@ -1697,7 +1713,9 @@ $('appV').textContent=$('ver').textContent;
 
 /* ---------- Traveler profile (Enka.Network) ---------- */
 const PFK='primo-prof',ENK='https://enka.network/ui/',STORE='https://raw.githubusercontent.com/EnkaNetwork/API-docs/master/store/';
+const PFBG={fail:false,busy:false,did:false};
 let PF=null,pfLast=0;try{PF=JSON.parse(localStorage.getItem(PFK)||'null')}catch(e){}
+function pfAgeTxt(){if(!PF)return '';let s;if(PF.ts){const m=Math.floor((Date.now()-PF.ts)/6e4);s='updated '+(m<1?'just now':m<60?m+' min ago':m<1440?Math.floor(m/60)+' h ago':Math.floor(m/1440)+' d ago')}else s='updated '+fmt(PF.at);if(PFBG.busy)s+=' · refreshing…';else if(PFBG.fail)s+=' · couldn’t refresh';return s}
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const tfetch=(u,ms)=>{const c=new AbortController(),t=setTimeout(()=>c.abort(),ms||15000);return fetch(u,{signal:c.signal}).finally(()=>clearTimeout(t))};
 const pfJson=u=>tfetch(u,15000).then(r=>{if(!r.ok)throw new Error('store');return r.json()});
@@ -1749,14 +1767,14 @@ function drawProfile(){const v=$('pfView'),o=PF;$('pfAct').hidden=!o;$('pfGo').t
   if(!o){v.innerHTML='<div class="sub">First time here? Enter your UID to load your name, level and endgame progress, so you type less.</div>';return}
   const age=-off(o.at),ab=o.ab;
   v.innerHTML='<div class="pfb"><div class="pfa" id="pfAv"></div><div class="pft"><b class="disp" style="font-size:21px">'+esc(o.nick)+'</b><div>AR '+o.ar+' · World Level '+o.wl+' · '+fm(o.ach)+' achievements</div>'+(o.sig?'<div style="opacity:.85;font-size:13px">'+esc(o.sig)+'</div>':'')+'</div></div><div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">'
-   +'<span class="badge">Abyss '+(ab.f?ab.f+'-'+ab.c:'none')+(ab.s!==undefined?' · '+ab.s+'★':'')+'</span><span class="badge">Theater '+(o.th&&o.th.a!==undefined?'act '+o.th.a+(o.th.s!==undefined?' · '+o.th.s+'★':''):'none')+'</span><span class="badge">Stygian '+(o.sg!==undefined?o.sg:'none')+'</span></div><div class="sub" style="margin-top:6px">UID '+esc(o.uid)+' · loaded '+fmt(o.at)+(age>=20?'. This is '+age+' days old, so tap Refresh for this patch’s endgame.':'')+'</div>';
+   +'<span class="badge">Abyss '+(ab.f?ab.f+'-'+ab.c:'none')+(ab.s!==undefined?' · '+ab.s+'★':'')+'</span><span class="badge">Theater '+(o.th&&o.th.a!==undefined?'act '+o.th.a+(o.th.s!==undefined?' · '+o.th.s+'★':''):'none')+'</span><span class="badge">Stygian '+(o.sg!==undefined?o.sg:'none')+'</span></div><div class="sub" style="margin-top:6px">UID '+esc(o.uid)+' · '+pfAgeTxt()+(age>=20?'. This is '+age+' days old, so tap Refresh for this patch’s endgame.':'')+'</div>';
   try{drawChars(o)}catch(e){try{errLog.push('showcase: '+e.message)}catch(x){}}
   const b=v.querySelector('.pfb');try{imgTo(b,o.nc,'bg',o.nc?[o.nc.replace(/_P$/,'')]:[]);const bg=b.querySelector('img.bg');if(bg)b.prepend(bg);imgTo($('pfAv'),o.pf,'',[])}catch(e){}
   try{const tier=o.ar>=60?['#f0b429','Gold']:o.ar>=50?['#b48cff','Violet']:o.ar>=40?['#6fb6ff','Blue']:['#9aa0b5','Silver'];$('pfAv').style.borderColor=tier[0];$('pfAv').style.boxShadow='0 0 0 3px rgba(0,0,0,.35),0 0 18px '+tier[0];$('pfAv').title='Frame colour by Adventure Rank ('+tier[1]+'). Enka does not share the in-game frame itself.';const up=(o.chars||[]).filter(c=>c.up&&Date.now()-c.up<259200000).length,fr=document.createElement('div');fr.className='sub';fr.style.marginTop='4px';fr.innerHTML='Roster last updated <b>'+(o.ts?ago(o.ts):fmt(o.at))+'</b>'+(o.ttl?' · Enka refreshes about every '+Math.round(o.ttl/60)+' min':'')+(up?' · <b style="color:#f0b429">'+plural(up,'build')+' changed recently</b>':'');b.after(fr);if(o.ncs&&o.ncs.length){const nw=document.createElement('div');nw.style.cssText='margin-top:8px';nw.innerHTML='<div class="sub" style="margin-bottom:4px">Namecards ('+o.ncs.length+'). Tap one to use it as your banner.</div><div class="ncs"></div>';const st=nw.querySelector('.ncs');o.ncs.forEach(n=>{const bt=document.createElement('button');bt.type='button';bt.className='nct'+(n.ic===o.nc?' on':'');bt.title='Namecard '+n.id;imgTo(bt,n.ic,'',[n.ic.replace(/_P$/,'')]);bt.onclick=()=>{o.nc=n.ic;try{localStorage.setItem(PFK,JSON.stringify(o))}catch(e){}drawProfile()};st.append(bt)});fr.after(nw)}}catch(e){}}
 function pfShow(e){const m=e.message,el=$('pfMsg');try{$('pfPaste').closest('details').open=true}catch(x){}
   if(m==='net'){el.textContent=(e.cors?'Enka is online, but it blocks direct requests from this page. ':'Could not reach Enka. ')+'I also tried the relays and they failed ('+((e.detail||[]).join('; ')||'no details')+'). Easiest fix: tap “1. Open my Enka data”, copy the page, and come back. I will paste it for you.';try{$('pfFix').hidden=false;$('pfOpen').dataset.u=EPT+(($('pf-uid').value||'').replace(/\D/g,''))}catch(x){}return}
   el.textContent=m==='slow'?'Enka took too long to answer. Try again in a minute.':m==='store'?'Enka answered, but its data tables could not be loaded. Try again, or use the paste option below.':m}
-async function pfRun(uid,fromEg){$('pfMsg').textContent='Loading…';$('pfFix').hidden=true;try{const first=!PF;PF=await pfLoad(uid,t=>{$('pfMsg').textContent=t});try{localStorage.setItem(PFK,JSON.stringify(PF))}catch(e){}pfLast=Date.now();drawProfile();$('pfMsg').textContent='Loaded'+(PF.via&&PF.via!=='directly'?' (through '+PF.via+')':'')+'.';
+async function pfRun(uid,fromEg){$('pfMsg').textContent='Loading…';$('pfFix').hidden=true;try{const first=!PF;PF=await pfLoad(uid,t=>{$('pfMsg').textContent=t});try{localStorage.setItem(PFK,JSON.stringify(PF))}catch(e){}pfLast=Date.now();PFBG.fail=false;drawProfile();try{egDetect()}catch(e){}$('pfMsg').textContent='Loaded'+(PF.via&&PF.via!=='directly'?' (through '+PF.via+')':'')+'.';
   if(first){try{const sv=uid[0]==='6'?'-5':uid[0]==='7'?'1':'8';RK.s=sv;localStorage.setItem(RKK,JSON.stringify(RK));$('rk-s').value=sv;drawResets()}catch(e){}}
   if(fromEg||(first&&S.log.length===0&&S.endgame.ab.every(x=>!x)))pfApply(PF,false)}catch(e){pfShow(e)}}
 $('pf-uid').value=PF?PF.uid:'';
@@ -1809,6 +1827,7 @@ $('pfCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('pfRep')
   $('hView').hidden=!(fix&&!o);
   if(document.activeElement!==hUid)hUid.value=pu.value;
   if(o){$('usNick').textContent=o.nick||'Traveler';$('usSub').textContent='AR '+o.ar+' · World Level '+o.wl+' · UID '+o.uid;
+   $('usAge').textContent=pfAgeTxt();
    const im=document.querySelector('#pfAv img'),av=$('usAv'),src=$('pfAv');av.textContent='';if(im){const c=im.cloneNode();c.removeAttribute('id');av.append(c)}if(src&&src.style.borderColor)av.style.borderColor=src.style.borderColor}
   hMsg.textContent=msg||(o?'':(show?IDLE:''));hMsg.hidden=!hMsg.textContent}
  let dq=0;const later=()=>{if(dq)return;dq=requestAnimationFrame(()=>{dq=0;drawStrip()})};
@@ -1821,7 +1840,17 @@ $('pfCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('pfRep')
  const toTrav=()=>{tab('me');setTimeout(()=>$('pfCard').scrollIntoView({behavior:'smooth',block:'start'}),80)};
  $('hView').onclick=toTrav;$('hView2').onclick=toTrav;
  $('uidChip').onclick=()=>{want=true;drawStrip();setTimeout(()=>hUid.focus(),30)};
- setTimeout(drawStrip,0);setTimeout(drawStrip,800)}
+ setInterval(later,60000);setTimeout(drawStrip,0);setTimeout(drawStrip,800)}
+/* refresh the cached profile once per boot (only if older than max(ttl, 5 min)); it never shows an error, only a small note */
+async function pfBoot(){if(PFBG.did||!PF||!PF.uid)return;PFBG.did=true;
+  if(Date.now()-(PF.ts||0)<Math.max((PF.ttl||0)*1000,3e5))return;
+  const ping=()=>{try{$('pf-uid').dispatchEvent(new Event('input',{bubbles:true}))}catch(e){}};
+  if(navigator.onLine===false){PFBG.fail=true;ping();return}
+  PFBG.busy=true;ping();
+  try{const o=await pfLoad(PF.uid,()=>{});PF=o;try{localStorage.setItem(PFK,JSON.stringify(PF))}catch(e){}pfLast=Date.now();PFBG.fail=false;drawProfile();try{egDetect()}catch(e){}}
+  catch(e){PFBG.fail=true}
+  PFBG.busy=false;ping();try{drawProfile()}catch(e){}drawResets()}
+setTimeout(pfBoot,1500);
 $('egUid').onclick=()=>{const u=(PF&&PF.uid)||$('pf-uid').value.replace(/\D/g,'');if(!u){toast('Enter your UID on Home first');document.querySelector('[data-tb=home]').click();return}pfRun(u,true)};
 $('pf-proxy').value=(()=>{try{return localStorage.getItem('primo-enka-proxy')||''}catch(e){return ''}})();$('pf-proxy').addEventListener('input',e=>{try{localStorage.setItem('primo-enka-proxy',e.target.value.trim())}catch(x){}});
 const GDB0={"c":[[10000005,"Aether","None",5,"Sword","UI_AvatarIcon_PlayerBoy"],[10000121,"Aino","Hydro",4,"Claymore","UI_AvatarIcon_Aino"],[10000038,"Albedo","Geo",5,"Sword","UI_AvatarIcon_Albedo"],[10000078,"Alhaitham","Dendro",5,"Sword","UI_AvatarIcon_Alhatham"],[10000062,"Aloy","Cryo",5,"Bow","UI_AvatarIcon_Aloy"],[10000148,"Alyosha","Electro",4,"Polearm","UI_AvatarIcon_Alyosha"],[10000021,"Amber","Pyro",4,"Bow","UI_AvatarIcon_Ambor"],[10000057,"Arataki Itto","Geo",5,"Claymore","UI_AvatarIcon_Itto"],[10000096,"Arlecchino","Pyro",5,"Polearm","UI_AvatarIcon_Arlecchino"],[10000082,"Baizhu","Dendro",5,"Catalyst","UI_AvatarIcon_Baizhuer"],[10000014,"Barbara","Hydro",4,"Catalyst","UI_AvatarIcon_Barbara"],[10000024,"Beidou","Electro",4,"Claymore","UI_AvatarIcon_Beidou"],[10000032,"Bennett","Pyro",4,"Sword","UI_AvatarIcon_Bennett"],[10000072,"Candace","Hydro",4,"Polearm","UI_AvatarIcon_Candace"],[10000088,"Charlotte","Cryo",4,"Catalyst","UI_AvatarIcon_Charlotte"],[10000104,"Chasca","Anemo",5,"Bow","UI_AvatarIcon_Chasca"],[10000090,"Chevreuse","Pyro",4,"Polearm","UI_AvatarIcon_Chevreuse"],[10000094,"Chiori","Geo",5,"Sword","UI_AvatarIcon_Chiori"],[10000036,"Chongyun","Cryo",4,"Claymore","UI_AvatarIcon_Chongyun"],[10000107,"Citlali","Cryo",5,"Catalyst","UI_AvatarIcon_Citlali"],[10000098,"Clorinde","Electro",5,"Sword","UI_AvatarIcon_Clorinde"],[10000067,"Collei","Dendro",4,"Bow","UI_AvatarIcon_Collei"],[10000125,"Columbina","Hydro",5,"Catalyst","UI_AvatarIcon_Columbina"],[10000071,"Cyno","Electro",5,"Polearm","UI_AvatarIcon_Cyno"],[10000115,"Dahlia","Hydro",4,"Sword","UI_AvatarIcon_Dahlia"],[10000079,"Dehya","Pyro",5,"Claymore","UI_AvatarIcon_Dehya"],[10000016,"Diluc","Pyro",5,"Claymore","UI_AvatarIcon_Diluc"],[10000039,"Diona","Cryo",4,"Bow","UI_AvatarIcon_Diona"],[10000068,"Dori","Electro",4,"Claymore","UI_AvatarIcon_Dori"],[10000123,"Durin","Pyro",5,"Sword","UI_AvatarIcon_Durin"],[10000099,"Emilie","Dendro",5,"Polearm","UI_AvatarIcon_Emilie"],[10000112,"Escoffier","Cryo",5,"Polearm","UI_AvatarIcon_Escoffier"],[10000051,"Eula","Cryo",5,"Claymore","UI_AvatarIcon_Eula"],[10000076,"Faruzan","Anemo",4,"Bow","UI_AvatarIcon_Faruzan"],[10000031,"Fischl","Electro",4,"Bow","UI_AvatarIcon_Fischl"],[10000120,"Flins","Electro",5,"Polearm","UI_AvatarIcon_Flins"],[10000085,"Freminet","Cryo",4,"Claymore","UI_AvatarIcon_Freminet"],[10000089,"Furina","Hydro",5,"Sword","UI_AvatarIcon_Furina"],[10000092,"Gaming","Pyro",4,"Claymore","UI_AvatarIcon_Gaming"],[10000037,"Ganyu","Cryo",5,"Bow","UI_AvatarIcon_Ganyu"],[10000055,"Gorou","Geo",4,"Bow","UI_AvatarIcon_Gorou"],[10000046,"Hu Tao","Pyro",5,"Polearm","UI_AvatarIcon_Hutao"],[10000110,"Iansan","Electro",4,"Polearm","UI_AvatarIcon_Iansan"],[10000113,"Ifa","Anemo",4,"Catalyst","UI_AvatarIcon_Ifa"],[10000127,"Illuga","Geo",4,"Polearm","UI_AvatarIcon_Illuga"],[10000116,"Ineffa","Electro",5,"Polearm","UI_AvatarIcon_Ineffa"],[10000124,"Jahoda","Anemo",4,"Bow","UI_AvatarIcon_Jahoda"],[10000003,"Jean","Anemo",5,"Sword","UI_AvatarIcon_Qin"],[10000100,"Kachina","Geo",4,"Polearm","UI_AvatarIcon_Kachina"],[10000047,"Kaedehara Kazuha","Anemo",5,"Sword","UI_AvatarIcon_Kazuha"],[10000015,"Kaeya","Cryo",4,"Sword","UI_AvatarIcon_Kaeya"],[10000002,"Kamisato Ayaka","Cryo",5,"Sword","UI_AvatarIcon_Ayaka"],[10000066,"Kamisato Ayato","Hydro",5,"Sword","UI_AvatarIcon_Ayato"],[10000081,"Kaveh","Dendro",4,"Claymore","UI_AvatarIcon_Kaveh"],[10000042,"Keqing","Electro",5,"Sword","UI_AvatarIcon_Keqing"],[10000101,"Kinich","Dendro",5,"Claymore","UI_AvatarIcon_Kinich"],[10000061,"Kirara","Dendro",4,"Sword","UI_AvatarIcon_Momoka"],[10000029,"Klee","Pyro",5,"Catalyst","UI_AvatarIcon_Klee"],[10000056,"Kujou Sara","Electro",4,"Bow","UI_AvatarIcon_Sara"],[10000065,"Kuki Shinobu","Electro",4,"Sword","UI_AvatarIcon_Shinobu"],[10000108,"Lan Yan","Anemo",4,"Catalyst","UI_AvatarIcon_Lanyan"],[10000119,"Lauma","Dendro",5,"Catalyst","UI_AvatarIcon_Lauma"],[10000074,"Layla","Cryo",4,"Sword","UI_AvatarIcon_Layla"],[10000130,"Linnea","Geo",5,"Bow","UI_AvatarIcon_Linnea"],[10000006,"Lisa","Electro",4,"Catalyst","UI_AvatarIcon_Lisa"],[10000129,"Lohen","Cryo",5,"Polearm","UI_AvatarIcon_Lohen"],[10000007,"Lumine","None",5,"Sword","UI_AvatarIcon_PlayerGirl"],[10000083,"Lynette","Anemo",4,"Sword","UI_AvatarIcon_Linette"],[10000084,"Lyney","Pyro",5,"Bow","UI_AvatarIcon_Liney"],[10000117,"Manekin","None",5,"Sword","UI_AvatarIcon_MannequinBoy"],[10000118,"Manekina","None",5,"Sword","UI_AvatarIcon_MannequinGirl"],[10000106,"Mavuika","Pyro",5,"Claymore","UI_AvatarIcon_Mavuika"],[10000080,"Mika","Cryo",4,"Polearm","UI_AvatarIcon_Mika"],[10000041,"Mona","Hydro",5,"Catalyst","UI_AvatarIcon_Mona"],[10000102,"Mualani","Hydro",5,"Catalyst","UI_AvatarIcon_Mualani"],[10000073,"Nahida","Dendro",5,"Catalyst","UI_AvatarIcon_Nahida"],[10000091,"Navia","Geo",5,"Claymore","UI_AvatarIcon_Navia"],[10000122,"Nefer","Dendro",5,"Catalyst","UI_AvatarIcon_Nefer"],[10000087,"Neuvillette","Hydro",5,"Catalyst","UI_AvatarIcon_Neuvillette"],[10000131,"Nicole","Pyro",5,"Catalyst","UI_AvatarIcon_Nicole"],[10000070,"Nilou","Hydro",5,"Sword","UI_AvatarIcon_Nilou"],[10000027,"Ningguang","Geo",4,"Catalyst","UI_AvatarIcon_Ningguang"],[10000034,"Noelle","Geo",4,"Claymore","UI_AvatarIcon_Noel"],[10000150,"Odette","Cryo",5,"Sword","UI_AvatarIcon_Odette"],[10000105,"Ororon","Electro",4,"Bow","UI_AvatarIcon_Olorun"],[10000132,"Prune","Anemo",4,"Catalyst","UI_AvatarIcon_Prune"],[10000035,"Qiqi","Cryo",5,"Sword","UI_AvatarIcon_Qiqi"],[10000052,"Raiden Shogun","Electro",5,"Polearm","UI_AvatarIcon_Shougun"],[10000020,"Razor","Electro",4,"Claymore","UI_AvatarIcon_Razor"],[10000045,"Rosaria","Cryo",4,"Polearm","UI_AvatarIcon_Rosaria"],[10000133,"Sandrone","Cryo",5,"Claymore","UI_AvatarIcon_MarionetteNew"],[10000054,"Sangonomiya Kokomi","Hydro",5,"Catalyst","UI_AvatarIcon_Kokomi"],[10000053,"Sayu","Anemo",4,"Claymore","UI_AvatarIcon_Sayu"],[10000097,"Sethos","Electro",4,"Bow","UI_AvatarIcon_Sethos"],[10000063,"Shenhe","Cryo",5,"Polearm","UI_AvatarIcon_Shenhe"],[10000059,"Shikanoin Heizou","Anemo",4,"Catalyst","UI_AvatarIcon_Heizo"],[10000095,"Sigewinne","Hydro",5,"Bow","UI_AvatarIcon_Sigewinne"],[10000114,"Skirk","Cryo",5,"Sword","UI_AvatarIcon_SkirkNew"],[10000043,"Sucrose","Anemo",4,"Catalyst","UI_AvatarIcon_Sucrose"],[10000033,"Tartaglia","Hydro",5,"Bow","UI_AvatarIcon_Tartaglia"],[10000050,"Thoma","Pyro",4,"Polearm","UI_AvatarIcon_Tohma"],[10000069,"Tighnari","Dendro",5,"Bow","UI_AvatarIcon_Tighnari"],[10000111,"Varesa","Electro",5,"Catalyst","UI_AvatarIcon_Varesa"],[10000128,"Varka","Anemo",5,"Claymore","UI_AvatarIcon_Varka"],[10000022,"Venti","Anemo",5,"Bow","UI_AvatarIcon_Venti"],[10000143,"Vesna","Anemo",5,"Sword","UI_AvatarIcon_Vesna"],[10000140,"Vodyanitsa","Hydro",5,"Catalyst","UI_AvatarIcon_Vodyanitsa"],[10000075,"Wanderer","Anemo",5,"Catalyst","UI_AvatarIcon_Wanderer"],[10000086,"Wriothesley","Cryo",5,"Catalyst","UI_AvatarIcon_Wriothesley"],[10000023,"Xiangling","Pyro",4,"Polearm","UI_AvatarIcon_Xiangling"],[10000093,"Xianyun","Anemo",5,"Catalyst","UI_AvatarIcon_Liuyun"],[10000026,"Xiao","Anemo",5,"Polearm","UI_AvatarIcon_Xiao"],[10000103,"Xilonen","Geo",5,"Sword","UI_AvatarIcon_Xilonen"],[10000025,"Xingqiu","Hydro",4,"Sword","UI_AvatarIcon_Xingqiu"],[10000044,"Xinyan","Pyro",4,"Claymore","UI_AvatarIcon_Xinyan"],[10000058,"Yae Miko","Electro",5,"Catalyst","UI_AvatarIcon_Yae"],[10000048,"Yanfei","Pyro",4,"Catalyst","UI_AvatarIcon_Feiyan"],[10000077,"Yaoyao","Dendro",4,"Polearm","UI_AvatarIcon_Yaoyao"],[10000060,"Yelan","Hydro",5,"Bow","UI_AvatarIcon_Yelan"],[10000049,"Yoimiya","Pyro",5,"Bow","UI_AvatarIcon_Yoimiya"],[10000109,"Yumemizuki Mizuki","Anemo",5,"Catalyst","UI_AvatarIcon_Mizuki"],[10000064,"Yun Jin","Geo",4,"Polearm","UI_AvatarIcon_Yunjin"],[10000030,"Zhongli","Geo",5,"Polearm","UI_AvatarIcon_Zhongli"],[10000126,"Zibai","Geo",5,"Sword","UI_AvatarIcon_Zibai"]],"w":[[11515,"Absolution",5,"Sword","UI_EquipIcon_Sword_Estoc"],[12416,"Akuoumaru",4,"Claymore","UI_EquipIcon_Claymore_Maria"],[15410,"Alley Hunter",4,"Bow","UI_EquipIcon_Bow_Outlaw"],[11414,"Amenoma Kageuchi",4,"Sword","UI_EquipIcon_Sword_Bakufu"],[15502,"Amos' Bow",5,"Bow","UI_EquipIcon_Bow_Amos"],[14523,"Angelos' Heptades",5,"Catalyst","UI_EquipIcon_Catalyst_FairyGarden"],[15508,"Aqua Simulacra",5,"Bow","UI_EquipIcon_Bow_Kirin"],[11501,"Aquila Favonia",5,"Sword","UI_EquipIcon_Sword_Falcon"],[14427,"Ash-Graven Drinking Horn",4,"Catalyst","UI_EquipIcon_Catalyst_ConchSprayer"],[15514,"Astral Vulture's Crimson Plumage",5,"Bow","UI_EquipIcon_Bow_Qoyllorsnova"],[12516,"A Teaspoon of Transcendence",5,"Claymore","UI_EquipIcon_Claymore_CrystallineSword"],[11518,"Athame Artis",5,"Sword","UI_EquipIcon_Sword_Motsognir"],[12514,"A Thousand Blazing Suns",5,"Claymore","UI_EquipIcon_Claymore_RadianceSword"],[14511,"A Thousand Floating Dreams",5,"Catalyst","UI_EquipIcon_Catalyst_Ayus"],[11517,"Azurelight",5,"Sword","UI_EquipIcon_Sword_OuterSword"],[14426,"Ballad of the Boundless Blue",4,"Catalyst","UI_EquipIcon_Catalyst_DandelionPoem"],[13424,"Ballad of the Fjords",4,"Polearm","UI_EquipIcon_Pole_Shanty"],[12511,"Beacon of the Reed Sea",5,"Claymore","UI_EquipIcon_Claymore_Deshret"],[11522,"Beyond the Chrysalis",5,"Sword","UI_EquipIcon_Sword_Samosvist"],[14408,"Blackcliff Agate",4,"Catalyst","UI_EquipIcon_Catalyst_Blackrock"],[11408,"Blackcliff Longsword",4,"Sword","UI_EquipIcon_Sword_Blackrock"],[13404,"Blackcliff Pole",4,"Polearm","UI_EquipIcon_Pole_Blackrock"],[12408,"Blackcliff Slasher",4,"Claymore","UI_EquipIcon_Claymore_Blackrock"],[15408,"Blackcliff Warbow",4,"Bow","UI_EquipIcon_Bow_Blackrock"],[14433,"Blackmarrow Lantern",4,"Catalyst","UI_EquipIcon_Catalyst_Ilmarinen"],[13303,"Black Tassel",3,"Polearm","UI_EquipIcon_Pole_Noire"],[12436,"Blade of Atonement",4,"Claymore","UI_EquipIcon_Claymore_GlintstoneClaymore"],[13516,"Bloodsoaked Ruins",5,"Polearm","UI_EquipIcon_Pole_TummaLyhty"],[12302,"Bloodtainted Greatsword",3,"Claymore","UI_EquipIcon_Claymore_Siegfry"],[15437,"Breezeborne Refrain",4,"Bow","UI_EquipIcon_Bow_Windtalker"],[11432,"Calamity of Eshu",4,"Sword","UI_EquipIcon_Sword_SacrificialNgombe"],[13507,"Calamity Queller",5,"Polearm","UI_EquipIcon_Pole_Santika"],[14513,"Cashflow Supervision",5,"Catalyst","UI_EquipIcon_Catalyst_Wheatley"],[15431,"Chain Breaker",4,"Bow","UI_EquipIcon_Bow_Isikhulu"],[11415,"Cinnabar Spindle",4,"Sword","UI_EquipIcon_Sword_Opus"],[14435,"Clash of Kings",4,"Catalyst","UI_EquipIcon_Catalyst_SandMemoria"],[15426,"Cloudforged",4,"Bow","UI_EquipIcon_Bow_Ultimatum"],[15407,"Compound Bow",4,"Bow","UI_EquipIcon_Bow_Exotic"],[11301,"Cool Steel",3,"Sword","UI_EquipIcon_Sword_Steel"],[15436,"Covenant of Frost and Snow",4,"Bow","UI_EquipIcon_Bow_GlintstoneBow"],[14515,"Crane's Echoing Call",5,"Catalyst","UI_EquipIcon_Catalyst_MountainGale"],[13403,"Crescent Pike",4,"Polearm","UI_EquipIcon_Pole_Exotic"],[13512,"Crimson Moon's Semblance",5,"Polearm","UI_EquipIcon_Pole_BloodMoon"],[11304,"Dark Iron Sword",3,"Sword","UI_EquipIcon_Sword_Darker"],[14434,"Dawning Frost",4,"Catalyst","UI_EquipIcon_Catalyst_Ziedas"],[13405,"Deathmatch",4,"Polearm","UI_EquipIcon_Pole_Gladiator"],[12305,"Debate Club",3,"Claymore","UI_EquipIcon_Claymore_Reasoning"],[13426,"Dialogues of the Desert Sages",4,"Polearm","UI_EquipIcon_Pole_Caduceus"],[13517,"Disaster and Remorse",5,"Polearm","UI_EquipIcon_Pole_Carbine"],[14413,"Dodoco Tales",4,"Catalyst","UI_EquipIcon_Catalyst_Ludiharpastum"],[13401,"Dragon's Bane",4,"Polearm","UI_EquipIcon_Pole_Stardust"],[13409,"Dragonspine Spear",4,"Polearm","UI_EquipIcon_Pole_Everfrost"],[12431,"Earth Shaker",4,"Claymore","UI_EquipIcon_Claymore_Isikhulu"],[14436,"Echoes of the Heart",4,"Catalyst","UI_EquipIcon_Catalyst_GlintstoneCatalyst"],[15503,"Elegy for the End",5,"Bow","UI_EquipIcon_Bow_Widsith"],[11436,"Emberwell",4,"Sword","UI_EquipIcon_Sword_GlintstoneSword"],[14304,"Emerald Orb",3,"Catalyst","UI_EquipIcon_Catalyst_Jade"],[15418,"End of the Line",4,"Bow","UI_EquipIcon_Bow_Fin"],[13509,"Engulfing Lightning",5,"Polearm","UI_EquipIcon_Pole_Narukami"],[14432,"Etherlight Spindlelute",4,"Catalyst","UI_EquipIcon_Catalyst_SeeliesLute"],[14506,"Everlasting Moonglow",5,"Catalyst","UI_EquipIcon_Catalyst_Kaleido"],[11521,"Exaiphanes Blade",5,"Sword","UI_EquipIcon_Sword_WeaponQuestSnezhnaya"],[14409,"Eye of Perception",4,"Catalyst","UI_EquipIcon_Catalyst_Truelens"],[15411,"Fading Twilight",4,"Bow","UI_EquipIcon_Bow_Fallensun"],[12513,"Fang of the Mountain King",5,"Claymore","UI_EquipIcon_Claymore_EmeraldSword"],[14401,"Favonius Codex",4,"Catalyst","UI_EquipIcon_Catalyst_Zephyrus"],[12401,"Favonius Greatsword",4,"Claymore","UI_EquipIcon_Claymore_Zephyrus"],[13407,"Favonius Lance",4,"Polearm","UI_EquipIcon_Pole_Zephyrus"],[11401,"Favonius Sword",4,"Sword","UI_EquipIcon_Sword_Zephyrus"],[15401,"Favonius Warbow",4,"Bow","UI_EquipIcon_Bow_Zephyrus"],[12301,"Ferrous Shadow",3,"Claymore","UI_EquipIcon_Claymore_Glaive"],[11413,"Festering Desire",4,"Sword","UI_EquipIcon_Sword_Magnum"],[11305,"Fillet Blade",3,"Sword","UI_EquipIcon_Sword_Sashimi"],[11425,"Finale of the Deep",4,"Sword","UI_EquipIcon_Sword_Vorpal"],[12432,"Flame-Forged Insight",4,"Claymore","UI_EquipIcon_Claymore_Polilith"],[11426,"Fleuve Cendre Ferryman",4,"Sword","UI_EquipIcon_Sword_Machination"],[15430,"Flower-Wreathed Feathers",4,"Bow","UI_EquipIcon_Bow_Umpakati"],[14425,"Flowing Purity",4,"Catalyst","UI_EquipIcon_Catalyst_Vorpal"],[11431,"Flute of Ezpitzal",4,"Sword","UI_EquipIcon_Sword_Isikhulu"],[13431,"Footprint of the Rainbow",4,"Polearm","UI_EquipIcon_Pole_Isikhulu"],[12417,"Forest Regalia",4,"Claymore","UI_EquipIcon_Claymore_Arakalari"],[12435,"Forged by the Golden Melody",4,"Claymore","UI_EquipIcon_Claymore_EscapeWheel"],[13515,"Fractured Halo",5,"Polearm","UI_EquipIcon_Pole_Perdix"],[11503,"Freedom-Sworn",5,"Sword","UI_EquipIcon_Sword_Widsith"],[14412,"Frostbearer",4,"Catalyst","UI_EquipIcon_Catalyst_Everfrost"],[13435,"Frostbreath",4,"Polearm","UI_EquipIcon_Pole_FaesCrystalle"],[12430,"Fruitful Hook",4,"Claymore","UI_EquipIcon_Claymore_Umpakati"],[14417,"Fruit of Fulfillment",4,"Catalyst","UI_EquipIcon_Catalyst_Arakalari"],[12515,"Gest of the Mighty Wolf",5,"Claymore","UI_EquipIcon_Claymore_EnsisAquilonis"],[15516,"Golden Frostbound Oath",5,"Bow","UI_EquipIcon_Bow_Alkonost"],[14414,"Hakushin Ring",4,"Catalyst","UI_EquipIcon_Catalyst_Bakufu"],[13302,"Halberd",3,"Polearm","UI_EquipIcon_Pole_Halberd"],[15414,"Hamayumi",4,"Bow","UI_EquipIcon_Bow_Bakufu"],[11510,"Haran Geppaku Futsu",5,"Sword","UI_EquipIcon_Sword_Amenoma"],[11302,"Harbinger of Dawn",3,"Sword","UI_EquipIcon_Sword_Dawn"],[11435,"Heretic's Molten Blade",4,"Sword","UI_EquipIcon_Sword_SerpentTooth"],[15511,"Hunter's Path",5,"Bow","UI_EquipIcon_Bow_Ayus"],[14524,"Hymn of the Maelstrom",5,"Catalyst","UI_EquipIcon_Catalyst_Bludnye"],[15419,"Ibis Piercer",4,"Bow","UI_EquipIcon_Bow_Ibis"],[11407,"Iron Sting",4,"Sword","UI_EquipIcon_Sword_Exotic"],[14505,"Jadefall's Splendor",5,"Catalyst","UI_EquipIcon_Catalyst_Morax"],[15435,"Jade Vista",4,"Bow","UI_EquipIcon_Bow_ShatteredMirror"],[11416,"Kagotsurube Isshin",4,"Sword","UI_EquipIcon_Sword_Youtou"],[14509,"Kagura's Verity",5,"Catalyst","UI_EquipIcon_Catalyst_Narukami"],[12414,"Katsuragikiri Nagamasa",4,"Claymore","UI_EquipIcon_Claymore_Bakufu"],[11511,"Key of Khaj-Nisut",5,"Sword","UI_EquipIcon_Sword_Deshret"],[15417,"King's Squire",4,"Bow","UI_EquipIcon_Bow_Arakalari"],[13414,"Kitain Cross Spear",4,"Polearm","UI_EquipIcon_Pole_Bakufu"],[11519,"Lightbearing Moonshard",5,"Sword","UI_EquipIcon_Sword_SilverwareSaw"],[11512,"Light of Foliar Incision",5,"Sword","UI_EquipIcon_Sword_Ayus"],[11405,"Lion's Roar",4,"Sword","UI_EquipIcon_Sword_Rockkiller"],[12410,"Lithic Blade",4,"Claymore","UI_EquipIcon_Claymore_Lapis"],[13406,"Lithic Spear",4,"Polearm","UI_EquipIcon_Pole_Lapis"],[14502,"Lost Prayer to the Sacred Winds",5,"Catalyst","UI_EquipIcon_Catalyst_Fourwinds"],[13513,"Lumidouce Elegy",5,"Polearm","UI_EquipIcon_Pole_Muguet"],[12412,"Luxurious Sea-Lord",4,"Claymore","UI_EquipIcon_Claymore_MillenniaTuna"],[14301,"Magic Guide",3,"Catalyst","UI_EquipIcon_Catalyst_Intro"],[12418,"Mailed Flower",4,"Claymore","UI_EquipIcon_Claymore_Fleurfair"],[12415,"Makhaira Aquamarine",4,"Claymore","UI_EquipIcon_Claymore_Pleroma"],[14407,"Mappa Mare",4,"Catalyst","UI_EquipIcon_Catalyst_Exotic"],[12433,"Master Key",4,"Claymore","UI_EquipIcon_Claymore_Ilmarinen"],[14504,"Memory of Dust",5,"Catalyst","UI_EquipIcon_Catalyst_Kunwu"],[15305,"Messenger",3,"Bow","UI_EquipIcon_Bow_Msg"],[13419,"Missive Windspear",4,"Polearm","UI_EquipIcon_Pole_Windvane"],[11509,"Mistsplitter Reforged",5,"Sword","UI_EquipIcon_Sword_Narukami"],[15412,"Mitternachts Waltz",4,"Bow","UI_EquipIcon_Bow_Nachtblind"],[13417,"Moonpiercer",4,"Polearm","UI_EquipIcon_Pole_Arakalari"],[11434,"Moonweaver's Dawn",4,"Sword","UI_EquipIcon_Sword_Miekka"],[13430,"Mountain-Bracing Bolt",4,"Polearm","UI_EquipIcon_Pole_Umpakati"],[15416,"Mouun's Moon",4,"Bow","UI_EquipIcon_Bow_Maria"],[11437,"New Bough",4,"Sword","UI_EquipIcon_Sword_SpikedStake"],[14520,"Nightweaver's Looking Glass",5,"Catalyst","UI_EquipIcon_Catalyst_MenulisRing"],[14522,"Nocturne's Curtain Call",5,"Catalyst","UI_EquipIcon_Catalyst_Brisingamen"],[14415,"Oathsworn Eye",4,"Catalyst","UI_EquipIcon_Catalyst_Jyanome"],[14303,"Otherworldly Story",3,"Catalyst","UI_EquipIcon_Catalyst_Lightnov"],[11516,"Peak Patrol Song",5,"Sword","UI_EquipIcon_Sword_XochitlsTube"],[15507,"Polar Star",5,"Bow","UI_EquipIcon_Bow_Worldbane"],[12427,"Portable Power Saw",4,"Claymore","UI_EquipIcon_Claymore_Mechanic"],[15415,"Predator",4,"Bow","UI_EquipIcon_Bow_Predator"],[11505,"Primordial Jade Cutter",5,"Sword","UI_EquipIcon_Sword_Morax"],[13505,"Primordial Jade Winged-Spear",5,"Polearm","UI_EquipIcon_Pole_Morax"],[11419,"Prized Isshin Blade",4,"Sword","UI_EquipIcon_Sword_YoutouEnchanted"],[11420,"Prized Isshin Blade",4,"Sword","UI_EquipIcon_Sword_YoutouShattered"],[11421,"Prized Isshin Blade",4,"Sword","UI_EquipIcon_Sword_YoutouEnchanted"],[13427,"Prospector's Drill",4,"Polearm","UI_EquipIcon_Pole_Mechanic"],[13433,"Prospector's Shovel",4,"Polearm","UI_EquipIcon_Pole_Ilmarinen"],[14406,"Prototype Amber",4,"Catalyst","UI_EquipIcon_Catalyst_Proto"],[12406,"Prototype Archaic",4,"Claymore","UI_EquipIcon_Claymore_Proto"],[15406,"Prototype Crescent",4,"Bow","UI_EquipIcon_Bow_Proto"],[11406,"Prototype Rancour",4,"Sword","UI_EquipIcon_Sword_Proto"],[13402,"Prototype Starglitter",4,"Polearm","UI_EquipIcon_Pole_Proto"],[15434,"Rainbow Serpent's Rain Bow",4,"Bow","UI_EquipIcon_Bow_ElegguaBow"],[12405,"Rainslasher",4,"Claymore","UI_EquipIcon_Claymore_Perdue"],[15427,"Range Gauge",4,"Bow","UI_EquipIcon_Bow_Mechanic"],[15301,"Raven Bow",3,"Bow","UI_EquipIcon_Bow_Crowfeather"],[15303,"Recurve Bow",3,"Bow","UI_EquipIcon_Bow_Curve"],[12510,"Redhorn Stonethresher",5,"Claymore","UI_EquipIcon_Claymore_Itadorimaru"],[14521,"Reliquary of Truth",5,"Catalyst","UI_EquipIcon_Catalyst_Sistrum"],[13425,"Rightful Reward",4,"Polearm","UI_EquipIcon_Pole_Vorpal"],[14431,"Ring of Yaxche",4,"Catalyst","UI_EquipIcon_Catalyst_Isikhulu"],[15404,"Royal Bow",4,"Bow","UI_EquipIcon_Bow_Theocrat"],[12404,"Royal Greatsword",4,"Claymore","UI_EquipIcon_Claymore_Theocrat"],[14404,"Royal Grimoire",4,"Catalyst","UI_EquipIcon_Catalyst_Theocrat"],[11404,"Royal Longsword",4,"Sword","UI_EquipIcon_Sword_Theocrat"],[13408,"Royal Spear",4,"Polearm","UI_EquipIcon_Pole_Theocrat"],[15405,"Rust",4,"Bow","UI_EquipIcon_Bow_Recluse"],[13434,"Sacrificer's Staff",4,"Polearm","UI_EquipIcon_Pole_Krivule"],[15403,"Sacrificial Bow",4,"Bow","UI_EquipIcon_Bow_Fossil"],[14403,"Sacrificial Fragments",4,"Catalyst","UI_EquipIcon_Catalyst_Fossil"],[12403,"Sacrificial Greatsword",4,"Claymore","UI_EquipIcon_Claymore_Fossil"],[14424,"Sacrificial Jade",4,"Catalyst","UI_EquipIcon_Catalyst_Yue"],[11403,"Sacrificial Sword",4,"Sword","UI_EquipIcon_Sword_Fossil"],[11417,"Sapwood Blade",4,"Sword","UI_EquipIcon_Sword_Arakalari"],[15424,"Scion of the Blazing Sun",4,"Bow","UI_EquipIcon_Bow_Gurabad"],[15432,"Sequence of Solitude",4,"Bow","UI_EquipIcon_Bow_Stinger"],[11433,"Serenity's Call",4,"Sword","UI_EquipIcon_Sword_Ilmarinen"],[12409,"Serpent Spine",4,"Claymore","UI_EquipIcon_Claymore_Kione"],[15302,"Sharpshooter's Oath",3,"Bow","UI_EquipIcon_Bow_Arjuna"],[11438,"Silver Light",4,"Sword","UI_EquipIcon_Sword_Fajian"],[15513,"Silvershower Heartstrings",5,"Bow","UI_EquipIcon_Bow_Arcdange"],[12306,"Skyrider Greatsword",3,"Claymore","UI_EquipIcon_Claymore_Mitsurugi"],[11306,"Skyrider Sword",3,"Sword","UI_EquipIcon_Sword_Mitsurugi"],[14501,"Skyward Atlas",5,"Catalyst","UI_EquipIcon_Catalyst_Dvalin"],[11502,"Skyward Blade",5,"Sword","UI_EquipIcon_Sword_Dvalin"],[15501,"Skyward Harp",5,"Bow","UI_EquipIcon_Bow_Dvalin"],[12501,"Skyward Pride",5,"Claymore","UI_EquipIcon_Claymore_Dvalin"],[13502,"Skyward Spine",5,"Polearm","UI_EquipIcon_Pole_Dvalin"],[15304,"Slingshot",3,"Bow","UI_EquipIcon_Bow_Sling"],[15433,"Snare Hook",4,"Bow","UI_EquipIcon_Bow_Ilmarinen"],[12411,"Snow-Tombed Starsilver",4,"Claymore","UI_EquipIcon_Claymore_Dragonfell"],[14405,"Solar Pearl",4,"Catalyst","UI_EquipIcon_Catalyst_Resurrection"],[12503,"Song of Broken Pines",5,"Claymore","UI_EquipIcon_Claymore_Widsith"],[15425,"Song of Stillness",4,"Bow","UI_EquipIcon_Bow_Vorpal"],[13436,"Song of the Vigil",4,"Polearm","UI_EquipIcon_Pole_GlintstonePolearm"],[11513,"Splendor of Tranquil Waters",5,"Sword","UI_EquipIcon_Sword_Regalis"],[13501,"Staff of Homa",5,"Polearm","UI_EquipIcon_Pole_Homa"],[13511,"Staff of the Scarlet Sands",5,"Polearm","UI_EquipIcon_Pole_Deshret"],[14517,"Starcaller's Watch",5,"Catalyst","UI_EquipIcon_Catalyst_Figurines"],[11430,"Sturdy Bone",4,"Sword","UI_EquipIcon_Sword_Umpakati"],[11504,"Summit Shaper",5,"Sword","UI_EquipIcon_Sword_Kunwu"],[14518,"Sunny Morning Sleep-In",5,"Catalyst","UI_EquipIcon_Catalyst_SakuraFan"],[14516,"Surf's Up",5,"Catalyst","UI_EquipIcon_Catalyst_MechaPufferfish"],[11412,"Sword of Descension",4,"Sword","UI_EquipIcon_Sword_Psalmus"],[11428,"Sword of Narzissenkreuz",4,"Sword","UI_EquipIcon_Sword_Purewill"],[13514,"Symphonist of Scents",5,"Polearm","UI_EquipIcon_Pole_Trident"],[12424,"Talking Stick",4,"Claymore","UI_EquipIcon_Claymore_BeastTamer"],[13432,"Tamayuratei no Ohanashi",4,"Polearm","UI_EquipIcon_Pole_Aoandon"],[11410,"The Alley Flash",4,"Sword","UI_EquipIcon_Sword_Outlaw"],[12402,"The Bell",4,"Claymore","UI_EquipIcon_Claymore_Troupe"],[11409,"The Black Sword",4,"Sword","UI_EquipIcon_Sword_Bloodstained"],[13415,"\"The Catch\"",4,"Polearm","UI_EquipIcon_Pole_Mori"],[15515,"The Daybreak Chronicles",5,"Bow","UI_EquipIcon_Bow_Arianna"],[11427,"The Dockhand's Assistant",4,"Sword","UI_EquipIcon_Sword_Mechanic"],[15512,"The First Great Magic",5,"Bow","UI_EquipIcon_Bow_Pledge"],[11402,"The Flute",4,"Sword","UI_EquipIcon_Sword_Troupe"],[15402,"The Stringless",4,"Bow","UI_EquipIcon_Bow_Troupe"],[12504,"The Unforged",5,"Claymore","UI_EquipIcon_Claymore_Kunwu"],[15409,"The Viridescent Hunt",4,"Bow","UI_EquipIcon_Bow_Viridescent"],[14402,"The Widsith",4,"Catalyst","UI_EquipIcon_Catalyst_Troupe"],[14302,"Thrilling Tales of Dragon Slayers",3,"Catalyst","UI_EquipIcon_Catalyst_Pulpfic"],[15509,"Thundering Pulse",5,"Bow","UI_EquipIcon_Bow_Narukami"],[12425,"Tidal Shadow",4,"Claymore","UI_EquipIcon_Claymore_Vorpal"],[14514,"Tome of the Eternal Flow",5,"Catalyst","UI_EquipIcon_Catalyst_Iudex"],[11422,"Toukabou Shigure",4,"Sword","UI_EquipIcon_Sword_Kasabouzu"],[11303,"Traveler's Handy Sword",3,"Sword","UI_EquipIcon_Sword_Traveler"],[14512,"Tulaytullah's Remembrance",5,"Catalyst","UI_EquipIcon_Catalyst_Alaya"],[14305,"Twin Nephrite",3,"Catalyst","UI_EquipIcon_Catalyst_Phoney"],[12426,"\"Ultimate Overlord's Mega Magic Sword\"",4,"Claymore","UI_EquipIcon_Claymore_Champion"],[11514,"Uraku Misugiri",5,"Sword","UI_EquipIcon_Sword_Needle"],[12512,"Verdict",5,"Claymore","UI_EquipIcon_Claymore_GoldenVerdict"],[14519,"Vivid Notions",5,"Catalyst","UI_EquipIcon_Catalyst_VaresaTransformer"],[13504,"Vortex Vanquisher",5,"Polearm","UI_EquipIcon_Pole_Kunwu"],[14416,"Wandering Evenstar",4,"Catalyst","UI_EquipIcon_Catalyst_Pleroma"],[13416,"Wavebreaker's Fin",4,"Polearm","UI_EquipIcon_Pole_Maria"],[14430,"Waveriding Whirl",4,"Catalyst","UI_EquipIcon_Catalyst_Umpakati"],[12407,"Whiteblind",4,"Claymore","UI_EquipIcon_Claymore_Exotic"],[12303,"White Iron Greatsword",3,"Claymore","UI_EquipIcon_Claymore_Tin"],[11520,"Whitelake Frostfeather",5,"Sword","UI_EquipIcon_Sword_Swanlake"],[13301,"White Tassel",3,"Polearm","UI_EquipIcon_Pole_Ruby"],[15413,"Windblume Ode",4,"Bow","UI_EquipIcon_Bow_Fleurfair"],[14410,"Wine and Song",4,"Catalyst","UI_EquipIcon_Catalyst_Outlaw"],[14437,"Winter's Heavy Heart",4,"Catalyst","UI_EquipIcon_Catalyst_FrostScepter"],[11424,"Wolf-Fang",4,"Sword","UI_EquipIcon_Sword_Boreas"],[12502,"Wolf's Gravestone",5,"Claymore","UI_EquipIcon_Claymore_Wolfmound"],[11418,"Xiphos' Moonlight",4,"Sword","UI_EquipIcon_Sword_Pleroma"]]};
@@ -2119,7 +2148,7 @@ const srcOf=e=>{
   if(/^Event:/.test(n)||/Bargain/.test(n)||/event/i.test(n))return 'event';
   return 'manual';
 };
-const catOf=e=>{const s=srcOf(e);return s==='daily'||s==='auto'?'daily':s==='event'||(s==='recon'&&e.tag==='Event')||e.tag==='Event'?'event':'other'};
+const catOf=e=>{const s=srcOf(e);return s==='endgame'?'endgame':s==='daily'||s==='auto'?'daily':s==='event'||(s==='recon'&&e.tag==='Event')||e.tag==='Event'?'event':'other'};
 
 /* ---------- reconcile ("Set to my in-game total") ---------- */
 function reconSpan(){
@@ -2179,53 +2208,118 @@ function drawAuto(){
 $('au-on').onchange=()=>{S.auto.on=$('au-on').checked;if(S.auto.on)S.auto.last=today();save();render();toast(S.auto.on?'Auto income is on. It starts tomorrow, so log today yourself.':'Auto income is off')};
 $('au-c').onchange=()=>{S.auto.comm=$('au-c').checked;save();render()};
 
-/* ---------- one-tap check-in, missed today, streak ---------- */
+/* ---------- ticks: Today + checklist. State is read from the ledger, so it can never drift from the balance. ---------- */
 const todayAuto=()=>S.log.find(e=>e.auto&&srcOf(e)==='auto'&&e.date===today()&&!(e.span>1));
-const todayDaily=()=>S.log.find(e=>e.date===today()&&srcOf(e)==='daily'&&!e.auto);
-function tickChecklist(){try{RK.done.dc=rkInfo('d').key;if(welkinOn())RK.done.wm=rkInfo('d').key;localStorage.setItem(RKK,JSON.stringify(RK))}catch(e){}drawResets()}
-function checkIn(){
-  if(todayDaily()){toast('You already checked in today.');return}
-  const full=(S.income.daily||0)+(welkinOn()?WELKIN:0),ex=todayAuto();
-  if(ex){ // confirm the estimate with the exact amount
-    const old={dp:ex.dp,p:ex.p,note:ex.note};
-    S.primos+=full-ex.dp;ex.dp=ex.p=full;ex.auto=false;ex.src='daily';ex.note='Daily check-in';
-    save();tickChecklist();refresh();
-    toast('Checked in ✓',()=>{S.primos+=old.dp-ex.dp;ex.dp=old.dp;ex.p=old.p;ex.auto=true;ex.src='auto';ex.note=old.note;save();refresh()});return;
-  }
-  if(full<=0){toast('Set your daily income first.');tab('income');return}
-  const r=commit({mode:'add',p:full,f:0,date:today(),note:'Daily check-in',src:'daily'});
-  if(!r.err){tickChecklist();toast('Checked in ✓ +'+fm(full),()=>undoEntry(r.e))}
-}
-$('hqCi').onclick=$('tdCi').onclick=checkIn;
-$('tdMiss').onclick=()=>{
-  const ex=todayAuto();if(!ex)return;
-  const snap={mode:'add',p:ex.dp,f:0,date:ex.date,note:ex.note,src:'auto',auto:true,bid:ex.bid,span:1};
-  undoEntry(ex);toast('Removed today’s estimate',()=>{applyCore(snap);save();refresh()});
-};
-function streakN(){const have=new Set(S.log.filter(e=>srcOf(e)==='daily'&&!e.auto).map(e=>e.date));let d=today(),n=0;if(!have.has(d))d=dAdd(d,-1);while(have.has(d)&&n<2000){n++;d=dAdd(d,-1)}return n}
+const tkEntry=id=>{const t=today();return S.log.find(e=>e.date===t&&!e.auto&&srcOf(e)==='daily'&&(e.tk===id||(id==='dc'&&(e.note==='Dailies'||e.note==='Daily check-in'))||(id==='wm'&&(e.note==='Welkin'||e.note==='Daily check-in'))))};
+const autoCovers=id=>!!todayAuto()&&(id==='dc'?!!S.auto.comm:welkinOn());
+const RKT={dc:'Daily commissions',wm:'Claim Welkin'};
+const EG={ab:{n:'Spiral Abyss',s:'Abyss',q:'How many stars did you earn this cycle? (0–36)',max:36,u:'★'},it:{n:'Imaginarium Theater',s:'Theater',q:'How many acts did you clear this month? (0–10)',max:10,u:' acts'},sg:{n:'Stygian Onslaught',s:'Stygian',q:'How many difficulty levels did you clear? (0–3)',max:3,u:'★'}};
+/* Step 0 decision: Enka's playerInfo has no cycle marker, so its Abyss/Theater/Stygian numbers can mean "highest ever". Detection stays OFF; the UID value is only a hint. */
+const EG_UID_AUTO=false;
+function egReward(id,n){n=Math.max(0,Math.min(EG[id].max,Math.floor(n)||0));
+  if(id==='ab'){let r=n,t=0;for(let i=0;i<4;i++){const v=Math.min(9,r);r-=v;t+=abyssFloor(Math.floor(v/3)*3)}return t}
+  if(id==='it')return Math.round((S.endgame.thMax||0)*n/10);
+  return n*150}
+const rkKey=id=>rkInfo(RKI.find(x=>x[0]===id)[2]).key;
+function itemState(id){const key=rkKey(id);
+  if(id==='dc'||id==='wm'){if(autoCovers(id))return {s:'auto',e:todayAuto()};const e=tkEntry(id);if(e)return {s:'me',e};return RK.done[id]===key?{s:'me'}:{s:'none'}}
+  if(EG[id]){const e=S.log.find(x=>x.eg===id&&x.ck===key);if(e)return {s:e.tag==='From UID'?'uid':'me',e};return RK.done[id]===key?{s:'me'}:{s:'none'}}
+  return RK.done[id]===key?{s:'me'}:{s:'none'}}
+const ICON={none:'○',me:'✓',auto:'🔒',uid:'🔒'},SLAB={none:'to do',me:'done',auto:'auto',uid:'from UID'};
+function rkRow(id,title,p){const st=itemState(id),i=rkInfo(p),locked=st.s==='auto'||st.s==='uid',row=document.createElement('div');row.className='rkr rk-'+st.s;
+  const b=document.createElement('button');b.type='button';b.className='rkb';b.dataset.i=id;b.setAttribute('aria-pressed',String(st.s!=='none'));if(locked)b.setAttribute('aria-disabled','true');
+  b.setAttribute('aria-label',title+': '+SLAB[st.s]+(locked?' (locked)':''));
+  b.innerHTML='<span class="ic" aria-hidden="true">'+ICON[st.s]+'</span><span class="rt">'+esc(title)+'</span><span class="rl">'+SLAB[st.s]+'</span>';row.append(b);
+  if(locked){const f=document.createElement('button');f.type='button';f.className='sm';f.dataset.fix=id;f.textContent=EG[id]?'Change stars':'Missed today';row.append(f)}
+  const c=document.createElement('span');c.className='cdn';c.textContent=cdText(i.ms);row.append(c);
+  if(EG[id]&&st.e&&st.e.note){const s=document.createElement('div');s.className='rks';s.textContent=st.e.note;row.append(s)}
+  return row}
+function drawResets(){const L=$('rkL');if(!L)return;$('rk-s').value=RK.s;L.textContent='';
+  RKI.filter(x=>x[0]!=='wm'||welkinOn()).forEach(([id,t,p])=>L.append(rkRow(id,t,p)));
+  const T=$('tdTicks');if(T){T.textContent='';RKI.filter(x=>x[0]==='dc'||(x[0]==='wm'&&welkinOn())).forEach(([id,t,p])=>T.append(rkRow(id,RKT[id]+' (+'+fm(id==='dc'?(S.income.daily||0):WELKIN)+')',p)))}}
+function rkTap(id){const st=itemState(id),key=rkKey(id);
+  if(st.s==='auto'){toast('Added by Auto income. Use “Missed today” if it is wrong.');return}
+  if(st.s==='uid'){toast('Detected from your UID. Use “Change stars” to change it.');return}
+  if(st.s==='me'){if(st.e){undoEntry(st.e);return}delete RK.done[id];rkSave();drawResets();return}
+  if(id==='dc'||id==='wm'){const p=id==='dc'?(S.income.daily||0):WELKIN;if(p<=0){toast('Set your daily income first.');tab('income');return}
+    const r=commit({mode:'add',p,f:0,date:today(),note:RKT[id],src:'daily',tk:id});if(!r.err)toast(RKT[id]+' ✓ +'+fm(r.e.dp),()=>undoEntry(r.e));return}
+  if(EG[id]){askEg(id,null);return}
+  RK.done[id]=key;rkSave();drawResets()}
+function fixItem(id){
+  if(id==='dc'||id==='wm'){const ex=todayAuto();if(!ex)return;const snap={mode:'add',p:ex.dp,f:0,date:ex.date,note:ex.note,src:'auto',auto:true,bid:ex.bid,span:1};
+    undoEntry(ex);if(!S.log.includes(ex))toast('Removed today’s auto income',()=>{applyCore(snap);save();refresh()});return}
+  if(EG[id]){const st=itemState(id);askEg(id,st.e||null)}}
+document.addEventListener('click',e=>{const f=e.target.closest('[data-fix]');if(f){fixItem(f.dataset.fix);return}const b=e.target.closest('.rkb');if(b)rkTap(b.dataset.i)});
+/* endgame: ask for stars, add once per cycle (keyed by the reset key), undo-able */
+let RKASK=null;
+function uidHint(id){if(!PF)return '';const v=id==='ab'?(PF.ab&&PF.ab.s):id==='it'?(PF.th&&PF.th.a):PF.sg;if(v===undefined||v===null)return '';return 'Your UID shows '+v+(id==='it'?' acts':'★')+' for '+EG[id].s+', but Enka does not say which cycle that is from, so I am not adding it for you.'}
+function egAdd(id,n,fromUid){const key=rkKey(id),g=EG[id],rw=egReward(id,n);
+  if(rw<=0){RK.done[id]=key;rkSave();drawResets();return null}
+  const note=fromUid?'Detected from UID: '+g.s+' '+n+g.u+' → +'+rw+' (est.)':g.s+' '+n+g.u+' (est.)';
+  const r=applyCore({mode:'add',p:rw,f:0,date:today(),note:note.slice(0,60),src:'endgame',auto:true,eg:id,ck:key,tag:fromUid?'From UID':''});
+  if(r.err){toast(r.err);return null}S.cu=today();save();refresh();return r.e}
+function askEg(id,old){RKASK={id,old};drawAsk();setTimeout(()=>{const n=$('rkN');if(n)n.focus()},30)}
+function drawAsk(){const A=$('rkAsk');if(!RKASK){A.hidden=true;A.textContent='';return}
+  const {id,old}=RKASK,g=EG[id],h=uidHint(id);A.hidden=false;
+  A.innerHTML='<div class="rcm"><b>'+esc(g.n)+'</b><br>'+esc(g.q)+'</div>'+(h?'<div class="sub" style="margin:4px 0">'+esc(h)+'</div>':'')+'<label class="f">Your number<input id="rkN" type="number" inputmode="numeric" min="0" max="'+g.max+'"></label><div class="sub" id="rkP" style="margin-top:6px"></div><div class="b" style="margin-top:8px"><button class="p sm" id="rkAdd" type="button">Add</button>'+(old?'':'<button class="sm" id="rkCnt" type="button">Already counted</button>')+'<button class="sm" id="rkX" type="button">Cancel</button></div>';
+  const inp=$('rkN'),pv=()=>{const n=inp.value===''?null:num(inp.value);$('rkP').textContent=n===null?'':n>g.max?'The most is '+g.max+'.':'Adds +'+fm(egReward(id,n))+' primogems (estimate), once for this cycle. You can undo it.'};
+  inp.oninput=pv;inp.onkeydown=e=>{if(e.key==='Enter')$('rkAdd').click()};
+  $('rkX').onclick=()=>{RKASK=null;drawAsk()};
+  if($('rkCnt'))$('rkCnt').onclick=()=>{RK.done[id]=rkKey(id);rkSave();RKASK=null;drawAsk();drawResets();toast(g.s+' marked as already counted')};
+  $('rkAdd').onclick=()=>{if(inp.value===''||num(inp.value)<0||num(inp.value)>g.max){toast('Enter a number from 0 to '+g.max);return}
+    const n=Math.floor(num(inp.value));let snap=null;
+    if(old){snap={mode:'add',p:old.dp,f:0,date:old.date,note:old.note,src:'endgame',auto:true,eg:old.eg,ck:old.ck,tag:old.tag};if(!undoCore(old)){return}}
+    RKASK=null;drawAsk();const e=egAdd(id,n,false);
+    if(e)toast(g.s+' '+n+g.u+' → +'+fm(e.dp)+' (est.)',()=>{undoEntry(e);if(snap){applyCore(snap);save();refresh()}});
+    else{save();refresh()}}}
+function cycleStart(id){const sv=Date.now()+(+RK.s-4)*36e5,D=new Date(sv),y=D.getUTCFullYear(),mo=D.getUTCMonth(),dd=D.getUTCDate();return Date.UTC(y,mo,id==='ab'&&dd>=16?16:1)-(+RK.s-4)*36e5}
+function egDetect(){if(!EG_UID_AUTO||!PF||!PF.ts)return;
+  Object.keys(EG).forEach(id=>{const key=rkKey(id);if(S.log.some(e=>e.eg===id&&e.ck===key)||RK.done[id]===key)return;if(PF.ts<cycleStart(id))return;
+    const n=id==='ab'?(PF.ab&&PF.ab.s):id==='it'?(PF.th&&PF.th.a):PF.sg;if(!(n>0))return;
+    const e=egAdd(id,n,true);if(e)toast('Detected from UID: '+EG[id].s+' '+n+EG[id].u+' → +'+fm(e.dp)+' (est.)',()=>undoEntry(e))})}
+/* +60 / +20 quick chips */
+function xpAsk(msg,fn){$('xpT').textContent=msg;$('xpC').hidden=false;$('xpYes').onclick=()=>{$('xpC').hidden=true;fn()};$('xpNo').onclick=()=>{$('xpC').hidden=true}}
+$('chP60').onclick=()=>{const auto=autoCovers('dc'),mine=!auto&&itemState('dc').s==='me';
+  if(auto||mine){xpAsk(auto?'Auto commission income is on and already added today’s +60. Add it again as extra?':'You already ticked today’s commissions. Add +60 again as extra?',()=>{const r=commit({mode:'add',p:60,f:0,date:today(),note:'Extra daily commissions',src:'daily',tk:'dx'});if(!r.err)toast('Extra +60 added',()=>undoEntry(r.e))});return}
+  const r=commit({mode:'add',p:60,f:0,date:today(),note:RKT.dc,src:'daily',tk:'dc'});if(!r.err)toast('Daily commissions ✓ +60',()=>undoEntry(r.e))};
+$('chP20').onclick=()=>{$('xpC').hidden=true;const r=commit({mode:'add',p:20,f:0,date:today(),note:'Other primogems',src:'manual',tag:'Other'});if(!r.err)toast('+20 primogems logged as Other',()=>undoEntry(r.e))};
+/* streak: a day counts if it has a daily entry or an auto entry (a removed "missed" day has no entry) */
+function streakN(){const have=new Set(S.log.filter(e=>(srcOf(e)==='daily'&&!e.auto)||(srcOf(e)==='auto'&&!(e.span>1))).map(e=>e.date));let d=today(),n=0;if(!have.has(d))d=dAdd(d,-1);while(have.has(d)&&n<2000){n++;d=dAdd(d,-1)}return n}
+/* balance status line + estimate chip */
+function estSum(){let i=S.log.length-1;while(i>=0&&S.log[i].mode!=='set')i--;return S.log.slice(i+1).filter(e=>e.auto&&e.dp>0).reduce((a,e)=>a+e.dp,0)}
+function goAuto(){tab('income');setIS('inc');setTimeout(()=>{const c=$('auCard');if(c){if(c._set)c._set(false);c.scrollIntoView({behavior:'smooth',block:'start'})}},80)}
+function drawStatus(){const A=S.auto,el=$('stl');if(!el)return;const t=today();el.textContent='';
+  let w='';if(A.welkinEnd&&welkinOn()){const n=off(A.welkinEnd);if(n>=0&&n<=7)w=' · Welkin ends '+(n===0?'today':'in '+plural(n,'day'))}
+  if(A.on)el.textContent='Auto income on · '+(A.last>=t?'+'+fm(dayAmount(t))+'/day · up to date ✓':'fills in when you open the app')+w;
+  else{el.append('Auto income off. ');const b=document.createElement('button');b.type='button';b.textContent='Turn on';b.onclick=goAuto;el.append(b);if(w)el.append(w)}
+  const n=estSum();$('estC').hidden=!(n>0);$('estN').textContent=fm(n)}
+$('estV').onclick=()=>{const c=$('set').closest('.card');if(c&&c._set)c._set(false);$('set').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>$('ap').focus(),250)};
+function drawCalcHow(){const el=$('chTxt');if(!el)return;let i=S.log.length-1;while(i>=0&&S.log[i].mode!=='set')i--;const after=S.log.slice(i+1),sum=a=>a.reduce((t,e)=>t+e.dp,0),
+  au=after.filter(e=>e.auto&&srcOf(e)==='auto'),eg=after.filter(e=>e.auto&&srcOf(e)==='endgame'),rest=after.filter(e=>!e.auto),inc=rest.filter(e=>e.dp>0),sp=rest.filter(e=>e.dp<0),
+  base=S.primos-sum(after),days=new Set(au.map(e=>e.date)).size;
+  let s1=i>=0?'Your last in-game total was <b>'+fm(base)+'</b> primogems on '+fmt(S.log[i].date)+'.':'You have not set an in-game total yet, so the app started from 0.';
+  let s2=' Since then it added <b>'+fm(sum(au))+'</b> from auto income ('+plural(days,'day')+')'+(eg.length?', <b>'+fm(sum(eg))+'</b> from endgame rewards (estimates)':'')+' and <b>'+fm(sum(inc))+'</b> from events and other entries'+(sp.length?', and took off <b>'+fm(-sum(sp))+'</b> for pulls and spending':'')+', which makes <b>'+fm(S.primos)+'</b> now. Fates are counted separately.';
+  el.innerHTML=s1+s2}
 function drawToday(){
-  const dn=todayDaily(),ex=todayAuto(),per=(S.income.daily||0)+(welkinOn()?WELKIN:0);
-  let sub;
-  if(dn)sub='Checked in today ✓ (+'+fm(dn.dp)+' primogems).';
-  else if(ex)sub='Auto-added today: +'+fm(ex.dp)+' primogems (an estimate). Tap the button if you really claimed them, or Missed today to take it out.';
-  else sub=per>0?'One tap adds '+fm(per)+' primogems: your daily commissions'+(welkinOn()?' and Welkin':'')+'.':'Set your daily income in the Income tab, then one tap logs it here.';
+  const ex=todayAuto();let sub;
+  if(ex)sub='Auto income added today: +'+fm(ex.dp)+' primogems (an estimate). If that is wrong, use “Missed today” on a locked item.';
+  else if(S.auto.on)sub='Auto income is on. Anything it has not added today, tick yourself.';
+  else sub='Tick what you did today. Each tick adds its primogems and can be undone.';
   $('tdSub').textContent=sub;
-  $('tdCi').hidden=!!dn;$('tdCi').textContent=ex?'✓ I claimed them':'✓ Commissions'+(welkinOn()?' & Welkin':'')+' done';
-  $('tdMiss').hidden=!ex;
-  $('hqCi').disabled=!!dn;$('hqCi').textContent=dn?'✓ Done today':'✓ Check in';
-  const wk=gainsByDay(7).reduce((a,d)=>a+d.v.daily+d.v.event+d.v.other,0),st=streakN(),bits=[];
+  const wk=gainsByDay(7).reduce((a,d)=>a+gTot(d),0),st=streakN(),bits=[];
   if(st>=2)bits.push(st+'-day check-in streak');
   if(wk>0)bits.push('This week: '+fm(wk)+' primogems');
   $('tdStat').textContent=bits.join(' · ');
   let svg=$('tdSvg');if(!svg){svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.id='tdSvg';svg.setAttribute('class','chart');svg.setAttribute('viewBox','0 0 360 84');svg.setAttribute('aria-hidden','true');$('tdChart').append(svg)}
   drawGainChart(svg,7,false);
+  drawResets();drawStatus();drawCalcHow();
 }
 $('tdChart').onclick=()=>{tab('more');setTimeout(()=>{const c=$('h-hi').closest('.card');if(c&&c._set)c._set(false);$('h-hi').scrollIntoView({behavior:'smooth',block:'start'})},80)};
 
 /* ---------- earnings chart: gains only, daily bars by source, 7-day average ---------- */
 function gainsByDay(n){
   const days=[];for(let i=n-1;i>=0;i--)days.push(addDays(-i));
-  const ix=new Map(days.map((d,i)=>[d,i])),out=days.map(d=>({date:d,v:{daily:0,event:0,other:0},e:{daily:0,event:0,other:0}})),first=days[0],td=today();
+  const ix=new Map(days.map((d,i)=>[d,i])),out=days.map(d=>({date:d,v:{daily:0,event:0,other:0,endgame:0},e:{daily:0,event:0,other:0,endgame:0}})),first=days[0],td=today();
   S.log.forEach(e=>{
     if(e.goal||e.mode==='inv'||e.date<first||e.date>td)return;
     if(e.mode==='set'&&!(e.span>0))return; // the very first total is a starting balance, not income
@@ -2235,7 +2329,7 @@ function gainsByDay(n){
   });
   return out;
 }
-const gTot=d=>d.v.daily+d.v.event+d.v.other;
+const gTot=d=>d.v.daily+d.v.event+d.v.other+d.v.endgame;
 function drawGainChart(svg,n,full){
   const data=gainsByDay(n+6),days=data.slice(6),avg=days.map((_,i)=>{let s=0;for(let k=0;k<7;k++)s+=gTot(data[i+k]);return s/7});
   const W=360,H=full?170:84,L=full?36:4,R=6,T=8,Bt=full?22:14,pw=W-L-R,ph=H-T-Bt;
@@ -2243,10 +2337,10 @@ function drawGainChart(svg,n,full){
   const bw=pw/n,barw=Math.max(2,bw*(n>14?.72:.62)),y=v=>T+ph-v/mx*ph;
   let h='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+y(0)+'" y2="'+y(0)+'"/>';
   if(full){[.5,1].forEach(f=>{h+='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+y(mx*f)+'" y2="'+y(mx*f)+'"/><text class="yl" x="'+(L-4)+'" y="'+(y(mx*f)+3.5)+'">'+fm(mx*f)+'</text>'});h+='<text class="yl" x="'+(L-4)+'" y="'+(y(0)+3.5)+'">0</text>'}
-  const cls={daily:'d',event:'e',other:'o'};
+  const cls={daily:'d',event:'e',other:'o',endgame:'g'};
   days.forEach((d,i)=>{
-    const x=L+i*bw+(bw-barw)/2;let base=0,t='<title>'+esc(fmt(d.date))+': '+fm(gTot(d))+' primogems'+(gTot(d)?' (daily '+fm(d.v.daily)+', events '+fm(d.v.event)+', other '+fm(d.v.other)+')':'')+'</title>';
-    ['daily','event','other'].forEach(k=>{
+    const x=L+i*bw+(bw-barw)/2;let base=0,t='<title>'+esc(fmt(d.date))+': '+fm(gTot(d))+' primogems'+(gTot(d)?' (daily '+fm(d.v.daily)+', events '+fm(d.v.event)+', other '+fm(d.v.other)+(d.v.endgame?', endgame '+fm(d.v.endgame):'')+')':'')+'</title>';
+    ['daily','event','other','endgame'].forEach(k=>{
       const est=Math.min(d.e[k],d.v[k]),real=d.v[k]-est;
       [[real,''],[est,' est']].forEach(([v,x2])=>{if(v>0.5){const hh=v/mx*ph;t+='<rect class="gb '+cls[k]+x2+'" x="'+x.toFixed(1)+'" y="'+(T+ph-base-hh).toFixed(1)+'" width="'+barw.toFixed(1)+'" height="'+hh.toFixed(1)+'" rx="1.5"/>';base+=hh}});
     });
@@ -2258,7 +2352,7 @@ function drawGainChart(svg,n,full){
     days.forEach((d,i)=>{if(n<=7||(n-1-i)%step===0)h+='<text class="xl" x="'+(L+i*bw+bw/2).toFixed(1)+'" y="'+(H-6)+'">'+esc(n<=7?new Date(d.date+'T00:00:00').toLocaleDateString(undefined,{weekday:'narrow'}):new Date(d.date+'T00:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short'}))+'</text>'});
   }
   svg.innerHTML=h;
-  const sum=days.reduce((a,d)=>a+gTot(d),0),est=days.reduce((a,d)=>a+d.e.daily+d.e.event+d.e.other,0);
+  const sum=days.reduce((a,d)=>a+gTot(d),0),est=days.reduce((a,d)=>a+d.e.daily+d.e.event+d.e.other+d.e.endgame,0);
   svg.setAttribute('aria-label','Primogems gained per day over the last '+n+' days. Total '+fm(sum)+', about '+fm(sum/n)+' a day.');
   if(!full)$('tdChart').setAttribute('aria-label','Primogems gained in the last 7 days: '+fm(sum)+'. Open the full chart in History.');
   return {sum,est,avg:sum/n};
@@ -2362,6 +2456,7 @@ function drawEvents(){
   });
   if(!closed.length)dn.innerHTML='<div class="sub">Nothing yet.</div>';
 }
+$('evAddTop').onclick=()=>{const c=$('evCard');if(c._set)c._set(false);$('evForm').open=true;$('evForm').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>$('ev-n').focus(),250)};
 $('evAdd').onclick=()=>{
   const n=$('ev-n').value.trim(),p=num($('ev-p').value),d=$('ev-d').value;
   if(!n||p<1){toast('Add a name and how many primogems.');return}
@@ -2522,7 +2617,11 @@ window.addEventListener('popstate',()=>tab(hashTab(),true,'pop'));
 {const h=hashTab();if(h!=='home')tab(h,true)}
 document.querySelectorAll('[data-tb],[data-go]').forEach(b=>b.addEventListener('click',()=>b.dataset.tb?tab(b.dataset.tb,false,'nav'):tab(b.dataset.go)));
 document.querySelectorAll('[data-pre]').forEach(b=>b.onclick=()=>{const p=b.dataset.pre;$('i-w').checked=p!=='f2p';$('i-bp').checked=p==='wb';if(!$('i-p').value)$('i-p').value=3000;incIn();toast('Income updated. Check the numbers below.')});
-function drawWelcome(){
+function drawFirst(){const c=$('frCard');if(!c)return;let done=false;try{done=localStorage.getItem('primo-fr')==='1'}catch(e){}c.hidden=done||!LOADED||S.log.length>0||S.auto.on}
+document.querySelectorAll('[data-fr]').forEach(b=>b.onclick=()=>{const v=b.dataset.fr;
+  if(v!=='no'){S.auto.on=true;S.auto.comm=true;S.auto.last=today();$('i-w').checked=v!=='free';$('i-bp').checked=v==='wbp';if(!$('i-p').value)$('i-p').value=3000;incIn();fillIncome()}
+  try{localStorage.setItem('primo-fr','1')}catch(e){}render();toast(v==='no'?'Okay. You can tick things off yourself on Home.':'Auto income is on. It starts tomorrow, so tick today yourself.')});
+function drawWelcome(){drawFirst();
   const i=S.income,d=[S.log.length>0,!!(i.welkin||i.bp||i.bargains||i.patch||i.monthly||S.patchStart),S.goals.length>0];
   let off=false;try{off=localStorage.getItem('primo-welcome')==='off'}catch(e){}
   $('wel').hidden=off||d.every(Boolean);
@@ -2663,4 +2762,3 @@ document.addEventListener('keydown',e=>{
 </script>
 </body>
 </html>
-
