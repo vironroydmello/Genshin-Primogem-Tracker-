@@ -1,4 +1,4 @@
-const BUILD='18.1+07c87596'; // stamped by build.js: the same value is shown in the app, so the cache and the version never drift apart
+const BUILD='18.2+ba55e948'; // stamped by build.js: the same value is shown in the app, so the cache and the version never drift apart
 const CACHE='primogem-tracker-'+BUILD;
 const ASSETS=['./','./index.html','./manifest.json','./roster.json','./icon-180.png','./icon-192.png','./icon-512.png'];
 const FONT_HOSTS=['fonts.googleapis.com','fonts.gstatic.com'];
