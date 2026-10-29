@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="18.3"><meta name="app-build" content="a85e5867"><meta name="app-built" content="2026-10-29"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="app-version" content="18.3"><meta name="app-build" content="9b4b3de1"><meta name="app-built" content="2026-10-29"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Primogem Tracker</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2a1f5e">
@@ -366,6 +366,7 @@ button,select,summary,.chip,.theme,.rkb,.sm,#toast button,.seg button{min-height
   <div class="tot disp"><div class="big"><b id="tt">0</b>pulls ready</div><div><b id="tp">0</b>primogems<span class="estc" id="estC" hidden>≈ <span id="estN">0</span> est. <button type="button" class="estv" id="estV">Verify</button></span></div><div><b id="tf">0</b>fates</div></div>
   <div class="stl" id="stl" role="status"></div>
   <div class="nx" id="nx"></div>
+  <div class="hq" role="group" aria-label="Quick log"><button type="button" data-q="f1">+1 fate</button><button type="button" id="hqLog">Log…</button></div>
 </header>
 <section class="card" id="uidStrip" data-tab="home" aria-label="Your UID">
   <div class="us-top" id="usTop" hidden><span class="us-av" id="usAv"></span><div class="us-t"><b class="disp" id="usNick"></b><div class="sub" id="usSub"></div><div class="sub" id="usAge"></div></div><div class="us-act"><button class="sm" id="hRef">Refresh</button><button class="sm" id="hView2">Open showcase ›</button></div></div>
@@ -393,25 +394,30 @@ button,select,summary,.chip,.theme,.rkb,.sm,#toast button,.seg button{min-height
 
 
 <section class="card" id="sumCard" data-tab="goals" hidden><div id="sumTxt" style="line-height:1.5"></div><div class="b" style="margin-top:8px"><button class="sm" id="sumShare">Share my plan</button></div></section>
-<button class="fab" id="fab" type="button" aria-label="Quick add: log primogems or fates">＋</button>
-<div class="bs" id="qaSheet" role="dialog" aria-modal="true" aria-label="Quick add" hidden><div class="bsp">
-<div style="display:flex;justify-content:space-between;align-items:center"><h3 class="disp" id="h-log">Quick add</h3><button class="sm" id="qaX" type="button">Close</button></div>
-<div class="chips">
+<section class="card" aria-labelledby="h-log" data-tab="home">
+  <h2 id="h-log" class="disp">Update your pulls</h2>
+  <div class="chips">
     <button class="chip" data-q="f1">+1 fate</button><button class="chip" id="chP60">+60 primogems</button><button class="chip" id="chP20">+20 primogems</button>
       </div>
   <div class="xpc" id="xpC" role="alertdialog" aria-live="polite" hidden><div id="xpT"></div><div class="b" style="margin-top:8px"><button class="p sm" id="xpYes">Add extra</button><button class="sm" id="xpNo">Cancel</button></div></div>
-  
-<div class="row">
+  <div class="row">
     <label class="f">Primogems<input id="ap" type="number" inputmode="numeric" placeholder="0"></label>
     <label class="f">Fates<input id="af" type="number" inputmode="numeric" placeholder="0"></label>
   </div>
-  <button class="p wide" id="set" style="margin-top:8px">🎯 Match my game total</button>
-  <details class="adv" style="margin-top:10px"><summary>Add or spend something else</summary><div class="sub" style="margin-top:6px">Type an amount above, then tap one button.</div><label class="f" style="display:block;margin-top:8px">Note (optional)<input id="an" maxlength="60" list="cats" autocomplete="off" placeholder="Events, Abyss 36★, Codes, Top-up…"></label>
+  <details class="adv"><summary>Add a note or change the date</summary><label class="f" style="display:block;margin-top:8px">Note (optional)<input id="an" maxlength="60" list="cats" autocomplete="off" placeholder="Events, Abyss 36★, Codes, Top-up…"></label>
   <datalist id="cats"><option value="Events"><option value="Abyss"><option value="Imaginarium Theater"><option value="Livestream codes"><option value="Genesis top-up"><option value="Maintenance"><option value="Quest / Exploration"></datalist>
-  <div class="row" style="margin-top:8px"><label class="f">Date<input id="ad" type="date"></label><label class="f">Where it came from<select id="as"><option value="">Other</option><option value="Event">Event</option><option value="Exploration">Exploration or quest</option><option value="Mail/code">Mail or code</option><option value="Top-up">Top-up</option></select></label></div></div><div class="sub" id="setHint" style="margin-top:10px"></div>
-  <div style="margin-top:8px"><div class="ubt" style="margin-top:8px"><button id="gainBtn" class="gainb">➕ I gained</button><button id="spendBtn" class="spendb">➖ I spent</button></div>
-  </div></details><details class="adv" style="margin-top:8px"><summary>How these buttons work</summary><div class="sub" style="margin-top:6px">Type a number above, then tap one button. <b>I gained / I spent</b>: type only the amount you got or used. <b>Match my game total</b> (reconcile): type what your game shows now. The app compares it with its own estimate, records the difference in History and asks what it was. 160 primogems = 1 pull.</div></details>
-  </div></div>
+  <div class="row" style="margin-top:8px"><label class="f">Date<input id="ad" type="date"></label><label class="f">Where it came from<select id="as"><option value="">Other</option><option value="Event">Event</option><option value="Exploration">Exploration or quest</option><option value="Mail/code">Mail or code</option><option value="Top-up">Top-up</option></select></label></div></details><div class="sub" id="setHint" style="margin-top:10px"></div>
+  <button class="p wide" id="set" style="margin-top:8px">🎯 Set to my in-game total</button>
+  <details class="adv" style="margin-top:8px"><summary>I gained / I spent</summary><div class="ubt" style="margin-top:8px"><button id="gainBtn" class="gainb">➕ I gained</button><button id="spendBtn" class="spendb">➖ I spent</button></div></details>
+  <details class="adv" style="margin-top:8px"><summary>How these buttons work</summary><div class="sub" style="margin-top:6px">Type a number above, then tap one button. <b>I gained / I spent</b>: type only the amount you got or used. <b>Set to my in-game total</b> (reconcile): type what your game shows now. The app compares it with its own estimate, records the difference in History and asks what it was. 160 primogems = 1 pull.</div></details>
+  <details class="panel adv"><summary>Genesis Crystals &amp; Starglitter (optional)</summary>
+    <div class="sub" id="latOut"></div>
+    <div class="row" style="margin-top:8px"><label class="f">Genesis Crystals<input id="inv-g" type="number" inputmode="numeric" min="0" placeholder="amount"></label><label class="f">Masterless Starglitter<input id="inv-s" type="number" inputmode="numeric" min="0" placeholder="amount"></label></div>
+    <div class="b"><button class="sm" id="invAdd">Add to inventory</button><button class="sm" id="invRem">Remove from inventory</button></div>
+    <div class="row" style="margin-top:12px"><label class="f">Convert Genesis<input id="cv-g" type="number" inputmode="numeric" min="0" placeholder="all"></label><label class="f">Convert Starglitter<input id="cv-s" type="number" inputmode="numeric" min="0" placeholder="all"></label><button id="conv">Convert</button></div>
+    <div class="sub" style="margin-top:6px">Leave the convert boxes empty to convert everything. Genesis becomes primogems 1:1 and 5 Starglitter become 1 fate. Every change here is logged in History and can be undone.</div></details>
+</section>
+
 <section class="card" id="rsCard" data-tab="home" data-help="Weekly and monthly jobs. Spiral Abyss and Imaginarium Theater ask what you earned and add it once per reset. Everything clears itself at the reset time."><h2 class="disp">Resets &amp; checklist</h2><label class="f">Server<select id="rk-s"><option value="8">Asia / TW-HK-MO (UTC+8)</option><option value="1">Europe (UTC+1)</option><option value="-5">America (UTC-5)</option></select></label><div id="rkL" style="margin-top:8px"></div><div class="rkleg">Weekly and monthly items. Daily ones are in Today. ○ to do (tap to tick) · ✓ done by you (tap to undo) · 🔒 <b style="color:var(--s-auto)">auto</b>: added by Auto income · 🔒 <b style="color:var(--s-uid)">from UID</b>. Locked items have a Fix button.</div><div class="sub" style="margin-top:6px">Everything resets at 04:00 server time, and ticks clear themselves.</div></section>
 <section class="card" id="chCard" data-tab="more"><details><summary class="disp h2s">How it’s calculated</summary><div class="sub" id="chTxt" style="margin-top:8px;line-height:1.5"></div></details></section>
 <div data-tab="pulls"><div class="sec"><h2 class="disp">Pulls</h2></div><p class="sub" style="margin:-4px 2px 10px">Log pulls, edit pity and import your wish history here. This is the only place pity is edited.</p></div>
@@ -423,12 +429,6 @@ button,select,summary,.chip,.theme,.rkb,.sm,#toast button,.seg button{min-height
 <details class="adv" style="margin-top:8px"><summary>Luck stats</summary><div id="plS" class="sub" style="margin-top:6px;line-height:1.6"></div></details></section>
 <section class="card" id="ptCard" data-tab="pulls"><h2 class="disp">Pity tracker</h2><div class="sub" id="ptSum"></div><details class="adv" style="margin-top:8px"><summary>More details / edit pity</summary><div class="sub" style="margin-top:6px">Enter your in-game pity once. It is shared by every goal of the same type: the first goal of each type uses it, later ones start fresh. It resets itself when you log a result.</div><div class="grid2" style="margin-top:8px"><label class="f">Character pity<input id="pt-char" type="number" inputmode="numeric" min="0" max="89"></label><label class="f">Weapon pity<input id="pt-weapon" type="number" inputmode="numeric" min="0" max="79"></label><label class="f">Chronicled pity<input id="pt-chron" type="number" inputmode="numeric" min="0" max="89"></label><label class="chk" style="grid-column:auto;align-self:end"><input type="checkbox" id="pt-cg"> Next character 5★ is guaranteed</label></div></details></section>
 <section class="card" id="whCard" data-tab="pulls"><h2 class="disp">Wish history</h2><div class="sub">Import your wish history to fill in your pity and see your stats. Use a tracker that exports UIGF JSON, for example paimon.moe or Genshin Wish Export.</div><div class="b" style="margin-top:8px"><button class="p sm" id="whBtn">Import wish history</button></div><input id="whF" type="file" accept=".json,application/json" hidden><div id="whO"></div><div class="b" id="whAct" hidden style="margin-top:8px"><button class="sm" id="whUse">Use this pity in my tracker</button><button class="sm" id="whClr">Clear stats</button></div><div class="sub" style="margin-top:6px">The 50/50 record needs English character names. Only your stats are kept on this device, not the whole file.</div></section>
-<section class="card" id="invCard" data-tab="pulls"><h2 class="disp">Genesis Crystals &amp; Starglitter</h2><div>
-    <div class="sub" id="latOut"></div>
-    <div class="row" style="margin-top:8px"><label class="f">Genesis Crystals<input id="inv-g" type="number" inputmode="numeric" min="0" placeholder="amount"></label><label class="f">Masterless Starglitter<input id="inv-s" type="number" inputmode="numeric" min="0" placeholder="amount"></label></div>
-    <div class="b"><button class="sm" id="invAdd">Add to inventory</button><button class="sm" id="invRem">Remove from inventory</button></div>
-    <div class="row" style="margin-top:12px"><label class="f">Convert Genesis<input id="cv-g" type="number" inputmode="numeric" min="0" placeholder="all"></label><label class="f">Convert Starglitter<input id="cv-s" type="number" inputmode="numeric" min="0" placeholder="all"></label><button id="conv">Convert</button></div>
-    <div class="sub" style="margin-top:6px">Leave the convert boxes empty to convert everything. Genesis becomes primogems 1:1 and 5 Starglitter become 1 fate. Every change here is logged in History and can be undone.</div></div></section>
 <section class="card" data-tab="pulls"><h2 class="disp">Wish odds</h2><div class="row"><label class="f">Banner<select id="c-t" data-cc><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled</option></select></label><label class="f">Copies you want<select id="c-n" data-cc><option value="1">C0 (1 copy)</option><option value="2">C1 (2 copies)</option><option value="3">C2 (3 copies)</option><option value="4">C3 (4 copies)</option><option value="5">C4 (5 copies)</option><option value="6">C5 (6 copies)</option><option value="7">C6 (7 copies)</option></select></label></div>
 <div class="row"><label class="f">Current pity<input id="c-pi" data-cc type="number" inputmode="numeric" min="0" placeholder="0"></label><label class="f">Pulls you have<input id="c-pl" data-cc type="number" inputmode="numeric" min="0" placeholder="0"></label></div>
 <label class="chk" style="margin-top:8px"><input type="checkbox" id="c-g" data-cc> Next 5★ is guaranteed (Fate Point for weapons)</label><div id="c1o" style="margin-top:10px;line-height:1.6"></div></section>
@@ -501,7 +501,7 @@ button,select,summary,.chip,.theme,.rkb,.sm,#toast button,.seg button{min-height
 <label class="chk" style="margin-top:4px"><input type="checkbox" id="au-on"> Add my daily income for me</label>
 <label class="chk" style="margin-top:8px"><input type="checkbox" id="au-c"> Include daily commissions (<span id="au-cv">60</span> a day)</label>
 <div class="sub" style="margin-top:8px" id="au-out"></div>
-<div class="sub" style="margin-top:6px">A web app can only do the maths when you open it, so it fills in the days you missed. Every automatic entry is marked <b>auto (est.)</b> in History and has an Undo. Welkin is added each day until the end date above. Use <b>Match my game total</b> now and then to correct any drift.</div></section>
+<div class="sub" style="margin-top:6px">A web app can only do the maths when you open it, so it fills in the days you missed. Every automatic entry is marked <b>auto (est.)</b> in History and has an Undo. Welkin is added each day until the end date above. Use <b>Set to my in-game total</b> now and then to correct any drift.</div></section>
 <section class="card" id="evCard" data-tab="income"><h2 class="disp">Events &amp; free primogems</h2><div class="b" style="margin:4px 0 8px"><button class="p sm" id="evAddTop" type="button">+ Add custom event</button></div><div class="sub" id="evSub"></div><div id="evList" style="margin-top:8px"></div>
 <label class="chk" style="margin-top:10px"><input type="checkbox" id="i-ev"> Use these events in my forecast</label>
 <details class="adv" style="margin-top:8px"><summary id="evDoneSum">Done and skipped</summary><div id="evDone" style="margin-top:6px"></div></details>
@@ -1257,9 +1257,9 @@ function entry(mode){
     const drop=ledP()-(p+f*160),sb=$('set');
     if(drop>=800&&!sb.dataset.armed){ // lowering the balance by 5+ pulls needs a second tap
       sb.dataset.armed='1';sb.textContent='Confirm: −'+Math.round(drop/160)+' pulls';clearTimeout(sb._t);
-      sb._t=setTimeout(()=>{delete sb.dataset.armed;sb.textContent='🎯 Match my game total'},5000);return;
+      sb._t=setTimeout(()=>{delete sb.dataset.armed;sb.textContent='🎯 Set to my in-game total'},5000);return;
     }
-    delete sb.dataset.armed;sb.textContent='🎯 Match my game total';
+    delete sb.dataset.armed;sb.textContent='🎯 Set to my in-game total';
   }
   else{p=num(pv);f=num(fv);if(sign<0){p=-Math.abs(p);f=-Math.abs(f)}}
   {const tP=mode==='set'?p:S.primos+p,tF=mode==='set'?f:S.fates+f;if(tP>1e6||tF>1e4){toast('That’s more than the app can track (max 1,000,000 primogems and 10,000 fates).');return}}
@@ -1271,7 +1271,7 @@ function entry(mode){
     if(mode==='set'){if(q.span>0)rcShow(r.e);toast(q.span>0?'Reconciled':'Starting balance set',()=>{undoEntry(r.e);rcShow(null)})}else toast('Entry logged',()=>undoEntry(r.e))}
 }
 $('gainBtn').onclick=()=>{sign=1;entry('add')};$('spendBtn').onclick=()=>{sign=-1;entry('add')};$('set').onclick=()=>entry('set');
-[$('ap'),$('af')].forEach(i=>i.addEventListener('input',()=>{const b=$('set');if(b.dataset.armed){delete b.dataset.armed;b.textContent='🎯 Match my game total'}}));
+[$('ap'),$('af')].forEach(i=>i.addEventListener('input',()=>{const b=$('set');if(b.dataset.armed){delete b.dataset.armed;b.textContent='🎯 Set to my in-game total'}}));
 [$('ap'),$('af')].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur()}));
 document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
   const q=b.dataset.q,p=q==='p60'?60:q==='p90'?90:0,f=q==='f1'?1:0;
@@ -2200,7 +2200,7 @@ const srcOf=e=>{
 };
 const catOf=e=>{const s=srcOf(e);return s==='endgame'?'endgame':s==='daily'||s==='auto'?'daily':s==='event'||(s==='recon'&&e.tag==='Event')||e.tag==='Event'?'event':'other'};
 
-/* ---------- reconcile ("Match my game total") ---------- */
+/* ---------- reconcile ("Set to my in-game total") ---------- */
 function reconSpan(){
   const recs=S.log.filter(e=>e.mode==='set').map(e=>e.date).sort();
   const from=recs.length?recs[recs.length-1]:(S.log.length?S.log.map(e=>e.date).sort()[0]:'');
@@ -2377,7 +2377,7 @@ function drawStatus(){const A=S.auto,el=$('stl');if(!el)return;const t=today();e
   if(A.on)el.textContent='Auto income on · '+(A.last>=t?'+'+fm(dayAmount(t))+'/day · up to date ✓':'fills in when you open the app')+w;
   else{el.append('Auto income off. ');const b=document.createElement('button');b.type='button';b.textContent='Turn on';b.onclick=goAuto;el.append(b);if(w)el.append(w)}
   const n=estSum();$('estC').hidden=!(n>0);$('estN').textContent=fm(n)}
-$('estV').onclick=()=>openQA();
+$('estV').onclick=()=>goLog();
 function drawCalcHow(){const el=$('chTxt');if(!el)return;let i=S.log.length-1;while(i>=0&&S.log[i].mode!=='set')i--;const after=S.log.slice(i+1),sum=a=>a.reduce((t,e)=>t+e.dp,0),
   au=after.filter(e=>e.auto&&srcOf(e)==='auto'),eg=after.filter(e=>e.auto&&srcOf(e)==='endgame'),rest=after.filter(e=>!e.auto),inc=rest.filter(e=>e.dp>0),sp=rest.filter(e=>e.dp<0),
   base=S.primos-sum(after),days=new Set(au.map(e=>e.date)).size;
@@ -2588,7 +2588,7 @@ function diCompare(){
     const old=S.income.patch,np=Math.max(0,Math.round(old+(per-fc)*patchLen()));
     S.income.patch=np;fillIncome();save();render();toast('Per-patch income set to '+fm(np),()=>{S.income.patch=old;fillIncome();save();render()});
   });
-  if(B.children.length){out.append(B);if(diff>0)out.insertAdjacentHTML('beforeend','<div class="sub" style="margin-top:6px">If you also use Match my game total, do one or the other for this gap, or it is counted twice.</div>')}
+  if(B.children.length){out.append(B);if(diff>0)out.insertAdjacentHTML('beforeend','<div class="sub" style="margin-top:6px">If you also use Set to my in-game total, do one or the other for this gap, or it is counted twice.</div>')}
 }
 $('diGo').onclick=diCompare;
 
@@ -2825,17 +2825,10 @@ const B=document.body,mini=$('mini'),hero=document.querySelector('.hero');
 const sync=()=>{$('mn-t').textContent=$('tt').textContent;$('mn-p').textContent=$('tp').textContent;$('mn-f').textContent=$('tf').textContent};
 sync();const mo=new MutationObserver(sync);['tt','tp','tf'].forEach(i=>mo.observe($(i),{childList:true,characterData:true,subtree:true}));
 if('IntersectionObserver' in window)new IntersectionObserver(([e])=>mini.classList.toggle('on',!e.isIntersecting&&e.boundingClientRect.bottom<0)).observe(hero);
-let QAK=0;
-function openQA(focus){const s=$('qaSheet');QAK++;s.hidden=false;if(focus!==false)setTimeout(()=>{try{$('ap').focus({preventScroll:true})}catch(e){}},60)}
-function closeQA(){$('qaSheet').hidden=true;$('xpC').hidden=true}
-window.openQA=openQA;window.closeQA=closeQA;
-$('fab').onclick=()=>openQA(false);$('qaX').onclick=closeQA;$('qaSheet').addEventListener('click',e=>{if(e.target===$('qaSheet'))closeQA()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('qaSheet').hidden)closeQA()});
-// close the sheet once something was logged (inputs cleared, or a chip added an entry)
-$('qaSheet').addEventListener('click',e=>{const t=e.target.closest('button');if(!t||t.id==='qaX')return;const n=S.log.length,k=QAK;setTimeout(()=>{if(k===QAK&&S.log.length!==n&&$('xpC').hidden)closeQA()},60)},true);
-function goLog(){openQA();return;const go=()=>{const h=$('h-log'),c=h.closest('.card');if(c&&c._set&&c.classList.contains('min'))c._set(false);h.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{try{$('ap').focus({preventScroll:true})}catch(e){}},400)};
+window.closeQA=()=>{};window.openQA=goLog;
+function goLog(){const go=()=>{const h=$('h-log'),c=h.closest('.card');if(c&&c._set&&c.classList.contains('min'))c._set(false);h.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{try{$('ap').focus({preventScroll:true})}catch(e){}},400)};
   if(B.dataset.t!=='home'){tab('home');setTimeout(go,80)}else go()}
-$('mLog').onclick=goLog;
+$('mLog').onclick=$('hqLog').onclick=goLog;
 $('mTop').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
 // Radio groups: only the selected option is a Tab stop (arrow keys move between options)
 const rove=()=>document.querySelectorAll('[role=radiogroup]').forEach(g=>{const r=[...g.querySelectorAll('[role=radio]')];if(!r.length)return;const on=r.find(x=>x.getAttribute('aria-checked')==='true')||r[0];r.forEach(x=>{x.tabIndex=x===on?0:-1})});
