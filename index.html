@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="18.2"><meta name="app-build" content="ba55e948"><meta name="app-built" content="2026-10-28"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="app-version" content="18.3"><meta name="app-build" content="a85e5867"><meta name="app-built" content="2026-10-29"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Primogem Tracker</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2a1f5e">
@@ -15,10 +15,10 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f3f1fa;--card:#fff;--ink:#221d33;--mut:#675f7d;--line:#e2deef;--acc:#6d4df2;--on:#fff;--gold:#a8740a;--gold-f:#e8b84a;--ok:#1f7f55;--warn:#a8480f;
+:root{--s-none:#5a5f75;--s-me:#1a6b45;--s-auto:#1b57c7;--s-uid:#6a3fc9;--bg:#f3f1fa;--card:#fff;--ink:#221d33;--mut:#675f7d;--line:#e2deef;--acc:#6d4df2;--on:#fff;--gold:#a8740a;--gold-f:#e8b84a;--ok:#1f7f55;--warn:#a8480f;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14111e;--card:#1e1a2b;--ink:#efecf7;--mut:#a29cb3;--line:#342f46;--acc:#a18dff;--on:#17122b;--gold:#f0c862;--gold-f:#f0c862;--ok:#4cc88e;--warn:#f0956a}}
-:root[data-theme="dark"]{--bg:#14111e;--card:#1e1a2b;--ink:#efecf7;--mut:#a29cb3;--line:#342f46;--acc:#a18dff;--on:#17122b;--gold:#f0c862;--gold-f:#f0c862;--ok:#4cc88e;--warn:#f0956a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--s-none:#8b90a8;--s-me:#4cc88e;--s-auto:#4a90ff;--s-uid:#b48cff;--bg:#14111e;--card:#1e1a2b;--ink:#efecf7;--mut:#a29cb3;--line:#342f46;--acc:#a18dff;--on:#17122b;--gold:#f0c862;--gold-f:#f0c862;--ok:#4cc88e;--warn:#f0956a}}
+:root[data-theme="dark"]{--s-none:#8b90a8;--s-me:#4cc88e;--s-auto:#4a90ff;--s-uid:#b48cff;--bg:#14111e;--card:#1e1a2b;--ink:#efecf7;--mut:#a29cb3;--line:#342f46;--acc:#a18dff;--on:#17122b;--gold:#f0c862;--gold-f:#f0c862;--ok:#4cc88e;--warn:#f0956a}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
@@ -321,15 +321,33 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
 .rkb{flex:1 1 150px;display:flex;align-items:center;gap:8px;min-height:36px;border:0;background:transparent;color:var(--ink);text-align:left;padding:0}
 .rkb .ic{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:2px solid currentColor;font-size:13px;flex:none}
 .rkb .rt{flex:1}.rkb .rl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
-.rk-none{border-left-color:#8b90a8}.rk-none .ic,.rk-none .rl{color:#8b90a8}
-.rk-me{border-left-color:var(--ok)}.rk-me .ic,.rk-me .rl{color:var(--ok)}.rk-me .ic{background:var(--ok);color:#fff}
-.rk-auto{border-left-color:#4a90ff}.rk-auto .ic,.rk-auto .rl{color:#4a90ff}
-.rk-uid{border-left-color:#b48cff}.rk-uid .ic,.rk-uid .rl{color:#b48cff}
+.rk-none{border-left-color:var(--s-none)}.rk-none .ic,.rk-none .rl{color:var(--s-none)}
+.rk-me{border-left-color:var(--s-me)}.rk-me .ic,.rk-me .rl{color:var(--s-me)}.rk-me .ic{background:var(--s-me);color:var(--card)}
+.rk-auto{border-left-color:var(--s-auto)}.rk-auto .ic,.rk-auto .rl{color:var(--s-auto)}
+.rk-uid{border-left-color:var(--s-uid)}.rk-uid .ic,.rk-uid .rl{color:var(--s-uid)}
 .rkb[aria-disabled=true]{cursor:default}
 #tdTicks .cdn{display:none}.rks{flex-basis:100%;font-size:12px;color:var(--mut)}
 .rkleg{font-size:12px;color:var(--mut);margin:8px 0 0;line-height:1.5}
 .xpc{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--acc) 9%,transparent)}
 .chart .gb.g{fill:#b48cff}.legend i.sq.g{background:#b48cff}
+.bs{position:fixed;inset:0;z-index:60;background:rgba(10,6,25,.55);display:flex;align-items:flex-end;justify-content:center}.bs[hidden]{display:none}
+.bsp{width:100%;max-width:580px;max-height:88vh;overflow:auto;background:var(--card);color:var(--ink);border-radius:22px 22px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.3)}
+.bsp h3{margin:0 0 4px;font-size:19px}.bsp .chips{margin:10px 0}
+#toast{z-index:90}
+.fab{position:fixed;right:16px;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:9;width:56px;height:56px;border-radius:50%;border:0;background:var(--acc);color:var(--on);font-size:30px;line-height:1;box-shadow:0 6px 18px rgba(0,0,0,.35);padding:0}
+body.nav-hide .fab{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+.hbtn{margin-left:8px;width:32px;height:32px;min-height:32px;padding:0;border-radius:50%;font-size:15px;font-weight:700;vertical-align:middle;position:relative}
+.hbtn::after{content:"";position:absolute;inset:-6px}
+.hlp{margin:6px 0 10px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--acc) 9%,transparent)}
+.na{padding:8px 0;border-top:1px solid var(--line)}.na:first-of-type{border-top:0}
+/* v18.3 comfort: 44px tap targets, 13px minimum text */
+button,select,summary,.chip,.theme,.rkb,.sm,#toast button,.seg button{min-height:44px!important}
+.legend,.legend *,.badge{font-size:13px!important}
+.theme{min-height:44px;font-size:13px}.rf{width:44px;height:44px}
+.estc,.estc *{font-size:13px}.estc .estv{min-height:44px;padding:4px 12px}
+.hbtn{width:44px;height:44px;min-height:44px;margin:-8px -6px -8px 2px}.hbtn::after{inset:0}
+.mnb{min-width:44px;min-height:44px}
+.rkb .rl,.rkleg,.rks,.rkleg *{font-size:13px}
 </style>
 </head>
 <body data-t="home">
@@ -348,7 +366,6 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
   <div class="tot disp"><div class="big"><b id="tt">0</b>pulls ready</div><div><b id="tp">0</b>primogems<span class="estc" id="estC" hidden>≈ <span id="estN">0</span> est. <button type="button" class="estv" id="estV">Verify</button></span></div><div><b id="tf">0</b>fates</div></div>
   <div class="stl" id="stl" role="status"></div>
   <div class="nx" id="nx"></div>
-  <div class="hq" role="group" aria-label="Quick log"><button type="button" data-q="f1">+1 fate</button><button type="button" id="hqLog">Log…</button></div>
 </header>
 <section class="card" id="uidStrip" data-tab="home" aria-label="Your UID">
   <div class="us-top" id="usTop" hidden><span class="us-av" id="usAv"></span><div class="us-t"><b class="disp" id="usNick"></b><div class="sub" id="usSub"></div><div class="sub" id="usAge"></div></div><div class="us-act"><button class="sm" id="hRef">Refresh</button><button class="sm" id="hView2">Open showcase ›</button></div></div>
@@ -356,48 +373,47 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
   <div class="b" style="margin-top:8px"><button class="sm" id="hView" hidden>Help loading it ›</button></div></div>
   <div class="sub" id="hMsg" style="margin-top:6px"></div>
 </section>
-<div data-tab="home" id="uidChipW" hidden><button class="chip" id="uidChip">+ Add UID (optional)</button></div>
-<section class="card" id="frCard" data-tab="home" hidden><h2 class="disp">Do you play daily?</h2><div class="sub">Pick how you play and the app will add your daily income for you (as an estimate you can correct any time).</div><div class="b" style="margin-top:8px"><button class="p sm" data-fr="free">Free-to-play</button><button class="sm" data-fr="w">Welkin</button><button class="sm" data-fr="wbp">Welkin + Battle Pass</button><button class="sm" data-fr="no">Not daily</button></div></section>
-<section class="card" id="tdCard" data-tab="home"><h2 class="disp">Today</h2>
+<div class="bs" id="egSheet" role="dialog" aria-modal="true" aria-label="Endgame reward" hidden><div class="bsp"></div></div>
+<section class="card" id="frCard" data-tab="home" hidden aria-labelledby="h-fr"><h2 id="h-fr" class="disp">Welcome! Quick setup</h2><div class="sub">One pull is one wish. This app counts the pulls you have saved and tells you when you can afford what you want. Three quick questions:</div>
+<div class="sub" style="margin-top:10px"><b>1. How do you play?</b></div><div class="b" id="frStyle" role="group" aria-label="How you play"><button class="sm" data-fr="free" aria-pressed="true">Free-to-play</button><button class="sm" data-fr="w" aria-pressed="false">Welkin</button><button class="sm" data-fr="wbp" aria-pressed="false">Welkin + Battle Pass</button><button class="sm" data-fr="no" aria-pressed="false">Not daily</button></div>
+<div class="sub" style="margin-top:4px">If you play daily, the app adds your daily income for you (an estimate you can correct).</div>
+<div class="sub" style="margin-top:10px"><b>2. What do you have right now?</b> (optional)</div><div class="row"><label class="f">Primogems<input id="fr-p" type="number" inputmode="numeric" placeholder="0"></label><label class="f">Fates<input id="fr-f" type="number" inputmode="numeric" placeholder="0"></label></div>
+<div class="sub" style="margin-top:10px"><b>3. Your UID</b> (optional)</div><label class="f"><input id="fr-u" inputmode="numeric" maxlength="10" placeholder="9-digit UID" autocomplete="off" aria-label="UID"></label><div class="sub" style="margin-top:4px">Loads your name, level and endgame progress. You can add it later in Traveler.</div>
+<div class="b" style="margin-top:12px"><button class="p" id="frGo" type="button">Finish setup</button><button class="sm" id="frSkip" type="button">Skip for now</button></div></section>
+<section class="card" id="tdCard" data-tab="home" data-help="Tick what you did today. Each tick adds its primogems to your balance, and tapping a green tick takes it back out. Blue locked items were added by Auto income. If one is wrong, press Missed today."><h2 class="disp">Today</h2>
 <div class="sub" id="tdSub"></div>
 <div id="tdTicks" style="margin-top:6px"></div>
 <div class="sub" id="tdStat" style="margin-top:8px"></div>
 <button type="button" class="plain" id="tdChart" aria-label="Open the earnings chart in History"></button>
 </section>
-<section class="card" id="rcCard" data-tab="home" hidden><h2 class="disp">Reconciled</h2><div id="rcTxt"></div><div class="b" id="rcBtns"></div></section>
+<section class="card" id="naCard" data-tab="home" hidden data-help="Things worth a look: your game total did not match the app, a backup is due, the monthly fates need confirming, or days were missed. It disappears when there is nothing to do." aria-labelledby="h-na"><h2 id="h-na" class="disp">Needs attention</h2><div class="na" id="rcCard" hidden><h3 class="disp" style="font-size:16px;margin:0 0 6px">Your game total vs the app</h3><div id="rcTxt"></div><div class="b" id="rcBtns"></div></div>
+<div class="na" id="bgCard" hidden><div id="bgTxt"></div><div class="b" id="bgBtns"><button class="p sm" id="bgYes" type="button">Got the limited fates</button><button class="sm" id="bgStd" type="button">Bought the standard fates too</button><button class="sm" id="bgSkip" type="button">Skip this month</button></div></div>
+<div class="na" id="bkCard" hidden><div id="bkTxt"></div><div class="b" style="margin-top:8px"><button class="p sm" id="bkYes">Back up now</button><button class="sm" id="bkNo">Remind me later</button></div></div>
+<div class="na" id="cuCard" hidden><div id="cuTxt"></div><div class="b"><button class="p sm" id="cuYes"></button><button class="sm" id="cuNo">Not now</button></div></div></section>
 
-<section class="card" id="wel" data-tab="home" hidden><h2 class="disp">Welcome! Set up in 3 steps</h2><div class="sub">One pull is one wish. This app counts the pulls you’ve saved and tells you when you can afford the character or weapon you want.</div><ol class="steps"><li id="w1"><span><b>Enter what you have now.</b> Type your primogems and fates under “Update your pulls” below, then tap <b>Set to my in-game total</b>.</span></li><li id="w2"><span><b>Set your income.</b> Pick how you play (free-to-play, Welkin…).</span><button class="sm" data-go="income">Open Income</button></li><li id="w3"><span><b>Add a goal.</b> Choose a character or weapon you’re saving for.</span><button class="sm" data-go="goals">Open Goals</button></li></ol><button class="sm" id="welHide">Hide this guide</button></section>
 
-<section class="card" id="bgCard" data-tab="home" hidden><div id="bgTxt"></div><div class="b" id="bgBtns"><button class="p sm" id="bgYes" type="button">Got the limited fates</button><button class="sm" id="bgStd" type="button">Bought the standard fates too</button><button class="sm" id="bgSkip" type="button">Skip this month</button></div></section>
-<section class="card" id="sumCard" data-tab="home" hidden><div id="sumTxt" style="line-height:1.5"></div><div class="b" style="margin-top:8px"><button class="sm" id="sumShare">Share my plan</button></div></section>
-<section class="card" id="bkCard" data-tab="home" hidden><div id="bkTxt"></div><div class="b" style="margin-top:8px"><button class="p sm" id="bkYes">Back up now</button><button class="sm" id="bkNo">Remind me later</button></div></section>
-<section class="card" id="cuCard" data-tab="home" hidden><div id="cuTxt"></div><div class="b"><button class="p sm" id="cuYes"></button><button class="sm" id="cuNo">Not now</button></div></section>
-<section class="card" aria-labelledby="h-log" data-tab="home">
-  <h2 id="h-log" class="disp">Update your pulls</h2>
-  <div class="chips">
+<section class="card" id="sumCard" data-tab="goals" hidden><div id="sumTxt" style="line-height:1.5"></div><div class="b" style="margin-top:8px"><button class="sm" id="sumShare">Share my plan</button></div></section>
+<button class="fab" id="fab" type="button" aria-label="Quick add: log primogems or fates">＋</button>
+<div class="bs" id="qaSheet" role="dialog" aria-modal="true" aria-label="Quick add" hidden><div class="bsp">
+<div style="display:flex;justify-content:space-between;align-items:center"><h3 class="disp" id="h-log">Quick add</h3><button class="sm" id="qaX" type="button">Close</button></div>
+<div class="chips">
     <button class="chip" data-q="f1">+1 fate</button><button class="chip" id="chP60">+60 primogems</button><button class="chip" id="chP20">+20 primogems</button>
       </div>
   <div class="xpc" id="xpC" role="alertdialog" aria-live="polite" hidden><div id="xpT"></div><div class="b" style="margin-top:8px"><button class="p sm" id="xpYes">Add extra</button><button class="sm" id="xpNo">Cancel</button></div></div>
-  <div class="row">
+  
+<div class="row">
     <label class="f">Primogems<input id="ap" type="number" inputmode="numeric" placeholder="0"></label>
     <label class="f">Fates<input id="af" type="number" inputmode="numeric" placeholder="0"></label>
   </div>
-  <details class="adv"><summary>Add a note or change the date</summary><label class="f" style="display:block;margin-top:8px">Note (optional)<input id="an" maxlength="60" list="cats" autocomplete="off" placeholder="Events, Abyss 36★, Codes, Top-up…"></label>
+  <button class="p wide" id="set" style="margin-top:8px">🎯 Match my game total</button>
+  <details class="adv" style="margin-top:10px"><summary>Add or spend something else</summary><div class="sub" style="margin-top:6px">Type an amount above, then tap one button.</div><label class="f" style="display:block;margin-top:8px">Note (optional)<input id="an" maxlength="60" list="cats" autocomplete="off" placeholder="Events, Abyss 36★, Codes, Top-up…"></label>
   <datalist id="cats"><option value="Events"><option value="Abyss"><option value="Imaginarium Theater"><option value="Livestream codes"><option value="Genesis top-up"><option value="Maintenance"><option value="Quest / Exploration"></datalist>
-  <div class="row" style="margin-top:8px"><label class="f">Date<input id="ad" type="date"></label><label class="f">Where it came from<select id="as"><option value="">Other</option><option value="Event">Event</option><option value="Exploration">Exploration or quest</option><option value="Mail/code">Mail or code</option><option value="Top-up">Top-up</option></select></label></div></details><div class="sub" id="setHint" style="margin-top:10px"></div>
-  <button class="p wide" id="set" style="margin-top:8px">🎯 Set to my in-game total</button>
-  <details class="adv" style="margin-top:8px"><summary>I gained / I spent</summary><div class="ubt" style="margin-top:8px"><button id="gainBtn" class="gainb">➕ I gained</button><button id="spendBtn" class="spendb">➖ I spent</button></div></details>
-  <details class="adv" style="margin-top:8px"><summary>How these buttons work</summary><div class="sub" style="margin-top:6px">Type a number above, then tap one button. <b>I gained / I spent</b>: type only the amount you got or used. <b>Set to my in-game total</b> (reconcile): type what your game shows now. The app compares it with its own estimate, records the difference in History and asks what it was. 160 primogems = 1 pull.</div></details>
-  <details class="panel adv"><summary>Genesis Crystals &amp; Starglitter (optional)</summary>
-    <div class="sub" id="latOut"></div>
-    <div class="row" style="margin-top:8px"><label class="f">Genesis Crystals<input id="inv-g" type="number" inputmode="numeric" min="0" placeholder="amount"></label><label class="f">Masterless Starglitter<input id="inv-s" type="number" inputmode="numeric" min="0" placeholder="amount"></label></div>
-    <div class="b"><button class="sm" id="invAdd">Add to inventory</button><button class="sm" id="invRem">Remove from inventory</button></div>
-    <div class="row" style="margin-top:12px"><label class="f">Convert Genesis<input id="cv-g" type="number" inputmode="numeric" min="0" placeholder="all"></label><label class="f">Convert Starglitter<input id="cv-s" type="number" inputmode="numeric" min="0" placeholder="all"></label><button id="conv">Convert</button></div>
-    <div class="sub" style="margin-top:6px">Leave the convert boxes empty to convert everything. Genesis becomes primogems 1:1 and 5 Starglitter become 1 fate. Every change here is logged in History and can be undone.</div></details>
-</section>
-
-<section class="card" id="rsCard" data-tab="home"><h2 class="disp">Resets &amp; checklist</h2><label class="f">Server<select id="rk-s"><option value="8">Asia / TW-HK-MO (UTC+8)</option><option value="1">Europe (UTC+1)</option><option value="-5">America (UTC-5)</option></select></label><div id="rkL" style="margin-top:8px"></div><div class="xpc" id="rkAsk" hidden></div><div class="rkleg">○ to do (tap to tick) · ✓ done by you (tap to undo) · 🔒 <b style="color:#4a90ff">auto</b>: added by Auto income · 🔒 <b style="color:#b48cff">from UID</b>. Locked items have a Fix button.</div><div class="sub" style="margin-top:6px">Everything resets at 04:00 server time, and ticks clear themselves.</div></section>
-<section class="card" id="chCard" data-tab="home"><details><summary class="disp h2s">How it’s calculated</summary><div class="sub" id="chTxt" style="margin-top:8px;line-height:1.5"></div></details></section>
+  <div class="row" style="margin-top:8px"><label class="f">Date<input id="ad" type="date"></label><label class="f">Where it came from<select id="as"><option value="">Other</option><option value="Event">Event</option><option value="Exploration">Exploration or quest</option><option value="Mail/code">Mail or code</option><option value="Top-up">Top-up</option></select></label></div></div><div class="sub" id="setHint" style="margin-top:10px"></div>
+  <div style="margin-top:8px"><div class="ubt" style="margin-top:8px"><button id="gainBtn" class="gainb">➕ I gained</button><button id="spendBtn" class="spendb">➖ I spent</button></div>
+  </div></details><details class="adv" style="margin-top:8px"><summary>How these buttons work</summary><div class="sub" style="margin-top:6px">Type a number above, then tap one button. <b>I gained / I spent</b>: type only the amount you got or used. <b>Match my game total</b> (reconcile): type what your game shows now. The app compares it with its own estimate, records the difference in History and asks what it was. 160 primogems = 1 pull.</div></details>
+  </div></div>
+<section class="card" id="rsCard" data-tab="home" data-help="Weekly and monthly jobs. Spiral Abyss and Imaginarium Theater ask what you earned and add it once per reset. Everything clears itself at the reset time."><h2 class="disp">Resets &amp; checklist</h2><label class="f">Server<select id="rk-s"><option value="8">Asia / TW-HK-MO (UTC+8)</option><option value="1">Europe (UTC+1)</option><option value="-5">America (UTC-5)</option></select></label><div id="rkL" style="margin-top:8px"></div><div class="rkleg">Weekly and monthly items. Daily ones are in Today. ○ to do (tap to tick) · ✓ done by you (tap to undo) · 🔒 <b style="color:var(--s-auto)">auto</b>: added by Auto income · 🔒 <b style="color:var(--s-uid)">from UID</b>. Locked items have a Fix button.</div><div class="sub" style="margin-top:6px">Everything resets at 04:00 server time, and ticks clear themselves.</div></section>
+<section class="card" id="chCard" data-tab="more"><details><summary class="disp h2s">How it’s calculated</summary><div class="sub" id="chTxt" style="margin-top:8px;line-height:1.5"></div></details></section>
 <div data-tab="pulls"><div class="sec"><h2 class="disp">Pulls</h2></div><p class="sub" style="margin:-4px 2px 10px">Log pulls, edit pity and import your wish history here. This is the only place pity is edited.</p></div>
 <section class="card" id="plCard" data-tab="pulls"><h2 class="disp">Log pulls</h2><div class="sub">Just pulled? Log it and your balance and pity update themselves. Pity lives in this tab only.</div>
 <div class="row" style="margin-top:8px"><label class="f">Banner<select id="pl-t"><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled</option></select></label><label class="f">Pulls done<input id="pl-n" type="number" inputmode="numeric" min="1" placeholder="10"></label></div>
@@ -407,6 +423,12 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
 <details class="adv" style="margin-top:8px"><summary>Luck stats</summary><div id="plS" class="sub" style="margin-top:6px;line-height:1.6"></div></details></section>
 <section class="card" id="ptCard" data-tab="pulls"><h2 class="disp">Pity tracker</h2><div class="sub" id="ptSum"></div><details class="adv" style="margin-top:8px"><summary>More details / edit pity</summary><div class="sub" style="margin-top:6px">Enter your in-game pity once. It is shared by every goal of the same type: the first goal of each type uses it, later ones start fresh. It resets itself when you log a result.</div><div class="grid2" style="margin-top:8px"><label class="f">Character pity<input id="pt-char" type="number" inputmode="numeric" min="0" max="89"></label><label class="f">Weapon pity<input id="pt-weapon" type="number" inputmode="numeric" min="0" max="79"></label><label class="f">Chronicled pity<input id="pt-chron" type="number" inputmode="numeric" min="0" max="89"></label><label class="chk" style="grid-column:auto;align-self:end"><input type="checkbox" id="pt-cg"> Next character 5★ is guaranteed</label></div></details></section>
 <section class="card" id="whCard" data-tab="pulls"><h2 class="disp">Wish history</h2><div class="sub">Import your wish history to fill in your pity and see your stats. Use a tracker that exports UIGF JSON, for example paimon.moe or Genshin Wish Export.</div><div class="b" style="margin-top:8px"><button class="p sm" id="whBtn">Import wish history</button></div><input id="whF" type="file" accept=".json,application/json" hidden><div id="whO"></div><div class="b" id="whAct" hidden style="margin-top:8px"><button class="sm" id="whUse">Use this pity in my tracker</button><button class="sm" id="whClr">Clear stats</button></div><div class="sub" style="margin-top:6px">The 50/50 record needs English character names. Only your stats are kept on this device, not the whole file.</div></section>
+<section class="card" id="invCard" data-tab="pulls"><h2 class="disp">Genesis Crystals &amp; Starglitter</h2><div>
+    <div class="sub" id="latOut"></div>
+    <div class="row" style="margin-top:8px"><label class="f">Genesis Crystals<input id="inv-g" type="number" inputmode="numeric" min="0" placeholder="amount"></label><label class="f">Masterless Starglitter<input id="inv-s" type="number" inputmode="numeric" min="0" placeholder="amount"></label></div>
+    <div class="b"><button class="sm" id="invAdd">Add to inventory</button><button class="sm" id="invRem">Remove from inventory</button></div>
+    <div class="row" style="margin-top:12px"><label class="f">Convert Genesis<input id="cv-g" type="number" inputmode="numeric" min="0" placeholder="all"></label><label class="f">Convert Starglitter<input id="cv-s" type="number" inputmode="numeric" min="0" placeholder="all"></label><button id="conv">Convert</button></div>
+    <div class="sub" style="margin-top:6px">Leave the convert boxes empty to convert everything. Genesis becomes primogems 1:1 and 5 Starglitter become 1 fate. Every change here is logged in History and can be undone.</div></div></section>
 <section class="card" data-tab="pulls"><h2 class="disp">Wish odds</h2><div class="row"><label class="f">Banner<select id="c-t" data-cc><option value="char">Character</option><option value="weapon">Weapon</option><option value="chron">Chronicled</option></select></label><label class="f">Copies you want<select id="c-n" data-cc><option value="1">C0 (1 copy)</option><option value="2">C1 (2 copies)</option><option value="3">C2 (3 copies)</option><option value="4">C3 (4 copies)</option><option value="5">C4 (5 copies)</option><option value="6">C5 (6 copies)</option><option value="7">C6 (7 copies)</option></select></label></div>
 <div class="row"><label class="f">Current pity<input id="c-pi" data-cc type="number" inputmode="numeric" min="0" placeholder="0"></label><label class="f">Pulls you have<input id="c-pl" data-cc type="number" inputmode="numeric" min="0" placeholder="0"></label></div>
 <label class="chk" style="margin-top:8px"><input type="checkbox" id="c-g" data-cc> Next 5★ is guaranteed (Fate Point for weapons)</label><div id="c1o" style="margin-top:10px;line-height:1.6"></div></section>
@@ -479,7 +501,7 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
 <label class="chk" style="margin-top:4px"><input type="checkbox" id="au-on"> Add my daily income for me</label>
 <label class="chk" style="margin-top:8px"><input type="checkbox" id="au-c"> Include daily commissions (<span id="au-cv">60</span> a day)</label>
 <div class="sub" style="margin-top:8px" id="au-out"></div>
-<div class="sub" style="margin-top:6px">A web app can only do the maths when you open it, so it fills in the days you missed. Every automatic entry is marked <b>auto (est.)</b> in History and has an Undo. Welkin is added each day until the end date above. Use <b>Set to my in-game total</b> now and then to correct any drift.</div></section>
+<div class="sub" style="margin-top:6px">A web app can only do the maths when you open it, so it fills in the days you missed. Every automatic entry is marked <b>auto (est.)</b> in History and has an Undo. Welkin is added each day until the end date above. Use <b>Match my game total</b> now and then to correct any drift.</div></section>
 <section class="card" id="evCard" data-tab="income"><h2 class="disp">Events &amp; free primogems</h2><div class="b" style="margin:4px 0 8px"><button class="p sm" id="evAddTop" type="button">+ Add custom event</button></div><div class="sub" id="evSub"></div><div id="evList" style="margin-top:8px"></div>
 <label class="chk" style="margin-top:10px"><input type="checkbox" id="i-ev"> Use these events in my forecast</label>
 <details class="adv" style="margin-top:8px"><summary id="evDoneSum">Done and skipped</summary><div id="evDone" style="margin-top:6px"></div></details>
@@ -506,7 +528,7 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
   <details><summary class="disp h2s" id="h-eg">Endgame income: Abyss &amp; Theater (optional)</summary>
   <div class="sec-s" style="margin-top:0">Spiral Abyss (floors 9–12): stars you usually get per floor</div>
   <div class="grid2" id="egFloors"></div>
-  <label class="f" style="display:block;margin-top:8px">Resets per month<select id="eg-an"><option value="1">Once a month (the 16th)</option><option value="2">Twice a month</option></select></label>
+  <div class="sub" style="margin-top:8px">Spiral Abyss resets once a month, on the 16th.</div><select id="eg-an" hidden><option value="1">1</option></select>
   <div class="sec-s">Imaginarium Theater</div>
   <div class="row"><label class="f">Maximum per month<input id="eg-tm" type="number" inputmode="numeric" min="0"></label><label class="f">How much you usually clear<select id="eg-tp"><option value="100">All of it</option><option value="75">About 75%</option><option value="50">About half</option><option value="25">About 25%</option><option value="0">None</option></select></label></div>
   <div class="sec-s">Stygian Onslaught (once per patch)</div>
@@ -574,6 +596,10 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
 
 <div id="st" role="status" data-tab="more" aria-live="polite"></div>
 
+<section class="card" id="rwCard" data-tab="more"><h2 class="disp">Endgame rewards</h2><div class="sub" id="rwSub"></div><div class="sub" id="rwOld" hidden></div>
+<div id="rwF" style="margin-top:8px"></div>
+<label class="f" style="display:block;margin-top:10px">Stygian Onslaught is active until<input type="date" id="sgUntil"></label><div class="sub" id="sgSt" style="margin-top:4px"></div>
+<div class="b" style="margin-top:10px"><button class="sm" id="rwReset" type="button">Use the standard amounts</button></div></section>
 <section class="card" data-tab="more"><h2 class="disp">Banner roster</h2><div class="sub" id="roStat"></div><div class="b"><button class="sm p" id="roGo">Check for new banners</button></div><div class="sub" style="margin-top:8px">This is the only part of the app that needs internet. The app checks for a newer roster each time it opens and keeps a saved copy for offline use.</div></section>
 <section class="card" data-tab="more"><h2 class="disp">Money to primogems</h2><div class="row"><label class="f">Amount you spend<input id="m-a" data-cc type="number" inputmode="decimal" min="0" placeholder="0"></label><label class="f">Currency<select id="m-c" data-cc><option value="USD">USD</option><option value="INR">INR</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="JPY">JPY</option><option value="KRW">KRW</option><option value="PHP">PHP</option><option value="IDR">IDR</option><option value="BRL">BRL</option><option value="CAD">CAD</option><option value="AUD">AUD</option><option value="OTHER">OTHER</option></select></label></div>
 <div class="row"><label class="f">1 USD =<input id="m-r" data-cc type="number" inputmode="decimal" step="any" min="0" placeholder="1"></label><label class="f">Pulls you want<input id="m-w" data-cc type="number" inputmode="numeric" min="0" placeholder="e.g. 90"></label></div>
@@ -598,7 +624,7 @@ body[data-is=farm] [data-tab=income]:not([data-sub]){display:none!important}
 'use strict';
 (function(){try{if(localStorage.getItem('primo-bak-v10'))return;const d={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^primo-(tracker|profiles)/.test(k))d[k]=localStorage.getItem(k)}localStorage.setItem('primo-bak-v10',JSON.stringify({at:Date.now(),data:d}))}catch(e){}})();
 let LS='primo-tracker-v3';const OLD=['primo-tracker-v2','primo-tracker-v1'];
-const TAB={worst:{PER:{char:180,weapon:160,chron:180},HALF:{char:90,weapon:80,chron:90}},real:{PER:{char:90,weapon:87,chron:94},HALF:{char:62,weapon:53,chron:62}}},WELKIN=90,BP=1320;
+const TAB={worst:{PER:{char:180,weapon:160,chron:180},HALF:{char:90,weapon:80,chron:90}},real:{PER:{char:90,weapon:87,chron:94},HALF:{char:62,weapon:53,chron:62}}},BP=1320;let WELKIN=90;
 
 /* ---------- helpers ---------- */
 const $=id=>document.getElementById(id);
@@ -613,6 +639,8 @@ const fmt=s=>{const d=new Date(s+'T00:00:00');return d.toLocaleDateString(undefi
 const uid=()=>Math.random().toString(36).slice(2,8);
 const plural=(n,w)=>n+' '+w+(n===1?'':'s');
 const isoRe=/^\d{4}-\d{2}-\d{2}$/;
+/* Old Abyss keys were half-months: 'Y-Ma' (1st-15th) and 'Y-Mb' (16th-end). New key = month of the most recent 16th: 'b' keeps its month, 'a' belongs to the previous month's window. */
+const abKeyNew=k=>{const m=/^(\d{4})-(\d{1,2})([ab])$/.exec(String(k));if(!m)return String(k);let y=+m[1],mo=+m[2];if(m[3]==='a'){mo--;if(mo<0){mo=11;y--}}return y+'-'+mo};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const EL={pyro:{n:'Pyro',c:'#ffe3da',s:'#f0643c',k:'f',d:'M20 3c1 7-8 10-8 19a8 8 0 0 0 16 0c0-5-3-8-4-12-1 4-3 5-4 5 2-6 1-9-0-12z'},hydro:{n:'Hydro',c:'#d9f1ff',s:'#2fb4ff',k:'f',d:'M20 3C14 12 8 18 8 25a12 12 0 0 0 24 0c0-7-6-13-12-22z'},anemo:{n:'Anemo',c:'#dcf6ee',s:'#4fc3a1',k:'s',d:'M6 13h17a4.5 4.5 0 1 0-4.5-4.5M6 21h26a4.5 4.5 0 1 1-4.500 4.5M6 29h13a3.500 3.500 0 1 1-3.500 3.500'},electro:{n:'Electro',c:'#eadfff',s:'#a35cf0',k:'f',d:'M24 2L8 22h10l-3 16 17-22H22z'},dendro:{n:'Dendro',c:'#e6f5c8',s:'#8fbf1f',k:'f',d:'M33 5C15 5 7 14 7 26c0 3 1 6 3 9 1-9 6-15 14-18-7 5-10 11-11 18 12 2 20-8 20-30z'},cryo:{n:'Cryo',c:'#e3f4ff',s:'#7cc6ee',k:'s',d:'M20 3v34M5 11.500l30 17M5 28.500l30-17M14 5l6 5 6-5M14 35l6-5 6 5'},geo:{n:'Geo',c:'#fff0c8',s:'#f5aa1e',k:'f',d:'M20 3l13 17-13 17L7 20z M20 11l6.500 9-6.500 9-6.500-9z'}};
 const elIco=k=>{const e=EL[k],st=e.k==='s';return '<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="'+e.c+'" stroke="'+e.s+'" stroke-width="2"/><g transform="translate(8 8) scale(.6)" '+(st?'fill="none" stroke="'+e.s+'" stroke-width="3.400" stroke-linecap="round" stroke-linejoin="round"':'fill="'+e.s+'" fill-rule="evenodd"')+'><path d="'+e.d+'"/></g></svg>'};
@@ -642,7 +670,7 @@ function norm(raw){ // accepts v1 to v5 data
   if(!raw||typeof raw!=='object')return o;
   o.primos=Math.min(1e6,Math.max(-1e6,num(raw.primos)));o.fates=Math.min(1e4,Math.max(-1e4,num(raw.fates)));o.updated=Number(raw.updated)||0;o.mode=raw.mode==='real'?'real':'worst';o.glitter=Math.max(0,num(raw.glitter));o.genesis=Math.max(0,num(raw.genesis));o.patchLen=Math.min(60,Math.max(28,num(raw.patchLen)||42));o.patchStart=isoRe.test(raw.patchStart||'')?raw.patchStart:'';o.bargain=String(raw.bargain||'').slice(0,7);
   const eg=raw.endgame&&typeof raw.endgame==='object'?raw.endgame:{};
-  o.endgame={ab:[0,1,2,3].map(i=>[0,3,6,9].includes(num((eg.ab||[])[i]))?num((eg.ab||[])[i]):0),abN:num(eg.abN)===2?2:1,thMax:eg.thMax===undefined?1000:Math.min(5000,Math.max(0,num(eg.thMax))),thPct:[0,25,50,75,100].includes(num(eg.thPct))?num(eg.thPct):0,sg:Math.min(3,Math.max(0,num(eg.sg)))};
+  o.endgame={ab:[0,1,2,3].map(i=>[0,3,6,9].includes(num((eg.ab||[])[i]))?num((eg.ab||[])[i]):0),abN:1,thMax:eg.thMax===undefined?1000:Math.min(5000,Math.max(0,num(eg.thMax))),thPct:[0,25,50,75,100].includes(num(eg.thPct))?num(eg.thPct):0,sg:Math.min(3,Math.max(0,num(eg.sg)))};
   o.bonus=(Array.isArray(raw.bonus)?raw.bonus:[]).filter(b=>b&&isoRe.test(b.date||'')).map(b=>({id:String(b.id||uid()),date:b.date,p:Math.max(0,num(b.p)),f:Math.max(0,num(b.f)),label:String(b.label||'').slice(0,40)}));
   const inc=raw.income;
   if(inc&&typeof inc==='object')o.income={daily:Math.max(0,num(inc.daily)),welkin:!!inc.welkin,monthly:Math.max(0,num(inc.monthly)),bargains:!!inc.bargains,bp:!!inc.bp,patch:Math.max(0,num(inc.patch)),rate:Math.min(100,Math.max(50,num(inc.rate)||100)),evTrack:inc.evTrack!==false};
@@ -655,7 +683,7 @@ function norm(raw){ // accepts v1 to v5 data
   o.log=(Array.isArray(raw.log)?raw.log:[]).filter(e=>e&&typeof e==='object').map(e=>{
     const x={date:isoRe.test(e.date||'')?e.date:today(),p:num(e.p),f:num(e.f),dp:num(e.dp),df:num(e.df),mode:e.mode||'add'};
     if(e.res==='won'||e.res==='lost'){x.res=e.res;x.pulls=num(e.pulls)}
-    if(SRCS.includes(e.src))x.src=e.src;if(e.auto)x.auto=true;if(e.tag)x.tag=String(e.tag).slice(0,24);if(e.span)x.span=Math.min(366,Math.max(1,num(e.span)));if(e.bid)x.bid=String(e.bid).slice(0,12);if(e.evid)x.evid=String(e.evid).slice(0,60);if(e.tk)x.tk=String(e.tk).slice(0,3);if(e.eg)x.eg=String(e.eg).slice(0,3);if(e.ck)x.ck=String(e.ck).slice(0,20);
+    if(SRCS.includes(e.src))x.src=e.src;if(e.auto)x.auto=true;if(e.tag)x.tag=String(e.tag).slice(0,24);if(e.span)x.span=Math.min(366,Math.max(1,num(e.span)));if(e.bid)x.bid=String(e.bid).slice(0,12);if(e.evid)x.evid=String(e.evid).slice(0,60);if(e.tk)x.tk=String(e.tk).slice(0,3);if(e.eg)x.eg=String(e.eg).slice(0,3);if(e.ck)x.ck=String(e.ck).slice(0,24);if(x.eg==='ab'&&x.ck)x.ck=abKeyNew(x.ck);
     if(e.app&&typeof e.app==='object')x.app={p:num(e.app.p),f:num(e.app.f)};
     if(e.eid)x.eid=String(e.eid);if(e.note)x.note=String(e.note).slice(0,60);if(e.lg)x.lg=num(e.lg);if(e.ls)x.ls=num(e.ls);
     if(e.goal&&typeof e.goal==='object'){x.goal=cleanGoal(e.goal);x.idx=num(e.idx)}
@@ -691,9 +719,27 @@ const totP=()=>ledP()+lat();
 const have=()=>Math.floor(totP()/160),ledHave=()=>Math.floor(ledP()/160);
 const patchLen=()=>S.patchLen||42;
 const PCAL={v:'7.2',d:'2026-11-04'}; // Patch 7.2 starts about 4 Nov 2026 (estimate until the official date is out). Later patches follow the usual cadence.
-const abyssFloor=st=>st>=9?200:st>=6?100:st>=3?50:0;
+/* ---------- reward rules: bundled defaults, refreshed from rules.json (network first, 4 s), your own overrides on top ---------- */
+const RULES_DEF={verified:'2026-10-29',sources:'Community-tallied reward amounts, not official. Check them in game.',daily:{commissions:60,welkin:90},endgame:{abyss:{cadence:'monthly',resetDay:16,floors:'9-12',perFloor:200,partial:{'3':50,'6':100,'9':200},max:800},theater:{cadence:'monthly',resetDay:1,tiers:[{label:'Through Act 8',primogems:620},{label:'Full clear',primogems:1000}],max:1000},stygian:{cadence:'per-version',perDifficulty:150,difficulties:['Normal','Advancing','Hard'],max:450,officialTotal:false,cycleStart:null,cycleEnd:null}}};
+function rulesClean(j){const D=JSON.parse(JSON.stringify(RULES_DEF));if(!j||typeof j!=='object')return D;
+  const n=(v,d,mx)=>Number.isFinite(+v)&&v!==null&&v!==''&&+v>=0&&+v<=(mx||1e5)?Math.round(+v):d,dt=v=>typeof v==='string'&&isoRe.test(v)?v:null,E=j.endgame&&typeof j.endgame==='object'?j.endgame:{};
+  if(dt(j.verified))D.verified=j.verified;if(typeof j.sources==='string')D.sources=j.sources.slice(0,200);
+  if(j.daily&&typeof j.daily==='object'){D.daily.commissions=n(j.daily.commissions,D.daily.commissions,1000);D.daily.welkin=n(j.daily.welkin,D.daily.welkin,1000)}
+  const a=E.abyss&&typeof E.abyss==='object'?E.abyss:{},A=D.endgame.abyss;A.perFloor=n(a.perFloor,A.perFloor,5000);A.max=n(a.max,A.max,20000);
+  if(a.partial&&typeof a.partial==='object')['3','6','9'].forEach(k=>{A.partial[k]=n(a.partial[k],A.partial[k],5000)});
+  const t=E.theater&&typeof E.theater==='object'?E.theater:{},T=D.endgame.theater;T.max=n(t.max,T.max,20000);
+  if(Array.isArray(t.tiers)&&t.tiers.length){const ts=t.tiers.filter(x=>x&&x.label&&Number.isFinite(+x.primogems)&&+x.primogems>=0).slice(0,6).map(x=>({label:String(x.label).slice(0,30),primogems:Math.round(+x.primogems)}));if(ts.length)T.tiers=ts}
+  const s=E.stygian&&typeof E.stygian==='object'?E.stygian:{},G=D.endgame.stygian;G.perDifficulty=n(s.perDifficulty,G.perDifficulty,5000);G.max=n(s.max,G.max,20000);G.cycleStart=dt(s.cycleStart);G.cycleEnd=dt(s.cycleEnd);G.officialTotal=!!s.officialTotal;
+  if(Array.isArray(s.difficulties)&&s.difficulties.length)G.difficulties=s.difficulties.slice(0,5).map(x=>String(x).slice(0,16));
+  return D}
+let RULES=RULES_DEF;try{const c=localStorage.getItem('primo-rules');if(c)RULES=rulesClean(JSON.parse(c))}catch(e){}
+let OV={};try{OV=JSON.parse(localStorage.getItem('primo-rules-ov')||'{}')||{}}catch(e){}
+const ovSave=()=>{try{localStorage.setItem('primo-rules-ov',JSON.stringify(OV))}catch(e){}};
+const ovN=(k,d)=>OV[k]!==undefined&&OV[k]!==null&&OV[k]!==''&&Number.isFinite(+OV[k])&&+OV[k]>=0?Math.round(+OV[k]):d;
+function RV(){const e=RULES.endgame;return {ab:{3:ovN('a3',e.abyss.partial['3']),6:ovN('a6',e.abyss.partial['6']),9:ovN('a9',e.abyss.partial['9'])},th:e.theater.tiers.map((x,i)=>ovN('t'+i,x.primogems)),sg:ovN('sg',e.stygian.perDifficulty)}}
+const abyssFloor=st=>{const v=RV().ab;return st>=9?v[9]:st>=6?v[6]:st>=3?v[3]:0};
 function endgameParts(){
-  const g=S.endgame,abyss=g.ab.reduce((t,x)=>t+abyssFloor(x),0)*g.abN,theater=g.thMax*g.thPct/100,stygian=g.sg*150*30/patchLen();
+  const g=S.endgame,abyss=g.ab.reduce((t,x)=>t+abyssFloor(x),0),theater=g.thMax*g.thPct/100,stygian=g.sg*RV().sg*30/patchLen();
   return {abyss,theater,stygian,total:abyss+theater+stygian};
 }
 const dAdd=(d,n)=>{const x=new Date(d+'T00:00:00');x.setDate(x.getDate()+n);return iso(x)};
@@ -1211,9 +1257,9 @@ function entry(mode){
     const drop=ledP()-(p+f*160),sb=$('set');
     if(drop>=800&&!sb.dataset.armed){ // lowering the balance by 5+ pulls needs a second tap
       sb.dataset.armed='1';sb.textContent='Confirm: −'+Math.round(drop/160)+' pulls';clearTimeout(sb._t);
-      sb._t=setTimeout(()=>{delete sb.dataset.armed;sb.textContent='🎯 Set to my in-game total'},5000);return;
+      sb._t=setTimeout(()=>{delete sb.dataset.armed;sb.textContent='🎯 Match my game total'},5000);return;
     }
-    delete sb.dataset.armed;sb.textContent='🎯 Set to my in-game total';
+    delete sb.dataset.armed;sb.textContent='🎯 Match my game total';
   }
   else{p=num(pv);f=num(fv);if(sign<0){p=-Math.abs(p);f=-Math.abs(f)}}
   {const tP=mode==='set'?p:S.primos+p,tF=mode==='set'?f:S.fates+f;if(tP>1e6||tF>1e4){toast('That’s more than the app can track (max 1,000,000 primogems and 10,000 fates).');return}}
@@ -1225,7 +1271,7 @@ function entry(mode){
     if(mode==='set'){if(q.span>0)rcShow(r.e);toast(q.span>0?'Reconciled':'Starting balance set',()=>{undoEntry(r.e);rcShow(null)})}else toast('Entry logged',()=>undoEntry(r.e))}
 }
 $('gainBtn').onclick=()=>{sign=1;entry('add')};$('spendBtn').onclick=()=>{sign=-1;entry('add')};$('set').onclick=()=>entry('set');
-[$('ap'),$('af')].forEach(i=>i.addEventListener('input',()=>{const b=$('set');if(b.dataset.armed){delete b.dataset.armed;b.textContent='🎯 Set to my in-game total'}}));
+[$('ap'),$('af')].forEach(i=>i.addEventListener('input',()=>{const b=$('set');if(b.dataset.armed){delete b.dataset.armed;b.textContent='🎯 Match my game total'}}));
 [$('ap'),$('af')].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur()}));
 document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
   const q=b.dataset.q,p=q==='p60'?60:q==='p90'?90:0,f=q==='f1'?1:0;
@@ -1283,7 +1329,7 @@ $('conv').onclick=()=>{
   });
 })();
 function egIn(){
-  S.endgame={ab:[0,1,2,3].map(i=>Number($('eg-f'+i).value)||0),abN:Number($('eg-an').value)===2?2:1,thMax:Math.min(5000,Math.max(0,num($('eg-tm').value))),thPct:Number($('eg-tp').value)||0,sg:Math.min(3,Math.max(0,Number($('eg-sg').value)||0))};
+  S.endgame={ab:[0,1,2,3].map(i=>Number($('eg-f'+i).value)||0),abN:1,thMax:Math.min(5000,Math.max(0,num($('eg-tm').value))),thPct:Number($('eg-tp').value)||0,sg:Math.min(3,Math.max(0,Number($('eg-sg').value)||0))};
   save();render();
 }
 ['eg-f0','eg-f1','eg-f2','eg-f3','eg-an','eg-tp','eg-sg'].forEach(id=>$(id).addEventListener('change',egIn));
@@ -1613,9 +1659,10 @@ function drawPulls(){
 const RKK='primo-reset';let RK={s:'8',done:{}};try{Object.assign(RK,JSON.parse(localStorage.getItem(RKK)||'{}'))}catch(e){}
 const RKI=[['dc','Daily commissions','d'],['wm','Claim Welkin','d'],['wb','Weekly bosses (3 discounted)','w'],['ab','Spiral Abyss','a'],['it','Imaginarium Theater','m'],['sg','Stygian Onslaught','m'],['pb','Paimon’s Bargain','m']];
 const rkSave=()=>{try{localStorage.setItem(RKK,JSON.stringify(RK))}catch(e){}};
+if(RK.done&&RK.done.ab&&abKeyNew(RK.done.ab)!==RK.done.ab){RK.done.ab=abKeyNew(RK.done.ab);rkSave()}
 function rkInfo(p){const sv=Date.now()+(+RK.s-4)*36e5,D=new Date(sv),di=Math.floor(sv/864e5),y=D.getUTCFullYear(),mo=D.getUTCMonth(),dd=D.getUTCDate(),dow=D.getUTCDay();let key,nx;
   if(p==='d'){key=di;nx=(di+1)*864e5}else if(p==='w'){const mon=di-((dow+6)%7);key=mon;nx=(mon+7)*864e5}
-  else if(p==='a'){key=y+'-'+mo+(dd>=16?'b':'a');nx=dd>=16?Date.UTC(y,mo+1,1):Date.UTC(y,mo,16)}else{key=y+'-'+mo;nx=Date.UTC(y,mo+1,1)}
+  else if(p==='a'){const m0=dd>=16?mo:mo-1,y0=m0<0?y-1:y,m1=(m0+12)%12;key=y0+'-'+m1;nx=Date.UTC(y0,m1+1,16)}else{key=y+'-'+mo;nx=Date.UTC(y,mo+1,1)}
   return {key:String(key),ms:nx-sv}}
 $('rk-s').onchange=()=>{RK.s=$('rk-s').value;try{localStorage.setItem(RKK,JSON.stringify(RK))}catch(e){}drawResets()};
 setInterval(drawResets,30000);
@@ -1674,7 +1721,11 @@ function setupMin(){document.querySelectorAll('section.card').forEach(c=>{if(c.d
   b.type='button';b.className='mnb';b.setAttribute('aria-label','Minimize or expand this section');b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';h.append(b);h.classList.add('mnh');
   const set=m=>{c.classList.toggle('min',m);b.setAttribute('aria-expanded',String(!m));if(m)MN[k]=1;else delete MN[k];try{localStorage.setItem('primo-min',JSON.stringify(MN))}catch(e){}};c._set=set;h.onclick=()=>set(!c.classList.contains('min'));
   c.classList.toggle('min',!!MN[k]);b.setAttribute('aria-expanded',String(!MN[k]))})}
-setupMin();minSum();setTimeout(minSum,1800);
+setupMin();
+document.querySelectorAll('[data-help]').forEach(c=>{const h=[...c.children].find(e=>e.tagName==='H2');if(!h)return;const hb=document.createElement('button');hb.type='button';hb.className='hbtn';hb.textContent='?';hb.setAttribute('aria-label','Help: '+h.textContent.trim().replace(/\?$/,''));hb.setAttribute('aria-expanded','false');
+  const box=document.createElement('div');box.className='sub hlp';box.hidden=true;box.textContent=c.dataset.help;const mb=h.querySelector('.mnb');mb?h.insertBefore(hb,mb):h.append(hb);const a=h.nextElementSibling&&h.nextElementSibling.classList.contains('mns')?h.nextElementSibling:h;a.after(box);
+  hb.onclick=e=>{e.stopPropagation();box.hidden=!box.hidden;hb.setAttribute('aria-expanded',String(!box.hidden))}});
+minSum();setTimeout(minSum,1800);
 ['click','input','change'].forEach(ev=>document.addEventListener(ev,()=>{clearTimeout(minSum._t);minSum._t=setTimeout(minSum,150)}));
 
 /* ---------- v12: wish history import + refresh ---------- */
@@ -1704,7 +1755,7 @@ $('whClr').onclick=()=>{WH={pools:{}};try{localStorage.removeItem(WHK)}catch(e){
 drawWish();
 async function hardRefresh(){toast('Updating to the newest files…');
   const ok=await fetch(location.pathname,{cache:'reload'}).then(r=>r.ok).catch(()=>false);if(!ok){toast('Could not reach the server. Try again when you are online.');return}
-  try{for(const u of ['./sw.js','./roster.json','./manifest.json'])await fetch(u,{cache:'reload'}).catch(()=>{});
+  try{for(const u of ['./sw.js','./roster.json','./rules.json','./manifest.json'])await fetch(u,{cache:'reload'}).catch(()=>{});
     if(navigator.serviceWorker){const r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(x=>x.unregister()))}
     if(window.caches){const k=await caches.keys();await Promise.all(k.map(x=>caches.delete(x)))}}catch(e){}
   location.reload()}
@@ -1822,7 +1873,7 @@ $('pfCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('pfRep')
  const ping=()=>pu.dispatchEvent(new Event('input',{bubbles:true}));
  function drawStrip(){let o=null;try{o=PF}catch(e){}
   const fix=!$('pfFix').hidden,msg=$('pfMsg').textContent.trim(),has=!!(pu.value.trim()||hUid.value.trim()),show=!!(o||fix||msg||has||want);
-  $('uidStrip').hidden=!show;$('uidChipW').hidden=show;
+  $('uidStrip').hidden=!show;
   $('usTop').hidden=!o;$('usForm').hidden=!!o;$('uidStrip').classList.toggle('slim',!!o);
   $('hView').hidden=!(fix&&!o);
   if(document.activeElement!==hUid)hUid.value=pu.value;
@@ -1839,7 +1890,6 @@ $('pfCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('pfRep')
  hGo.onclick=go;$('hRef').onclick=go;
  const toTrav=()=>{tab('me');setTimeout(()=>$('pfCard').scrollIntoView({behavior:'smooth',block:'start'}),80)};
  $('hView').onclick=toTrav;$('hView2').onclick=toTrav;
- $('uidChip').onclick=()=>{want=true;drawStrip();setTimeout(()=>hUid.focus(),30)};
  setInterval(later,60000);setTimeout(drawStrip,0);setTimeout(drawStrip,800)}
 /* refresh the cached profile once per boot (only if older than max(ttl, 5 min)); it never shows an error, only a small note */
 async function pfBoot(){if(PFBG.did||!PF||!PF.uid)return;PFBG.did=true;
@@ -2150,7 +2200,7 @@ const srcOf=e=>{
 };
 const catOf=e=>{const s=srcOf(e);return s==='endgame'?'endgame':s==='daily'||s==='auto'?'daily':s==='event'||(s==='recon'&&e.tag==='Event')||e.tag==='Event'?'event':'other'};
 
-/* ---------- reconcile ("Set to my in-game total") ---------- */
+/* ---------- reconcile ("Match my game total") ---------- */
 function reconSpan(){
   const recs=S.log.filter(e=>e.mode==='set').map(e=>e.date).sort();
   const from=recs.length?recs[recs.length-1]:(S.log.length?S.log.map(e=>e.date).sort()[0]:'');
@@ -2213,17 +2263,26 @@ const todayAuto=()=>S.log.find(e=>e.auto&&srcOf(e)==='auto'&&e.date===today()&&!
 const tkEntry=id=>{const t=today();return S.log.find(e=>e.date===t&&!e.auto&&srcOf(e)==='daily'&&(e.tk===id||(id==='dc'&&(e.note==='Dailies'||e.note==='Daily check-in'))||(id==='wm'&&(e.note==='Welkin'||e.note==='Daily check-in'))))};
 const autoCovers=id=>!!todayAuto()&&(id==='dc'?!!S.auto.comm:welkinOn());
 const RKT={dc:'Daily commissions',wm:'Claim Welkin'};
-const EG={ab:{n:'Spiral Abyss',s:'Abyss',q:'How many stars did you earn this cycle? (0–36)',max:36,u:'★'},it:{n:'Imaginarium Theater',s:'Theater',q:'How many acts did you clear this month? (0–10)',max:10,u:' acts'},sg:{n:'Stygian Onslaught',s:'Stygian',q:'How many difficulty levels did you clear? (0–3)',max:3,u:'★'}};
+const EG={ab:{n:'Spiral Abyss',s:'Abyss',max:36,u:'★'},it:{n:'Imaginarium Theater',s:'Theater',max:10,u:' acts'},sg:{n:'Stygian Onslaught',s:'Stygian',max:3,u:'★'}};
 /* Step 0 decision: Enka's playerInfo has no cycle marker, so its Abyss/Theater/Stygian numbers can mean "highest ever". Detection stays OFF; the UID value is only a hint. */
 const EG_UID_AUTO=false;
-function egReward(id,n){n=Math.max(0,Math.min(EG[id].max,Math.floor(n)||0));
+/* Stygian is shown only inside a known active cycle: dates from rules.json, or "active until" typed in More */
+function sgCycle(){const s=RULES.endgame.stygian,t=today();
+  if(s.cycleStart&&s.cycleEnd&&t>=s.cycleStart&&t<=s.cycleEnd)return {from:s.cycleStart,until:s.cycleEnd,key:'sg:'+s.cycleStart};
+  if(OV.sgU&&isoRe.test(OV.sgU)&&OV.sgU>=t)return {from:null,until:OV.sgU,key:'sg:u'+OV.sgU};return null}
+function egChips(id){const R=RV();
+  if(id==='ab')return [1,2,3,4].map(n=>({label:n+(n===1?' floor':' floors')+' at 9★',p:n*R.ab[9]}));
+  if(id==='it')return RULES.endgame.theater.tiers.map((x,i)=>({label:x.label,p:R.th[i]}));
+  return [1,2,3].map(n=>({label:n+(n===1?' difficulty':' difficulties'),p:n*R.sg}))}
+function egReward(id,n){n=Math.max(0,Math.min(EG[id].max,Math.floor(n)||0));const R=RV();
   if(id==='ab'){let r=n,t=0;for(let i=0;i<4;i++){const v=Math.min(9,r);r-=v;t+=abyssFloor(Math.floor(v/3)*3)}return t}
-  if(id==='it')return Math.round((S.endgame.thMax||0)*n/10);
-  return n*150}
-const rkKey=id=>rkInfo(RKI.find(x=>x[0]===id)[2]).key;
+  if(id==='it')return n>=10?R.th[R.th.length-1]:n>=8?R.th[0]:0;
+  return n*R.sg}
+const rkKey=id=>{if(id==='sg'){const c=sgCycle();return c?c.key:''}return rkInfo(RKI.find(x=>x[0]===id)[2]).key};
 function itemState(id){const key=rkKey(id);
   if(id==='dc'||id==='wm'){if(autoCovers(id))return {s:'auto',e:todayAuto()};const e=tkEntry(id);if(e)return {s:'me',e};return RK.done[id]===key?{s:'me'}:{s:'none'}}
-  if(EG[id]){const e=S.log.find(x=>x.eg===id&&x.ck===key);if(e)return {s:e.tag==='From UID'?'uid':'me',e};return RK.done[id]===key?{s:'me'}:{s:'none'}}
+  if(EG[id]){const c=id==='sg'?sgCycle():null,e=S.log.find(x=>x.eg===id&&x.ck===key)||(c?S.log.find(x=>x.eg==='sg'&&x.ck&&x.ck.slice(0,3)!=='sg:'&&x.date>=(c.from||dAdd(c.until,-42))&&x.date<=c.until):null); // older Stygian entries (month keys) count if dated inside the cycle
+    if(e)return {s:e.tag==='From UID'?'uid':'me',e};return RK.done[id]===key?{s:'me'}:{s:'none'}}
   return RK.done[id]===key?{s:'me'}:{s:'none'}}
 const ICON={none:'○',me:'✓',auto:'🔒',uid:'🔒'},SLAB={none:'to do',me:'done',auto:'auto',uid:'from UID'};
 function rkRow(id,title,p){const st=itemState(id),i=rkInfo(p),locked=st.s==='auto'||st.s==='uid',row=document.createElement('div');row.className='rkr rk-'+st.s;
@@ -2235,7 +2294,7 @@ function rkRow(id,title,p){const st=itemState(id),i=rkInfo(p),locked=st.s==='aut
   if(EG[id]&&st.e&&st.e.note){const s=document.createElement('div');s.className='rks';s.textContent=st.e.note;row.append(s)}
   return row}
 function drawResets(){const L=$('rkL');if(!L)return;$('rk-s').value=RK.s;L.textContent='';
-  RKI.filter(x=>x[0]!=='wm'||welkinOn()).forEach(([id,t,p])=>L.append(rkRow(id,t,p)));
+  RKI.filter(x=>x[0]!=='dc'&&x[0]!=='wm'&&(x[0]!=='sg'||sgCycle())).forEach(([id,t,p])=>L.append(rkRow(id,t,p)));
   const T=$('tdTicks');if(T){T.textContent='';RKI.filter(x=>x[0]==='dc'||(x[0]==='wm'&&welkinOn())).forEach(([id,t,p])=>T.append(rkRow(id,RKT[id]+' (+'+fm(id==='dc'?(S.income.daily||0):WELKIN)+')',p)))}}
 function rkTap(id){const st=itemState(id),key=rkKey(id);
   if(st.s==='auto'){toast('Added by Auto income. Use “Missed today” if it is wrong.');return}
@@ -2250,38 +2309,63 @@ function fixItem(id){
     undoEntry(ex);if(!S.log.includes(ex))toast('Removed today’s auto income',()=>{applyCore(snap);save();refresh()});return}
   if(EG[id]){const st=itemState(id);askEg(id,st.e||null)}}
 document.addEventListener('click',e=>{const f=e.target.closest('[data-fix]');if(f){fixItem(f.dataset.fix);return}const b=e.target.closest('.rkb');if(b)rkTap(b.dataset.i)});
-/* endgame: ask for stars, add once per cycle (keyed by the reset key), undo-able */
+/* endgame: a sheet with quick chips from rules.json plus a custom amount. One entry per cycle, undo-able. */
 let RKASK=null;
 function uidHint(id){if(!PF)return '';const v=id==='ab'?(PF.ab&&PF.ab.s):id==='it'?(PF.th&&PF.th.a):PF.sg;if(v===undefined||v===null)return '';return 'Your UID shows '+v+(id==='it'?' acts':'★')+' for '+EG[id].s+', but Enka does not say which cycle that is from, so I am not adding it for you.'}
-function egAdd(id,n,fromUid){const key=rkKey(id),g=EG[id],rw=egReward(id,n);
-  if(rw<=0){RK.done[id]=key;rkSave();drawResets();return null}
-  const note=fromUid?'Detected from UID: '+g.s+' '+n+g.u+' → +'+rw+' (est.)':g.s+' '+n+g.u+' (est.)';
-  const r=applyCore({mode:'add',p:rw,f:0,date:today(),note:note.slice(0,60),src:'endgame',auto:true,eg:id,ck:key,tag:fromUid?'From UID':''});
+function egAdd(id,amount,label,fromUid){const key=rkKey(id),g=EG[id];
+  if(!key){toast('Stygian is not active right now.');return null}
+  if(!(amount>0)){RK.done[id]=key;rkSave();drawResets();return null}
+  const note=(fromUid?'Detected from UID: ':'')+g.s+': '+label+' → +'+amount+' (est.)';
+  const r=applyCore({mode:'add',p:amount,f:0,date:today(),note:note.slice(0,60),src:'endgame',auto:true,eg:id,ck:key,tag:fromUid?'From UID':''});
   if(r.err){toast(r.err);return null}S.cu=today();save();refresh();return r.e}
-function askEg(id,old){RKASK={id,old};drawAsk();setTimeout(()=>{const n=$('rkN');if(n)n.focus()},30)}
-function drawAsk(){const A=$('rkAsk');if(!RKASK){A.hidden=true;A.textContent='';return}
-  const {id,old}=RKASK,g=EG[id],h=uidHint(id);A.hidden=false;
-  A.innerHTML='<div class="rcm"><b>'+esc(g.n)+'</b><br>'+esc(g.q)+'</div>'+(h?'<div class="sub" style="margin:4px 0">'+esc(h)+'</div>':'')+'<label class="f">Your number<input id="rkN" type="number" inputmode="numeric" min="0" max="'+g.max+'"></label><div class="sub" id="rkP" style="margin-top:6px"></div><div class="b" style="margin-top:8px"><button class="p sm" id="rkAdd" type="button">Add</button>'+(old?'':'<button class="sm" id="rkCnt" type="button">Already counted</button>')+'<button class="sm" id="rkX" type="button">Cancel</button></div>';
-  const inp=$('rkN'),pv=()=>{const n=inp.value===''?null:num(inp.value);$('rkP').textContent=n===null?'':n>g.max?'The most is '+g.max+'.':'Adds +'+fm(egReward(id,n))+' primogems (estimate), once for this cycle. You can undo it.'};
-  inp.oninput=pv;inp.onkeydown=e=>{if(e.key==='Enter')$('rkAdd').click()};
-  $('rkX').onclick=()=>{RKASK=null;drawAsk()};
-  if($('rkCnt'))$('rkCnt').onclick=()=>{RK.done[id]=rkKey(id);rkSave();RKASK=null;drawAsk();drawResets();toast(g.s+' marked as already counted')};
-  $('rkAdd').onclick=()=>{if(inp.value===''||num(inp.value)<0||num(inp.value)>g.max){toast('Enter a number from 0 to '+g.max);return}
-    const n=Math.floor(num(inp.value));let snap=null;
-    if(old){snap={mode:'add',p:old.dp,f:0,date:old.date,note:old.note,src:'endgame',auto:true,eg:old.eg,ck:old.ck,tag:old.tag};if(!undoCore(old)){return}}
-    RKASK=null;drawAsk();const e=egAdd(id,n,false);
-    if(e)toast(g.s+' '+n+g.u+' → +'+fm(e.dp)+' (est.)',()=>{undoEntry(e);if(snap){applyCore(snap);save();refresh()}});
-    else{save();refresh()}}}
-function cycleStart(id){const sv=Date.now()+(+RK.s-4)*36e5,D=new Date(sv),y=D.getUTCFullYear(),mo=D.getUTCMonth(),dd=D.getUTCDate();return Date.UTC(y,mo,id==='ab'&&dd>=16?16:1)-(+RK.s-4)*36e5}
+function askEg(id,old){RKASK={id,old};drawAsk()}
+function closeAsk(){RKASK=null;const s=$('egSheet');if(s)s.hidden=true}
+function drawAsk(){const s=$('egSheet');if(!RKASK){s.hidden=true;return}
+  const {id,old}=RKASK,g=EG[id],h=uidHint(id),chips=egChips(id);s.hidden=false;
+  const P=s.querySelector('.bsp');P.innerHTML='<h3 class="disp">'+esc(g.n)+'</h3><div class="sub">'+(old?'Change what you earned this cycle. The old entry is replaced.':'What did you earn this cycle? Pick one. It is added once and you can undo it.')+'</div>'+(h?'<div class="sub" style="margin-top:6px">'+esc(h)+'</div>':'')+'<div class="chips" id="egCh"></div><label class="f">Or type an amount<input id="egCustom" type="number" inputmode="numeric" min="0" placeholder="primogems"></label><div class="b" style="margin-top:10px"><button class="p sm" id="egAddC" type="button">Add this amount</button>'+(old?'':'<button class="sm" id="egCnt" type="button">Already counted</button>')+'<button class="sm" id="egX" type="button">Cancel</button></div>';
+  const C=P.querySelector('#egCh');
+  const go=(amt,label)=>{let snap=null;
+    if(old){snap={mode:'add',p:old.dp,f:0,date:old.date,note:old.note,src:'endgame',auto:true,eg:old.eg,ck:old.ck,tag:old.tag};if(!undoCore(old))return}
+    closeAsk();const e=egAdd(id,amt,label,false);
+    if(e)toast(g.s+' +'+fm(e.dp)+' (est.)',()=>{undoEntry(e);if(snap){applyCore(snap);save();refresh()}});else{save();refresh()}};
+  chips.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=c.label+' · +'+fm(c.p);b.onclick=()=>go(c.p,c.label);C.append(b)});
+  $('egAddC').onclick=()=>{const v=$('egCustom').value;if(v===''||!(num(v)>0)||num(v)>50000){toast('Enter an amount above 0');return}go(Math.round(num(v)),'custom amount')};
+  $('egCustom').onkeydown=e=>{if(e.key==='Enter')$('egAddC').click()};
+  $('egX').onclick=closeAsk;if($('egCnt'))$('egCnt').onclick=()=>{RK.done[id]=rkKey(id);rkSave();closeAsk();drawResets();toast(g.s+' marked as already counted')};
+  setTimeout(()=>{const f=P.querySelector('.chip');if(f)f.focus()},30)}
+$('egSheet').addEventListener('click',e=>{if(e.target===$('egSheet'))closeAsk()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&RKASK)closeAsk()});
+function cycleStart(id){const sv=Date.now()+(+RK.s-4)*36e5,D=new Date(sv),y=D.getUTCFullYear(),mo=D.getUTCMonth(),dd=D.getUTCDate(),off4=(+RK.s-4)*36e5;
+  if(id==='ab'){const m0=dd>=16?mo:mo-1,y0=m0<0?y-1:y;return Date.UTC(y0,(m0+12)%12,16)-off4}
+  if(id==='sg'){const c=sgCycle();return c&&c.from?new Date(c.from+'T00:00:00').getTime():Infinity}
+  return Date.UTC(y,mo,1)-off4}
 function egDetect(){if(!EG_UID_AUTO||!PF||!PF.ts)return;
-  Object.keys(EG).forEach(id=>{const key=rkKey(id);if(S.log.some(e=>e.eg===id&&e.ck===key)||RK.done[id]===key)return;if(PF.ts<cycleStart(id))return;
+  Object.keys(EG).forEach(id=>{const key=rkKey(id);if(!key||S.log.some(e=>e.eg===id&&e.ck===key)||RK.done[id]===key)return;if(PF.ts<cycleStart(id))return;
     const n=id==='ab'?(PF.ab&&PF.ab.s):id==='it'?(PF.th&&PF.th.a):PF.sg;if(!(n>0))return;
-    const e=egAdd(id,n,true);if(e)toast('Detected from UID: '+EG[id].s+' '+n+EG[id].u+' → +'+fm(e.dp)+' (est.)',()=>undoEntry(e))})}
+    const amt=egReward(id,n);if(!(amt>0))return;const e=egAdd(id,amt,n+EG[id].u,true);if(e)toast('Detected from UID: '+EG[id].s+' '+n+EG[id].u+' → +'+fm(e.dp)+' (est.)',()=>undoEntry(e))})}
+function naSync(){const c=$('naCard');if(!c)return;const any=[...c.querySelectorAll('.na')].some(x=>!x.hidden);if(c.hidden===any)c.hidden=!any}
+new MutationObserver(()=>naSync()).observe($('naCard'),{subtree:true,attributes:true,attributeFilter:['hidden']});
+/* Endgame rewards settings (More) */
+function rwDraw(){$('chP60').textContent='+'+DC()+' primogems';const f=$('rwF');if(!f)return;const E=RULES.endgame,a=document.activeElement;if(f.contains(a)&&a.tagName==='INPUT')return;
+  const inp=(k,lab,def)=>'<label class="f">'+esc(lab)+'<input data-ov="'+k+'" type="number" inputmode="numeric" min="0" placeholder="'+def+'" value="'+(OV[k]!==undefined&&OV[k]!==''?OV[k]:'')+'"></label>';
+  f.innerHTML='<div class="sub"><b>Spiral Abyss</b> resets once a month on the 16th. Reward per floor, by stars (floors 9 to 12, up to '+fm(E.abyss.max)+').</div><div class="row">'+inp('a3','3★',E.abyss.partial['3'])+inp('a6','6★',E.abyss.partial['6'])+inp('a9','9★',E.abyss.partial['9'])+'</div>'
+   +'<div class="sub" style="margin-top:10px"><b>Imaginarium Theater</b> resets on the 1st of each month (up to '+fm(E.theater.max)+').</div><div class="row">'+E.theater.tiers.map((x,i)=>inp('t'+i,x.label,x.primogems)).join('')+'</div>'
+   +'<div class="sub" style="margin-top:10px"><b>Stygian Onslaught</b>: reward per difficulty cleared (Normal, Advancing, Hard; up to '+fm(E.stygian.max)+' per cycle). <b>Check these in game: community-tallied.</b></div><div class="row">'+inp('sg','Per difficulty',E.stygian.perDifficulty)+'</div>';
+  const age=-off(RULES.verified);$('rwSub').textContent='Amounts last verified '+fmt(RULES.verified)+'. Leave a box empty to use the standard amount.';
+  const o=$('rwOld');o.hidden=!(age>60);if(age>60)o.textContent='These amounts were last checked '+age+' days ago, so they may be out of date. Check them in game and edit any that changed.';
+  $('sgUntil').value=OV.sgU||'';const c=sgCycle();$('sgSt').textContent=c?'Stygian is active until '+fmt(c.until)+'. It shows in your checklist.':'Stygian is hidden in the checklist until a cycle is known. Type the date it ends to show it.'}
+$('rwF').addEventListener('input',e=>{const k=e.target.dataset.ov;if(!k)return;if(e.target.value==='')delete OV[k];else OV[k]=Math.max(0,Math.round(num(e.target.value)));ovSave();render()});
+$('sgUntil').onchange=()=>{const v=$('sgUntil').value;if(isoRe.test(v))OV.sgU=v;else delete OV.sgU;ovSave();render();rwDraw()};
+$('rwReset').onclick=()=>{const keep=OV.sgU;OV={};if(keep)OV.sgU=keep;ovSave();rwDraw();render();toast('Standard amounts restored')};
+async function rulesFetch(){try{const c=new AbortController(),t=setTimeout(()=>c.abort(),4000);const r=await fetch('./rules.json',{cache:'no-cache',signal:c.signal});clearTimeout(t);if(!r.ok)throw 0;const j=await r.json();RULES=rulesClean(j);WELKIN=RULES.daily.welkin;try{localStorage.setItem('primo-rules',JSON.stringify(RULES))}catch(e){}render()}catch(e){}}
+WELKIN=RULES.daily.welkin;
+setTimeout(rulesFetch,300);
 /* +60 / +20 quick chips */
 function xpAsk(msg,fn){$('xpT').textContent=msg;$('xpC').hidden=false;$('xpYes').onclick=()=>{$('xpC').hidden=true;fn()};$('xpNo').onclick=()=>{$('xpC').hidden=true}}
-$('chP60').onclick=()=>{const auto=autoCovers('dc'),mine=!auto&&itemState('dc').s==='me';
-  if(auto||mine){xpAsk(auto?'Auto commission income is on and already added today’s +60. Add it again as extra?':'You already ticked today’s commissions. Add +60 again as extra?',()=>{const r=commit({mode:'add',p:60,f:0,date:today(),note:'Extra daily commissions',src:'daily',tk:'dx'});if(!r.err)toast('Extra +60 added',()=>undoEntry(r.e))});return}
-  const r=commit({mode:'add',p:60,f:0,date:today(),note:RKT.dc,src:'daily',tk:'dc'});if(!r.err)toast('Daily commissions ✓ +60',()=>undoEntry(r.e))};
+const DC=()=>RULES.daily.commissions;
+$('chP60').onclick=()=>{const auto=autoCovers('dc'),mine=!auto&&itemState('dc').s==='me',v=DC();
+  if(auto||mine){xpAsk(auto?'Auto commission income is on and already added today’s +'+v+'. Add it again as extra?':'You already ticked today’s commissions. Add +'+v+' again as extra?',()=>{const r=commit({mode:'add',p:v,f:0,date:today(),note:'Extra daily commissions',src:'daily',tk:'dx'});if(!r.err){toast('Extra +'+v+' added',()=>undoEntry(r.e));closeQA()}});return}
+  const r=commit({mode:'add',p:v,f:0,date:today(),note:RKT.dc,src:'daily',tk:'dc'});if(!r.err)toast('Daily commissions ✓ +'+v,()=>undoEntry(r.e))};
 $('chP20').onclick=()=>{$('xpC').hidden=true;const r=commit({mode:'add',p:20,f:0,date:today(),note:'Other primogems',src:'manual',tag:'Other'});if(!r.err)toast('+20 primogems logged as Other',()=>undoEntry(r.e))};
 /* streak: a day counts if it has a daily entry or an auto entry (a removed "missed" day has no entry) */
 function streakN(){const have=new Set(S.log.filter(e=>(srcOf(e)==='daily'&&!e.auto)||(srcOf(e)==='auto'&&!(e.span>1))).map(e=>e.date));let d=today(),n=0;if(!have.has(d))d=dAdd(d,-1);while(have.has(d)&&n<2000){n++;d=dAdd(d,-1)}return n}
@@ -2293,7 +2377,7 @@ function drawStatus(){const A=S.auto,el=$('stl');if(!el)return;const t=today();e
   if(A.on)el.textContent='Auto income on · '+(A.last>=t?'+'+fm(dayAmount(t))+'/day · up to date ✓':'fills in when you open the app')+w;
   else{el.append('Auto income off. ');const b=document.createElement('button');b.type='button';b.textContent='Turn on';b.onclick=goAuto;el.append(b);if(w)el.append(w)}
   const n=estSum();$('estC').hidden=!(n>0);$('estN').textContent=fm(n)}
-$('estV').onclick=()=>{const c=$('set').closest('.card');if(c&&c._set)c._set(false);$('set').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>$('ap').focus(),250)};
+$('estV').onclick=()=>openQA();
 function drawCalcHow(){const el=$('chTxt');if(!el)return;let i=S.log.length-1;while(i>=0&&S.log[i].mode!=='set')i--;const after=S.log.slice(i+1),sum=a=>a.reduce((t,e)=>t+e.dp,0),
   au=after.filter(e=>e.auto&&srcOf(e)==='auto'),eg=after.filter(e=>e.auto&&srcOf(e)==='endgame'),rest=after.filter(e=>!e.auto),inc=rest.filter(e=>e.dp>0),sp=rest.filter(e=>e.dp<0),
   base=S.primos-sum(after),days=new Set(au.map(e=>e.date)).size;
@@ -2301,6 +2385,8 @@ function drawCalcHow(){const el=$('chTxt');if(!el)return;let i=S.log.length-1;wh
   let s2=' Since then it added <b>'+fm(sum(au))+'</b> from auto income ('+plural(days,'day')+')'+(eg.length?', <b>'+fm(sum(eg))+'</b> from endgame rewards (estimates)':'')+' and <b>'+fm(sum(inc))+'</b> from events and other entries'+(sp.length?', and took off <b>'+fm(-sum(sp))+'</b> for pulls and spending':'')+', which makes <b>'+fm(S.primos)+'</b> now. Fates are counted separately.';
   el.innerHTML=s1+s2}
 function drawToday(){
+  try{rwDraw()}catch(e){}
+  try{naSync()}catch(e){}
   const ex=todayAuto();let sub;
   if(ex)sub='Auto income added today: +'+fm(ex.dp)+' primogems (an estimate). If that is wrong, use “Missed today” on a locked item.';
   else if(S.auto.on)sub='Auto income is on. Anything it has not added today, tick yourself.';
@@ -2502,7 +2588,7 @@ function diCompare(){
     const old=S.income.patch,np=Math.max(0,Math.round(old+(per-fc)*patchLen()));
     S.income.patch=np;fillIncome();save();render();toast('Per-patch income set to '+fm(np),()=>{S.income.patch=old;fillIncome();save();render()});
   });
-  if(B.children.length){out.append(B);if(diff>0)out.insertAdjacentHTML('beforeend','<div class="sub" style="margin-top:6px">If you also use Set to my in-game total, do one or the other for this gap, or it is counted twice.</div>')}
+  if(B.children.length){out.append(B);if(diff>0)out.insertAdjacentHTML('beforeend','<div class="sub" style="margin-top:6px">If you also use Match my game total, do one or the other for this gap, or it is counted twice.</div>')}
 }
 $('diGo').onclick=diCompare;
 
@@ -2617,17 +2703,17 @@ window.addEventListener('popstate',()=>tab(hashTab(),true,'pop'));
 {const h=hashTab();if(h!=='home')tab(h,true)}
 document.querySelectorAll('[data-tb],[data-go]').forEach(b=>b.addEventListener('click',()=>b.dataset.tb?tab(b.dataset.tb,false,'nav'):tab(b.dataset.go)));
 document.querySelectorAll('[data-pre]').forEach(b=>b.onclick=()=>{const p=b.dataset.pre;$('i-w').checked=p!=='f2p';$('i-bp').checked=p==='wb';if(!$('i-p').value)$('i-p').value=3000;incIn();toast('Income updated. Check the numbers below.')});
+let FRSEL='free';
 function drawFirst(){const c=$('frCard');if(!c)return;let done=false;try{done=localStorage.getItem('primo-fr')==='1'}catch(e){}c.hidden=done||!LOADED||S.log.length>0||S.auto.on}
-document.querySelectorAll('[data-fr]').forEach(b=>b.onclick=()=>{const v=b.dataset.fr;
+document.querySelectorAll('#frStyle [data-fr]').forEach(x=>x.onclick=()=>{FRSEL=x.dataset.fr;document.querySelectorAll('#frStyle [data-fr]').forEach(y=>y.setAttribute('aria-pressed',String(y===x)))});
+function frDone(msg){try{localStorage.setItem('primo-fr','1')}catch(e){}render();if(msg)toast(msg)}
+$('frSkip').onclick=()=>frDone('You can set this up any time in Income.');
+$('frGo').onclick=()=>{const v=FRSEL;
   if(v!=='no'){S.auto.on=true;S.auto.comm=true;S.auto.last=today();$('i-w').checked=v!=='free';$('i-bp').checked=v==='wbp';if(!$('i-p').value)$('i-p').value=3000;incIn();fillIncome()}
-  try{localStorage.setItem('primo-fr','1')}catch(e){}render();toast(v==='no'?'Okay. You can tick things off yourself on Home.':'Auto income is on. It starts tomorrow, so tick today yourself.')});
-function drawWelcome(){drawFirst();
-  const i=S.income,d=[S.log.length>0,!!(i.welkin||i.bp||i.bargains||i.patch||i.monthly||S.patchStart),S.goals.length>0];
-  let off=false;try{off=localStorage.getItem('primo-welcome')==='off'}catch(e){}
-  $('wel').hidden=off||d.every(Boolean);
-  d.forEach((x,k)=>$('w'+(k+1)).classList.toggle('done',x));
-}
-$('welHide').onclick=()=>{try{localStorage.setItem('primo-welcome','off')}catch(e){}drawWelcome()};
+  const p=$('fr-p').value,f=$('fr-f').value;if(p!==''||f!==''){const r=commit({mode:'set',p:Math.max(0,Math.round(num(p))),f:Math.max(0,Math.round(num(f))),date:today(),note:'Starting balance',src:'recon'});if(r.err)return}
+  const u=$('fr-u').value.replace(/\D/g,'');if(u.length>=9){$('pf-uid').value=u;$('pf-uid').dispatchEvent(new Event('input',{bubbles:true}));try{$('pfGo').click()}catch(e){}}
+  frDone(v==='no'?'All set. Tick things off yourself on Home.':'All set. Auto income is on; it starts tomorrow, so tick today yourself.')};
+function drawWelcome(){drawFirst()}
 drawWelcome();
 
 let RO={banners:[],updated:''},rsGoal=null,rsF='all';
@@ -2739,9 +2825,17 @@ const B=document.body,mini=$('mini'),hero=document.querySelector('.hero');
 const sync=()=>{$('mn-t').textContent=$('tt').textContent;$('mn-p').textContent=$('tp').textContent;$('mn-f').textContent=$('tf').textContent};
 sync();const mo=new MutationObserver(sync);['tt','tp','tf'].forEach(i=>mo.observe($(i),{childList:true,characterData:true,subtree:true}));
 if('IntersectionObserver' in window)new IntersectionObserver(([e])=>mini.classList.toggle('on',!e.isIntersecting&&e.boundingClientRect.bottom<0)).observe(hero);
-function goLog(){const go=()=>{const h=$('h-log'),c=h.closest('.card');if(c&&c._set&&c.classList.contains('min'))c._set(false);h.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{try{$('ap').focus({preventScroll:true})}catch(e){}},400)};
+let QAK=0;
+function openQA(focus){const s=$('qaSheet');QAK++;s.hidden=false;if(focus!==false)setTimeout(()=>{try{$('ap').focus({preventScroll:true})}catch(e){}},60)}
+function closeQA(){$('qaSheet').hidden=true;$('xpC').hidden=true}
+window.openQA=openQA;window.closeQA=closeQA;
+$('fab').onclick=()=>openQA(false);$('qaX').onclick=closeQA;$('qaSheet').addEventListener('click',e=>{if(e.target===$('qaSheet'))closeQA()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('qaSheet').hidden)closeQA()});
+// close the sheet once something was logged (inputs cleared, or a chip added an entry)
+$('qaSheet').addEventListener('click',e=>{const t=e.target.closest('button');if(!t||t.id==='qaX')return;const n=S.log.length,k=QAK;setTimeout(()=>{if(k===QAK&&S.log.length!==n&&$('xpC').hidden)closeQA()},60)},true);
+function goLog(){openQA();return;const go=()=>{const h=$('h-log'),c=h.closest('.card');if(c&&c._set&&c.classList.contains('min'))c._set(false);h.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{try{$('ap').focus({preventScroll:true})}catch(e){}},400)};
   if(B.dataset.t!=='home'){tab('home');setTimeout(go,80)}else go()}
-$('mLog').onclick=$('hqLog').onclick=goLog;
+$('mLog').onclick=goLog;
 $('mTop').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
 // Radio groups: only the selected option is a Tab stop (arrow keys move between options)
 const rove=()=>document.querySelectorAll('[role=radiogroup]').forEach(g=>{const r=[...g.querySelectorAll('[role=radio]')];if(!r.length)return;const on=r.find(x=>x.getAttribute('aria-checked')==='true')||r[0];r.forEach(x=>{x.tabIndex=x===on?0:-1})});
