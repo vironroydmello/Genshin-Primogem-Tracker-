@@ -1,6 +1,6 @@
-const BUILD='18.2+ba55e948'; // stamped by build.js: the same value is shown in the app, so the cache and the version never drift apart
+const BUILD='18.3+a85e5867'; // stamped by build.js: the same value is shown in the app, so the cache and the version never drift apart
 const CACHE='primogem-tracker-'+BUILD;
-const ASSETS=['./','./index.html','./manifest.json','./roster.json','./icon-180.png','./icon-192.png','./icon-512.png'];
+const ASSETS=['./','./index.html','./manifest.json','./roster.json','./rules.json','./icon-180.png','./icon-192.png','./icon-512.png'];
 const FONT_HOSTS=['fonts.googleapis.com','fonts.gstatic.com'];
 // Cache each file on its own, so one missing file can't break the whole install. 'reload' skips the browser's HTTP cache.
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.all(ASSETS.map(a=>c.add(new Request(a,{cache:'reload'})).catch(()=>{})))));self.skipWaiting()});
@@ -17,8 +17,8 @@ self.addEventListener('fetch',e=>{
     return;
   }
   if(u.origin!==location.origin)return;
-  // Banner roster: network first (4 s limit), saved copy offline
-  if(u.pathname.endsWith('/roster.json')){
+  // Banner roster and reward rules (data only): network first (4 s limit), saved copy offline
+  if(u.pathname.endsWith('/roster.json')||u.pathname.endsWith('/rules.json')){
     const net=fetch(r,{cache:'no-cache'}).then(res=>{if(res.ok){const c=res.clone();caches.open(CACHE).then(x=>x.put(r,c))}return res});
     const slow=new Promise((_,no)=>setTimeout(no,4000));
     e.respondWith(Promise.race([net,slow]).catch(()=>caches.match(r,{ignoreSearch:true}).then(hit=>hit||net)));return}
