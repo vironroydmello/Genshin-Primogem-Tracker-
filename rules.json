@@ -1,0 +1,33 @@
+{
+  "verified": "2026-10-29",
+  "sources": "Community-tallied reward amounts, not official. Check them in game. Stygian dates are filled in only when known.",
+  "daily": { "commissions": 60, "welkin": 90 },
+  "endgame": {
+    "abyss": {
+      "cadence": "monthly",
+      "resetDay": 16,
+      "floors": "9-12",
+      "perFloor": 200,
+      "partial": { "3": 50, "6": 100, "9": 200 },
+      "max": 800
+    },
+    "theater": {
+      "cadence": "monthly",
+      "resetDay": 1,
+      "tiers": [
+        { "label": "Through Act 8", "primogems": 620 },
+        { "label": "Full clear", "primogems": 1000 }
+      ],
+      "max": 1000
+    },
+    "stygian": {
+      "cadence": "per-version",
+      "perDifficulty": 150,
+      "difficulties": ["Normal", "Advancing", "Hard"],
+      "max": 450,
+      "officialTotal": false,
+      "cycleStart": null,
+      "cycleEnd": null
+    }
+  }
+}
