@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="18.4"><meta name="app-build" content="d0303317"><meta name="app-built" content="2026-11-01"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="app-version" content="18.5"><meta name="app-build" content="25c7fa56"><meta name="app-built" content="2026-11-03"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Primogem Tracker</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2a1f5e">
@@ -376,6 +376,11 @@ button,select,summary,.chip,.theme,.rkb,.sm,#toast button,.seg button{min-height
 .estc{flex-wrap:nowrap}.estc .estv{min-height:44px}
 .hero .stl{max-width:100%}
 .tot{align-items:flex-end}
+.sht{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.sht div{border:1px solid var(--line);border-radius:14px;padding:8px 10px;background:var(--bg);display:flex;flex-direction:column;gap:2px;min-width:0}
+.sht b{font-size:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sht span{font-size:13px;color:var(--mut)}
+.chip[aria-pressed=true]{background:color-mix(in srgb,var(--acc) 22%,transparent);color:var(--acc);font-weight:700}
+.shc{transition:transform .15s}.shc:active{transform:scale(.97)}
 </style>
 </head>
 <body data-t="home">
@@ -415,7 +420,8 @@ button,select,summary,.chip,.theme,.rkb,.sm,#toast button,.seg button{min-height
 <div class="sub" id="tdStat" style="margin-top:8px"></div>
 <button type="button" class="plain" id="tdChart" aria-label="Open the earnings chart in History"></button>
 </section>
-<section class="card" id="naCard" data-tab="home" hidden data-help="Things worth a look: your game total did not match the app, a backup is due, the monthly fates need confirming, or days were missed. It disappears when there is nothing to do." aria-labelledby="h-na"><h2 id="h-na" class="disp">Needs attention</h2><div class="na" id="rcCard" hidden><h3 class="disp" style="font-size:16px;margin:0 0 6px">Your game total vs the app</h3><div id="rcTxt"></div><div class="b" id="rcBtns"></div></div>
+<section class="card" id="naCard" data-tab="home" hidden data-help="Things worth a look: your game total did not match the app, a backup is due, the monthly fates need confirming, or days were missed. It disappears when there is nothing to do." aria-labelledby="h-na"><h2 id="h-na" class="disp">Needs attention</h2><div class="na" id="egNa" hidden></div>
+<div class="na" id="rcCard" hidden><h3 class="disp" style="font-size:16px;margin:0 0 6px">Your game total vs the app</h3><div id="rcTxt"></div><div class="b" id="rcBtns"></div></div>
 <div class="na" id="bgCard" hidden><div id="bgTxt"></div><div class="b" id="bgBtns"><button class="p sm" id="bgYes" type="button">Got the limited fates</button><button class="sm" id="bgStd" type="button">Bought the standard fates too</button><button class="sm" id="bgSkip" type="button">Skip this month</button></div></div>
 <div class="na" id="bkCard" hidden><div id="bkTxt"></div><div class="b" style="margin-top:8px"><button class="p sm" id="bkYes">Back up now</button><button class="sm" id="bkNo">Remind me later</button></div></div>
 <div class="na" id="cuCard" hidden><div id="cuTxt"></div><div class="b"><button class="p sm" id="cuYes"></button><button class="sm" id="cuNo">Not now</button></div></div></section>
@@ -2005,10 +2011,16 @@ function drawChars(o){const v=$('pfView');
   const old=o.chars.some(c=>!c.arts);o.chars=o.chars.map(c=>Object.assign({tx:[0,0,0],arts:[],st:{},cv:0,fr:0,el:'',sp:'',ic:'',w:null},c,{t:c.t||[1,1,1],tx:c.tx||[0,0,0],arts:c.arts||[],st:c.st||{}}));
   const d=document.createElement('div');d.style.marginTop='12px';const avg=o.chars.reduce((t,c)=>t+c.cv,0)/o.chars.length;
   d.innerHTML='<div class="sub">Character showcase · '+plural(o.chars.length,'character')+(avg?' · average crit value '+Math.round(avg):'')+'. Tap a card for stats, weapon and artifacts.'+(old?' This profile was saved by an older version, so tap Refresh to load artifacts and stats.':'')+'</div>';
-  const lg=document.createElement('div');lg.className='sub';lg.style.cssText='display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:6px 0';lg.innerHTML='<span>Artifact CV:</span>'+[[0,'Low'],[10,'Fair'],[20,'Decent'],[30,'Good'],[40,'Great'],[50,'Godly']].map(([n])=>{const t=cvA(n);return '<span class="badge" style="color:'+t[0]+';border-color:'+t[0]+'">'+t[1]+' '+n+'+</span>'}).join('')+'<select class="sm" id="chSort" style="margin-left:auto"><option value="">Game order</option><option value="cv">Sort by crit value</option><option value="lv">Sort by level</option></select>';d.append(lg);
-  try{const sv=localStorage.getItem('primo-chsort')||'';if(sv==='cv')o.chars.sort((a,b)=>b.cv-a.cv);else if(sv==='lv')o.chars.sort((a,b)=>b.lv-a.lv||b.cv-a.cv);lg.querySelector('#chSort').value=sv;lg.querySelector('#chSort').onchange=e=>{try{localStorage.setItem('primo-chsort',e.target.value)}catch(x){}if(!e.target.value&&PF&&PF.uid)PF.chars=PF.chars.slice();drawProfile()}}catch(e){}
+  const lg=document.createElement('div');lg.className='sub';lg.style.cssText='display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:6px 0';lg.innerHTML='<span>Artifact CV:</span>'+[[0,'Low'],[10,'Fair'],[20,'Decent'],[30,'Good'],[40,'Great'],[50,'Godly']].map(([n])=>{const t=cvA(n);return '<span class="badge" style="color:'+t[0]+';border-color:'+t[0]+'">'+t[1]+' '+n+'+</span>'}).join('')+'<select class="sm" id="chSort" style="margin-left:auto"><option value="">Game order</option><option value="cv">Sort by crit value</option><option value="lv">Sort by level</option><option value="c">Sort by constellation</option><option value="nm">Sort by name</option></select>';d.append(lg);
+  try{const sv=localStorage.getItem('primo-chsort')||'';if(sv==='cv')o.chars.sort((a,b)=>b.cv-a.cv);else if(sv==='lv')o.chars.sort((a,b)=>b.lv-a.lv||b.cv-a.cv);else if(sv==='c')o.chars.sort((a,b)=>b.c-a.c||b.cv-a.cv);else if(sv==='nm')o.chars.sort((a,b)=>String(a.name).localeCompare(String(b.name)));lg.querySelector('#chSort').value=sv;lg.querySelector('#chSort').onchange=e=>{try{localStorage.setItem('primo-chsort',e.target.value)}catch(x){}if(!e.target.value&&PF&&PF.uid)PF.chars=PF.chars.slice();drawProfile()}}catch(e){}
+  {const best=o.chars.reduce((m,c)=>c.cv>(m?m.cv:-1)?c:m,null),c6=o.chars.filter(c=>c.c>=6).length,mx=o.chars.filter(c=>c.lv>=90).length,weak=o.chars.filter(c=>c.arts.length<5||c.arts.some(a=>a.lv<16)).length;
+   const tl=document.createElement('div');tl.className='sht';
+   [['Characters',o.chars.length],['Avg crit value',avg?Math.round(avg):'–'],['Best build',best&&best.cv?esc(best.name)+' · '+Math.round(best.cv):'–'],['Level 90',mx],['C6',c6],['Need artifacts',weak]].forEach(([k,v])=>{const t=document.createElement('div');t.innerHTML='<b>'+v+'</b><span>'+k+'</span>';tl.append(t)});d.append(tl)}
+  let fil='';try{fil=localStorage.getItem('primo-chfil')||''}catch(e){}
+  {const els=[...new Set(o.chars.map(c=>c.el).filter(Boolean))],fr=document.createElement('div');fr.className='chips';fr.style.margin='8px 0';fr.setAttribute('role','group');fr.setAttribute('aria-label','Filter by element');
+   [['','All']].concat(els.map(e=>[e,(EL[e]||{}).n||e])).forEach(([k,l])=>{const x=document.createElement('button');x.type='button';x.className='chip';x.textContent=l;x.setAttribute('aria-pressed',String(fil===k));if(k)x.style.borderColor=(EL[k]||{}).s||'';x.onclick=()=>{try{localStorage.setItem('primo-chfil',k)}catch(e){}drawProfile()};fr.append(x)});d.append(fr)}
   const grid=document.createElement('div');grid.className='shg';
-  o.chars.forEach(ch=>{const c=document.createElement('button');c.type='button';c.className='shc';c.style.setProperty('--ec',(EL[ch.el]||{}).s||'#8a8fb0');
+  o.chars.filter(c=>!fil||c.el===fil).forEach(ch=>{const c=document.createElement('button');c.type='button';c.className='shc';c.style.setProperty('--ec',(EL[ch.el]||{}).s||'#8a8fb0');
     imgTo(c,ch.sp||ch.ic,'sp',ch.ic?[ch.ic]:[]);
     const cap=ASCCAP[Math.min(6,Math.max(0,ch.asc))]||90,tier=cvTier(ch.cv);
     c.insertAdjacentHTML('beforeend',(ch.el?'<span class="tp">'+elIco(ch.el)+'</span>':'')+(ch.cv?'<span class="cvb" style="color:'+tier[0]+'">CV '+Math.round(ch.cv)+'</span>':'')+'<span class="cn">C'+ch.c+'</span><span class="ov"><span class="nm"></span><span class="ln">Lv '+ch.lv+'/'+cap+' · '+ch.t.map((x,i)=>x+ch.tx[i]).join('/')+'</span><span class="ln"></span></span>');
@@ -2044,12 +2056,12 @@ function chDetail(ch){const o=document.createElement('div');o.className='sheet';
   h+='<h3 class="disp" style="margin:12px 0 0;font-size:16px">Artifacts</h3><div class="arts">'+(ch.arts.length?ch.arts.map(a=>{const ix=cvOf(a),ct=cvA(ix);return '<div class="art" style="border-left:4px solid '+ct[0]+'"><div class="h"><span class="ai" style="width:38px;height:38px;flex:none"></span><div><div class="sub">'+EQN[a.ty]+' · +'+a.lv+(ix?' · <b style="color:'+ct[0]+'">CV '+Math.round(ix*10)/10+' '+ct[1]+'</b>':'')+'</div><div class="m">'+esc(fpS(a.m.id,a.m.v))+'</div></div></div><div class="s">'+a.s.map(x=>{const crit=x.id==='FIGHT_PROP_CRITICAL'||x.id==='FIGHT_PROP_CRITICAL_HURT';return '<div'+(crit?' class="hi"':'')+'>'+esc(fpS(x.id,x.v))+'</div>'}).join('')+'</div></div>'}).join(''):'<div class="sub">No artifacts equipped.</div>')+'</div>';
   try{h+=subPlan(ch)}catch(e){}
   if(ch.up&&ch.upd)h='<div class="badge" style="color:#f0b429;border-color:#f0b429;margin-bottom:6px">Updated '+ago(ch.up)+' · '+esc(ch.upd)+'</div>'+h;
-  h+='<div class="b" style="margin-top:14px"><button class="p" id="chP">Use levels in planner</button></div>';
+  h+='<div class="b" style="margin-top:14px"><button class="p" id="chP">Use levels in planner</button><button class="sm" id="chCp" type="button">Copy build summary</button></div>';
   o.querySelector('#chB').innerHTML=h;
   o.querySelectorAll('.cbi').forEach(i=>i.oninput=()=>{const b=CBF[ch.id]||(CBF[ch.id]={});b[i.dataset.k]=+i.value||0;try{localStorage.setItem(CBK,JSON.stringify(CBF))}catch(e){}const t=document.createElement('div');t.innerHTML=subPlan(ch);const nb=t.querySelector('#spB'),ob=o.querySelector('#spB');if(nb&&ob)ob.innerHTML=nb.innerHTML});
   if(ch.w&&ch.w.ic){const b=o.querySelector('.wi');imgTo(b,ch.w.ic,'',[])}
   o.querySelectorAll('.ai').forEach((b,i)=>imgTo(b,ch.arts[i].ic,'',[]));
-  const close=()=>o.remove();o.onclick=e=>{if(e.target===o)close()};o.querySelector('#chX').onclick=close;o.querySelector('#chP').onclick=()=>{close();planPrefill(ch)};
+  const close=()=>o.remove();o.onclick=e=>{if(e.target===o)close()};o.querySelector('#chX').onclick=close;o.querySelector('#chP').onclick=()=>{close();planPrefill(ch)};o.querySelector('#chCp').onclick=async()=>{const sv=ch.st||{},pc=x=>(Math.round(x*10)/10)+'%',L=[ch.name+' C'+ch.c+' · Lv '+ch.lv+' · Talents '+ch.t.map((x,i)=>x+ch.tx[i]).join('/'),ch.w&&ch.w.n?'Weapon: '+ch.w.n+' R'+ch.w.ref+' Lv '+ch.w.lv:'',sv.hp?'HP '+fm(Math.round(sv.hp))+' · ATK '+fm(Math.round(sv.atk))+' · DEF '+fm(Math.round(sv.def))+' · EM '+Math.round(sv.em):'',sv.cr?'CRIT '+pc(sv.cr)+' / '+pc(sv.cd)+' · ER '+pc(sv.er)+(ch.cv?' · Crit value '+ch.cv:''):''].filter(Boolean).join('\n');try{await navigator.clipboard.writeText(L);toast('Build summary copied')}catch(e){toast('Could not copy. Your browser blocked it.')}};
   document.body.append(o)}
 function planPrefill(ch){try{tab('income');setIS('farm')}catch(e){}const caps=[20,40,50,60,70,80],set=(id,val)=>{const e=$(id);if(e){e.value=val;e.dispatchEvent(new Event('input',{bubbles:true}))}},ci=caps.indexOf(ch.lv);
   set('c-lf',ch.lv);if($('c-asc')){$('c-asc').checked=ci>=0&&ch.asc>=ci+1;$('c-asc').dispatchEvent(new Event('input',{bubbles:true}))}
@@ -2321,7 +2333,7 @@ function rkRow(id,title,p){const st=itemState(id),i=rkInfo(p),locked=st.s==='aut
   b.setAttribute('aria-label',title+': '+SLAB[st.s]+(locked?' (locked)':''));
   b.innerHTML='<span class="ic" aria-hidden="true">'+ICON[st.s]+'</span><span class="rt">'+esc(title)+'</span><span class="rl">'+SLAB[st.s]+'</span>';row.append(b);
   if(locked){const cp=document.createElement('span');cp.className='rkc';cp.textContent=st.s==='auto'?'Added by Auto income':'Detected from your UID';row.append(cp);const f=document.createElement('button');f.type='button';f.className='sm';f.dataset.fix=id;f.textContent=EG[id]?'Change stars':'Missed today';row.append(f)}
-  const c=document.createElement('span');c.className='cdn';c.textContent=cdText(i.ms);row.append(c);
+  const c=document.createElement('span');c.className='cdn';c.textContent=cdText(i.ms);row.append(c);if(typeof EGO!=='undefined'&&EGO[id]&&st.s==='none'){const q=document.createElement('div');q.className='rks';q.textContent='Profile shows progress. See “Needs attention” to add it.';row.append(q)}
   if(EG[id]&&st.e&&st.e.note){const s=document.createElement('div');s.className='rks';s.textContent=st.e.note;row.append(s)}
   return row}
 function drawResets(){const L=$('rkL');if(!L)return;$('rk-s').value=RK.s;L.textContent='';
@@ -2370,14 +2382,33 @@ function cycleStart(id){const sv=Date.now()+(+RK.s-4)*36e5,D=new Date(sv),y=D.ge
   if(id==='ab'){const m0=dd>=16?mo:mo-1,y0=m0<0?y-1:y;return Date.UTC(y0,(m0+12)%12,16)-off4}
   if(id==='sg'){const c=sgCycle();return c&&c.from?new Date(c.from+'T00:00:00').getTime():Infinity}
   return Date.UTC(y,mo,1)-off4}
-function egDetect(){if(!EG_UID_AUTO||!PF||!PF.ts)return;
+/* Detected progress is only an OFFER. Nothing is added until you say so. "Not now" is remembered for that cycle and amount; the offer returns only if the amount goes up. */
+let EGO={};const EGDK='primo-egdis';let EGD={};try{EGD=JSON.parse(localStorage.getItem(EGDK)||'{}')||{}}catch(e){}
+const egdSave=()=>{try{const k=Object.keys(EGD).slice(-40);const o={};k.forEach(x=>o[x]=EGD[x]);EGD=o;localStorage.setItem(EGDK,JSON.stringify(o))}catch(e){}};
+function egDetect(){EGO={};if(!EG_UID_AUTO||!PF||!PF.ts){try{drawEgOffers()}catch(e){}return}
   EG_AUTO_IDS.forEach(id=>{const key=rkKey(id);if(!key||RK.done[id]===key)return;
     const mine=S.log.filter(e=>e.eg===id&&e.ck===key);if(mine.some(e=>e.tag!=='From UID'))return; // you entered it yourself: leave it alone
     if(!(PF.ts>=cycleStart(id)))return; // only profile data fetched after this cycle started counts
     const n=id==='it'?(PF.th&&PF.th.a):PF.sg;if(!(n>0))return;
-    const amt=egReward(id,n);if(!(amt>0))return;const old=mine[0];if(old&&old.dp>=amt)return; // once per cycle; only ever tops up
-    let snap=null;if(old){snap={mode:'add',p:old.dp,f:0,date:old.date,note:old.note,src:'endgame',auto:true,eg:old.eg,ck:old.ck,tag:old.tag};if(!undoCore(old))return}
-    const e=egAdd(id,amt,n+EG[id].u,true);if(e)toast('Detected from UID: '+EG[id].s+' '+n+EG[id].u+' → +'+fm(e.dp)+' (est.)',()=>{undoEntry(e);if(snap){applyCore(snap);save();refresh()}})})}
+    const amt=egReward(id,n);if(!(amt>0))return;const old=mine[0];if(old&&old.dp>=amt)return;
+    if((EGD[id+'|'+key]||0)>=amt)return; // you said "not now" for this amount
+    EGO[id]={id,key,n,amt,old,label:n+EG[id].u}});
+  try{drawEgOffers()}catch(e){}}
+function egAccept(id){const o=EGO[id];if(!o)return;let snap=null;
+  if(o.old){snap={mode:'add',p:o.old.dp,f:0,date:o.old.date,note:o.old.note,src:'endgame',auto:true,eg:o.old.eg,ck:o.old.ck,tag:o.old.tag};if(!undoCore(o.old))return}
+  const e=egAdd(id,o.amt,o.label,true);delete EGO[id];
+  if(e)toast(EG[id].s+' +'+fm(e.dp)+' added (est.)',()=>{undoEntry(e);if(snap){applyCore(snap);save();refresh()}});else{save();refresh()}
+  drawEgOffers()}
+function drawEgOffers(){const box=$('egNa');if(!box)return;const L=Object.values(EGO);box.hidden=!L.length;box.textContent='';
+  L.forEach(o=>{const d=document.createElement('div');d.style.margin='6px 0';
+    const t=document.createElement('div');t.className='rcm';t.innerHTML='<b>'+esc(EG[o.id].n)+'</b>: your profile shows <b>'+esc(o.label)+'</b>. '+(o.old?'Update the reward from +'+fm(o.old.dp)+' to ':'Add ')+'<b>+'+fm(o.amt)+'</b> primogems (estimate)?';
+    const r=document.createElement('div');r.className='b';r.style.marginTop='8px';
+    const mk=(txt,fn,p)=>{const x=document.createElement('button');x.type='button';x.className='sm'+(p?' p':'');x.textContent=txt;x.onclick=fn;r.append(x)};
+    mk(o.old?'Update to +'+fm(o.amt):'Add +'+fm(o.amt),()=>egAccept(o.id),true);
+    mk('Not now',()=>{EGD[o.id+'|'+o.key]=o.amt;egdSave();delete EGO[o.id];drawEgOffers();toast('Okay. I will ask again only if it goes up.')});
+    if(!o.old)mk('Already counted',()=>{RK.done[o.id]=o.key;rkSave();delete EGO[o.id];drawEgOffers();drawResets()});
+    d.append(t,r);box.append(d)});
+  try{naSync();drawResets()}catch(e){}}
 function naSync(){const c=$('naCard');if(!c)return;const any=[...c.querySelectorAll('.na')].some(x=>!x.hidden);if(c.hidden===any)c.hidden=!any}
 new MutationObserver(()=>naSync()).observe($('naCard'),{subtree:true,attributes:true,attributeFilter:['hidden']});
 /* Endgame rewards settings (More) */
@@ -2422,6 +2453,7 @@ function drawCalcHow(){const el=$('chTxt');if(!el)return;let i=S.log.length-1;wh
   el.innerHTML=s1+s2}
 function drawToday(){
   try{rwDraw()}catch(e){}
+  try{egDetect()}catch(e){}
   try{naSync()}catch(e){}
   const ex=todayAuto();let sub;
   if(ex)sub='Auto income added today: +'+fm(ex.dp)+' primogems (an estimate). If that is wrong, use “Missed today” on a locked item.';
